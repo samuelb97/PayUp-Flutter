@@ -20,10 +20,12 @@ class userController{
   static String _gender;
   static String _mobile;
   static String _name;
+  static String _username;
   static String _occupation;
   static String _photoUrl;
 
   static List _interests;
+  static List _friends;
   static double _latitude;
   static double _longitude;
  
@@ -34,6 +36,7 @@ class userController{
 
   String get uid => _uid;
   String get name => _name;
+  String get username => _username;
   String get age => _age;
   String get gender => _gender;
   String get mobile => _mobile;
@@ -45,6 +48,8 @@ class userController{
   LocationData get location => _location;
   double get latitude => _latitude;
   double get longitude => _longitude;
+
+  List get friends => _friends;
   // LatLng get latlng => LatLng(_latitude, _longitude);
 
   
@@ -58,8 +63,10 @@ class userController{
         _gender = DocumentSnapshot.data['gender'].toString();
         _mobile = DocumentSnapshot.data['mobile'].toString();
         _name = DocumentSnapshot.data['name'].toString();
+        _username = DocumentSnapshot.data['username'].toString();
         _occupation = DocumentSnapshot.data['occupation'].toString();
         _interests = DocumentSnapshot.data['interests'];
+        _friends = DocumentSnapshot.data['friends'];
         _photoUrl = DocumentSnapshot.data['photoUrl'].toString();
         GeoPoint __location = DocumentSnapshot.data['location'];
         _latitude = __location.latitude;

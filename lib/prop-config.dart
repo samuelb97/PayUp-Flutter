@@ -40,6 +40,7 @@ class Headers{
   static const String messages = 'Messages';
   static const String settings = 'Settings';
   static const String welcomePage = 'Welcome Page';
+  static const String search = 'Search';
 }
 
 class Path{

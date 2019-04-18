@@ -4,6 +4,7 @@ import 'package:login/src/buddies/View/buddies.dart';
 import 'package:login/src/profile/View/profile.dart';
 import 'package:login/src/messages/messages.dart';
 import 'package:login/src/settings/settings.dart';
+import 'package:login/src/search/search.dart';
 import 'package:login/prop-config.dart';
 import 'package:login/analtyicsController.dart';
 import 'package:login/userController.dart';
@@ -30,8 +31,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   List<String> pages = [
     Headers.profile,
-    Headers.messages,
     Headers.findBuddies,
+    Headers.messages,
+    Headers.search,
     Headers.settings,
   ];
 
@@ -60,16 +62,21 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
               widget.analControl.sendAnalytics('nav_to_profile');
               return ProfilePage(user: widget.user, analControl: widget.analControl);
               break;
-            
+
+            case Headers.findBuddies:
+              widget.analControl.sendAnalytics('nav_to_buddies');
+              return BuddiesPage(user: widget.user, analControl: widget.analControl);
+              break;
+
             case Headers.messages:
               widget.analControl.sendAnalytics('nav_to_messages');
               return MessagePage(user: widget.user, analControl: widget.analControl);
               //return MessagePage(user: widget.user, analControl: widget.analControl);
               break;
 
-            case Headers.findBuddies:
-              widget.analControl.sendAnalytics('nav_to_buddies');
-              return BuddiesPage(user: widget.user, analControl: widget.analControl);
+            case Headers.search:
+              widget.analControl.sendAnalytics('nav_to_search');
+              return SearchPage(user: widget.user, analControl: widget.analControl);
               break;
 
             case Headers.settings:
@@ -95,13 +102,18 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             activeColor: Colors.green,
           ),
           BottomNavyBarItem(
+              icon: Icon(Icons.people),
+              title: Text(Headers.findBuddies),
+              activeColor: Colors.green,
+          ),
+          BottomNavyBarItem(
               icon: Icon(Icons.message),
               title: Text(Headers.messages),
               activeColor: Colors.green,
           ),
           BottomNavyBarItem(
-              icon: Icon(Icons.people),
-              title: Text(Headers.findBuddies),
+              icon: Icon(Icons.search),
+              title: Text(Headers.search),
               activeColor: Colors.green,
           ),
           BottomNavyBarItem(
