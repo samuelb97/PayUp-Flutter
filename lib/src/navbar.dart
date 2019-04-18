@@ -49,7 +49,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context){
     return Scaffold(
       appBar: AppBar(
-        title: Text(Headers.spotBuddy),
+        title: Text(Headers.payup),
         backgroundColor: Colors.lightGreen,
       ),
       body: TabBarView(

@@ -21,13 +21,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var materialApp = MaterialApp(
-      title: Headers.spotBuddy + Prompts.login,
+      title: Headers.payup,
       theme: ThemeData(
-        primarySwatch: Colors.lightGreen,
+        primarySwatch: themeColors.theme,
+        fontFamily: 'Nunito',
       ),
       navigatorObservers: <NavigatorObserver>[_analyticsController.observer],
       home: WelcomePage(
-        thisAnalyticsController: _analyticsController),
+        analControl: _analyticsController),
     );
     return materialApp;
   }

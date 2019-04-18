@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:login/prop-config.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:login/analtyicsController.dart';
-import 'package:login/src/welcome/signup/controller.dart';
+import 'controller.dart';
 
 class SignUpPage extends StatefulWidget {
   final analyticsController analControl;
@@ -18,114 +18,187 @@ class _SignUpPageState extends StateMVC<SignUpPage> {
     _con = Controller.con;
   }
   Controller _con;
-  var linearGradient = const BoxDecoration(
-      gradient: const LinearGradient(
-        begin: FractionalOffset.centerRight,
-        end: FractionalOffset.bottomLeft,
-        colors: <Color>[
-          const Color(0xFF413070),
-          const Color(0xFF2B264A),
-        ],
-      ),
-    );
+
   @override
   Widget build(BuildContext context) {
-    widget.analControl.currentScreen('update_profile', 'updateProfileOver');
+    widget.analControl.currentScreen('Sign_Up', 'signUpOver');
     return Scaffold(
         appBar: AppBar(
           title: Text(Prompts.signup),
-          backgroundColor: Colors.lightGreen,
+          backgroundColor: themeColors.accent2,
         ),
-        body: SingleChildScrollView(
-            child: Container(
-              //decoration: linearGradient,
-                margin: EdgeInsets.all(25.0),
-                child: Form(
-                  key: _con.formkey,
-                  child: Column(
-                    children: <Widget>[
-                      TextFormField(
-                        validator: (input) {
-                          if (input.isEmpty) {
-                            return Prompts.type_email;
-                          }
-                        },
-                        onSaved: (input) => _con.set_email = input,
-                        decoration: InputDecoration(labelText: Headers.email),
-                      ),
-                      TextFormField(
-                        validator: (input) {
-                          if (input.length < 6) {
-                            return Prompts.passwrd_valid;
-                          }
-                        },
-                        onSaved: (input) => _con.set_password = input,
-                        decoration: InputDecoration(labelText: Prompts.passwrd),
-                        obscureText: true,
-                      ),
-                      TextFormField(
-                        decoration:
-                            InputDecoration(hintText: Userinfo.fullName),
-                        maxLength: 32,
-                        //validator: _con.validateName,
-                        onSaved: (input) => _con.set_name = input,
-                      ),
-                      TextFormField(
-                        decoration: InputDecoration(hintText: Userinfo.age),
-                        maxLength: 2,
-                        //validator: _con.validateAge,
-                        onSaved: (input) => _con.set_age = input,
-                      ),
-                      TextFormField(
-                        decoration:
-                            InputDecoration(hintText: Userinfo.username),
-                        maxLength: 32,
-                        //validator: _con.validateOccupation,
-                        onSaved: (input) => _con.set_occupation = input,
-                      ),
-                      TextFormField(
-                        decoration:
-                            InputDecoration(hintText: Userinfo.mobileNumber),
-                        keyboardType: TextInputType.phone,
-                        maxLength: 10,
-                        //validator: _con.validateMobile,
-                        onSaved: (input) => _con.set_mobile = input,
-                      ),
-                      SizedBox(height: 15.0),
-                      ButtonTheme(
-                          minWidth: 250,
-                          child: RaisedButton(
-                            color: Colors.green[800],
-                            splashColor: Colors.green[300],
-                            textTheme: ButtonTextTheme.primary,
-                            padding: EdgeInsets.all(20.0),
-                            elevation: 6,
-                            shape: BeveledRectangleBorder(
-                              side: BorderSide(
-                                width: 2.0,
-                                color: Colors.deepPurple[800],
-                              ),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            onPressed: () {
-                              widget.analControl.sendAnalytics('profileUpdate');
-                              widget.analControl.sendAnalytics('new_sign_up');
-                              widget.analControl
-                                  .currentScreen('sign_up', 'SignUpOver');
-                              Controller.signUp(
-                                  context, widget.analControl);
-                            },
-                            child: Text(Prompts.signup),
-                          ))
-                    ],
+        body: Container(
+          decoration: themeColors.linearGradient,
+          child: Center(
+            child: Form(
+              key: _con.registerformkey,
+              child: ListView(
+                shrinkWrap: true,
+                padding: EdgeInsets.only(left: 24.0, right: 24.0),
+                children: <Widget>[
+                  Text(
+                    "Money won is twice as sweet as money earned",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontFamily: 'Aguafina'
+                    ),
                   ),
-                ))));
+                  SizedBox(height: 25.0),
+                  TextFormField(
+                    validator: (input) {
+                      if(input.isEmpty){
+                        return Prompts.type_username;
+                      } 
+                    },
+                    onSaved: (input) => _con.set_username = input,
+                    style: TextStyle(color: Colors.white),
+                    autofocus: false,
+                    decoration: InputDecoration(
+                      fillColor: Colors.white,
+                      hintStyle: TextStyle(color: Colors.white),
+                      hintText: 'Username',
+                      contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(32.0),
+                        borderSide: const BorderSide(color: Colors.white)
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 17.0),
+                  TextFormField(
+                    validator: (input) {
+                      if(input.isEmpty){
+                        return Prompts.name;
+                      } 
+                    },
+                    onSaved: (input) => _con.set_name = input,
+                    style: TextStyle(color: Colors.white),
+                    autofocus: false,
+                    decoration: InputDecoration(
+                      fillColor: Colors.white,
+                      hintStyle: TextStyle(color: Colors.white),
+                      hintText: 'Full Name',
+                      contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(32.0),
+                        borderSide: const BorderSide(color: Colors.white)
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 17.0),
+                  TextFormField(
+                    validator: (input) {
+                      if(!isNumeric(input)){
+                        return Prompts.age;
+                      } 
+                    },
+                    onSaved: (input) => _con.set_age = input,
+                    style: TextStyle(color: Colors.white),
+                    autofocus: false,
+                    decoration: InputDecoration(
+                      fillColor: Colors.white,
+                      hintStyle: TextStyle(color: Colors.white),
+                      hintText: 'Age',
+                      contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(32.0),
+                        borderSide: const BorderSide(color: Colors.white)
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 17.0),
+                  TextFormField(
+                    validator: (input) {
+                      if(input.isEmpty){
+                        return Prompts.type_email;
+                      } 
+                    },
+                    onSaved: (input) => _con.set_email = input,
+                    style: TextStyle(color: Colors.white),
+                    keyboardType: TextInputType.emailAddress,
+                    autofocus: false,
+                    decoration: InputDecoration(
+                      fillColor: Colors.white,
+                      hintStyle: TextStyle(color: Colors.white),
+                      hintText: 'Email',
+                      contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(32.0),
+                        borderSide: const BorderSide(color: Colors.white)
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 17.0),
+                  TextFormField(
+                    validator: (input) {
+                    if(input.length < 6){
+                      return Prompts.passwrd_valid;
+                      } 
+                    },
+                    onSaved: (input) => _con.set_password = input,
+                    style: TextStyle(color: Colors.white),
+                    autofocus: false,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      fillColor: Colors.white,
+                      hintStyle: TextStyle(color: Colors.white),
+                      hintText: Prompts.passwrd,
+                      contentPadding:
+                          EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(32.0),
+                          borderSide: const BorderSide(color: Colors.white)),
+                    ),
+                  ),
+                  SizedBox(height: 17.0),
+                  TextFormField(
+                    validator: (input) {
+                    if(input.length < 6){
+                      return Prompts.passwrd_valid;
+                      } 
+                    },
+                    onSaved: (input) => _con.set_password2 = input,
+                    style: TextStyle(color: Colors.white),
+                    autofocus: false,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      fillColor: Colors.white,
+                      hintStyle: TextStyle(color: Colors.white),
+                      hintText: Prompts.passwrd2,
+                      contentPadding:
+                          EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(32.0),
+                          borderSide: const BorderSide(color: Colors.white)),
+                    ),
+                  ),
+                  SizedBox(height: 17.0),
+                  RaisedButton(
+                    onPressed: () {
+                      Controller.signUp(context, widget.analControl);
+                    },
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(24),
+                    ),
+                    padding: EdgeInsets.all(12),
+                    color: themeColors.accent2,
+                    child: Text('Sign Up', style: TextStyle(color: Colors.white)),
+                  ),
+                  SizedBox(height: 25.0),
+                ]
+              )
+            )
+          )
+        )
+      );
   }
 
-  void handleGenderValueChange(int value) {
-    setState(() {
-      _con.set_gender = value;
-      print(Userinfo.gender + " ${_con.genderBtnValue}");
-    });
+  bool isNumeric(String s) {
+    if(s == null) {
+      return false;
+    }
+    return double.parse(s, (e) => null) != null;
   }
 }

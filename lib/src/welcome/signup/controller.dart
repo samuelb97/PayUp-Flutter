@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:login/src/welcome/login/view.dart';
 import 'package:login/analtyicsController.dart';
 import 'package:login/prop-config.dart';
+import 'package:login/src/welcome/view.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class Controller extends ControllerMVC {
   factory Controller() {
@@ -15,12 +16,12 @@ class Controller extends ControllerMVC {
 
   Controller._();
 
-  static String email, password, name, age, gender, occupation, mobile;
+  static String username, email, password, password2, name, age;
   static int _genderBtnValue = 0;
 
-  GlobalKey<FormState> get formkey => _formkey;
+  GlobalKey<FormState> get registerformkey => _registerformkey;
 
-  static final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
+  static final GlobalKey<FormState> _registerformkey = GlobalKey<FormState>();
 
   int get genderBtnValue => _genderBtnValue;
 
@@ -36,37 +37,26 @@ class Controller extends ControllerMVC {
   set set_age(String _age) {
     age = _age;
   }
-  set set_gender(int g_Val) {
-    _genderBtnValue = g_Val;
+  set set_username(String _username) {
+    username = username;
   }
-  set set_occupation(String _occupation) {
-    occupation = _occupation;
+   set set_password2(String _password2) {
+    password2 = _password2;
   }
-  set set_mobile(String _mobile) {
-    mobile = _mobile;
-  }
+
 
   static Controller get con => _this;
 
   static Future<void> signUp(BuildContext context,
       analyticsController analControl) async {
-    switch (_genderBtnValue) {
-      case 0:
-        gender = Userinfo.gender0;
-        break;
-      case 1:
-        gender = Userinfo.gender1;
-        break;
-      case 2:
-        gender = Userinfo.gender2;
-        break;
-      default:
-        gender = Userinfo.gender0;
-        break;
-    }
-    final formState = _formkey.currentState;
+
+    final formState = _registerformkey.currentState;
     if (formState.validate()) {
       formState.save();
+      if(password != password2){
+        Fluttertoast.showToast(msg: 'Passwords do not match');
+        return;
+      }
       try {
         FirebaseUser user =
             await FirebaseAuth.instance.createUserWithEmailAndPassword(
@@ -74,22 +64,24 @@ class Controller extends ControllerMVC {
           password: password,
         );
         String uid = user.uid;
+        String searchKey = name[0].toUpperCase();
         Firestore.instance.collection("users").document("$uid").setData({
+          "username": "$username",
           "email": "$email",
           "name": "$name",
           "age": "$age",
-          "gender": "$gender",
-          "occupation": "$occupation",
-          "mobile": "$mobile",
-          "username": "$name",
           "photoUrl": null,
-          "location": null
+          "wins": 0,
+          "loses": 0,
+          "searchKey": "$searchKey",
+          "friends": null,
+          "betIDs": null,
         });
         user.sendEmailVerification();
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-                builder: (context) => LoginPage(analControl: analControl)));
+                builder: (context) => WelcomePage(analControl: analControl)));
       } catch (e) {
         print(e.message);
       }
