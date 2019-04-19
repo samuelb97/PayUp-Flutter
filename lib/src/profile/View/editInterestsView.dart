@@ -32,7 +32,7 @@ class _EditInterestsPageState extends StateMVC<EditInterestsPage> {
   @override
   Widget build(BuildContext context) {
     widget.analControl.currentScreen('update_profile', 'EditInterestsOver');
-    _con.set_interests = widget.user.interests;
+    // _con.set_interests = widget.user.interests;
     return Scaffold(
       appBar: AppBar(
         title: Text(Prompts.editInterests),

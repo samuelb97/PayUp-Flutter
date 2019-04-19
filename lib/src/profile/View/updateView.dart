@@ -52,23 +52,6 @@ class _UpdateProfilePageState extends StateMVC<UpdateProfilePage> {
                         validator: _con.validateAge,
                         onSaved: (input) => _con.set_age = input,
                       ),
-                      TextFormField(
-                        decoration: InputDecoration(
-                            hintText: Userinfo.username,
-                            labelText: widget.user.occupation),
-                        maxLength: 32,
-                        validator: _con.validateOccupation,
-                        onSaved: (input) => _con.set_occupation = input,
-                      ),
-                      TextFormField(
-                        decoration: InputDecoration(
-                            hintText: Userinfo.mobileNumber,
-                            labelText: widget.user.mobile),
-                        keyboardType: TextInputType.phone,
-                        maxLength: 10,
-                        validator: _con.validateMobile,
-                        onSaved: (input) => _con.set_mobile = input,
-                      ),
                       SizedBox(height: 15.0),
                       RaisedButton(
                         color: Colors.green[800],

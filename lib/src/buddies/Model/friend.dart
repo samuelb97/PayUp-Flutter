@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:meta/meta.dart';
 
-class Buddy {
-  Buddy({
+class Friend {
+  Friend({
     @required this.avatar,
     @required this.name,
     @required this.email,
@@ -19,20 +19,20 @@ class Buddy {
   final String occupation;
   final String location;
 
-  static List<Buddy> allFromResponse(String response) {
+  static List<Friend> allFromResponse(String response) {
     var decodedJson = json.decode(response).cast<String, dynamic>();
 
     return decodedJson['results']
         .cast<Map<String, dynamic>>()
-        .map((obj) => Buddy.fromMap(obj))
+        .map((obj) => Friend.fromMap(obj))
         .toList()
-        .cast<Buddy>();
+        .cast<Friend>();
   }
 
-  static Buddy fromMap(Map map) {
+  static Friend fromMap(Map map) {
     var name = map['name'];
 
-    return new Buddy(
+    return new Friend(
       avatar: map['picture']['large'],
       name: '${_capitalize(name['first'])} ${_capitalize(name['last'])}',
       email: map['email'],
@@ -47,7 +47,7 @@ class Buddy {
   }
 }
 /*
-void _navigateToBuddyDetails(Buddy buddy, Object avatarTag) {
+void _navigateToBuddyDetails(Friend buddy, Object avatarTag) {
     Navigator.of(context).push(
       new MaterialPageRoute(
         builder: (c) {

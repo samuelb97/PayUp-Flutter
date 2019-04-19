@@ -6,7 +6,8 @@ import 'package:login/userController.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:login/src/navbar.dart';
 import 'package:login/prop-config.dart';
-
+import 'package:async_loader/async_loader.dart';
+import 'dart:async';
 
 class Controller extends ControllerMVC {
   factory Controller() {
@@ -49,13 +50,15 @@ class Controller extends ControllerMVC {
           userController _user = userController();
           print('\n\nUserID: ${user.uid}\n\n');
           _user.set_uid = user.uid;
-          _user.load_data_from_firebase();
-          _user.updateLocation();
-          Navigator.push(
+          await _user.load_data_from_firebase();
+          print("\nPost Load\n");
+          Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                   builder: (context) =>
-                      Home(user: _user, analControl: analControl)));
+                      //Splash(user: _user, analControl: analControl)
+                      Home(user: _user, analControl: analControl)
+                  ));
         } else {
           _ShowEmailNotVerifiedAlert(context, user);
         }
@@ -94,14 +97,19 @@ class Controller extends ControllerMVC {
   }
 
   static void NavigateToSignUp(
-    BuildContext context,
-    analyticsController thisAnalyticsController){
-      Navigator.push(
-        context, 
+      BuildContext context, analyticsController thisAnalyticsController) {
+    Navigator.push(
+        context,
         MaterialPageRoute(
-          builder: (context) => SignUpPage(analControl: thisAnalyticsController),
-          fullscreenDialog: true
-        )
-      );
-    }
+            builder: (context) =>
+                SignUpPage(analControl: thisAnalyticsController),
+            fullscreenDialog: true));
+  }
+
+  static void NavigateToHome(BuildContext context,
+      analyticsController analControl, userController _user) {}
+
+  static Future sleep1() {
+    return new Future.delayed(const Duration(seconds: 1), () => "1");
+  }
 }

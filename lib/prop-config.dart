@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:async_loader/async_loader.dart';
 
 class Prompts {
   static const String type_username = 'Please type a username';
@@ -7,7 +8,7 @@ class Prompts {
   static const String updateDoc = 'Documented Update';
   static const String login = 'Log In';
   static const String signup = 'Sign Up';
-  static const String type_email = 'Please type an email';
+  static const String type_email = 'Please type your email';
   static const String email_verif = 'Email not Verified';
   static const String passwrd = 'Password';
   static const String passwrd2 = 'Confirm Password';
@@ -38,7 +39,7 @@ class Buttons {
 
 class Headers {
   static const String payup = 'PayUp ';
-  static const String findBuddies = 'Find Buddies';
+  static const String friends = 'Friends';
   static const String profile = 'Profile';
   static const String username = 'Username';
   static const String email = 'Email';
@@ -143,19 +144,35 @@ class Screens {
 
 class themeColors {
   static Color accent = Colors.green;
+  static Color accent4 = Color(0xFF083F1E);
   static Color accent3 = Colors.green[900];
   static Color accent2 = Colors.green[800];
   static Color accent1 = Colors.green[300];
   static Color theme = Colors.blueGrey;
   static Color theme2 = Colors.blueGrey[600];
-  static Color theme1 = Colors.blueGrey[400];
+  static Color theme1 = Colors.blueGrey[300];
+  static Color theme0 = Colors.blueGrey[200];
   static Color theme3 = Colors.blueGrey[900];
   static var linearGradient = BoxDecoration(
     gradient: LinearGradient(
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
       // Add one stop for each color. Stops should increase from 0 to 1
-      stops: [0.1, 0.6, 0.9],
+      stops: [0.12, 0.64, 0.96],
+      colors: [
+        // Colors are easy thanks to Flutter's Colors class.
+        theme3,
+        theme2,
+        theme1,
+      ],
+    ),
+  );
+  static var linearGradient2 = BoxDecoration(
+    gradient: LinearGradient(
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+      // Add one stop for each color. Stops should increase from 0 to 1
+      stops: [0.24, 0.84, 0.99],
       colors: [
         // Colors are easy thanks to Flutter's Colors class.
         theme3,
@@ -165,3 +182,6 @@ class themeColors {
     ),
   );
 }
+
+final GlobalKey<AsyncLoaderState> asyncLoaderState = GlobalKey<AsyncLoaderState>();
+

@@ -30,7 +30,7 @@ class _InterestPageState extends StateMVC<InterestPage> {
   
   @override
   Widget build(BuildContext context) {
-    _con.set_interests = widget.user.interests;
+    // _con.set_interests = widget.user.interests;
     return Scaffold(
       body: Stack(
           children: <Widget>[

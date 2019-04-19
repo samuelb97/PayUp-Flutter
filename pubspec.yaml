@@ -44,10 +44,8 @@ dependencies:
   intl: ^0.15.8
   geoflutterfire: ^2.0.3+2
   latlong: ^0.6.1
-
-
-
-  
+  sticky_headers: "^0.1.7"
+  async_loader: ^0.1.1
 
 dev_dependencies:
   flutter_test:
@@ -71,6 +69,7 @@ flutter:
     - assets/logo.png
     - assets/logo1.png
     - assets/alucard.jpg
+    - assets/profileBG.png
 
   #  - images/a_dot_ham.jpeg
 

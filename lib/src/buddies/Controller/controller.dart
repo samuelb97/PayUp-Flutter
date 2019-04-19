@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:login/src/buddies/Model/buddy.dart';
+import 'package:login/src/buddies/Model/friend.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:login/src/buddies/View/details_page.dart';
@@ -17,7 +17,7 @@ class Controller extends ControllerMVC {
   static Controller get con => _this;
   bool _isLoading = false;
   bool get isLoading => _isLoading;
-  List<Buddy> _buddies = [];
+  List<Friend> _buddies = [];
   List _interests; 
   static String _newInterest;
   static TextEditingController _textController = TextEditingController();
@@ -32,15 +32,15 @@ class Controller extends ControllerMVC {
   @override
   void initState() {
     super.initState();
-    _loadBuddies();
+    _loadFriends();
   }
 
-  Future<void> _loadBuddies() async {
+  Future<void> _loadFriends() async {
     http.Response response =
         await http.get('https://randomuser.me/api/?results=25');
 
     setState(() {
-      _buddies = Buddy.allFromResponse(response.body);
+      _buddies = Friend.allFromResponse(response.body);
     });
   }
 

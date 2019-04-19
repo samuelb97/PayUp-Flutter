@@ -9,6 +9,7 @@ import 'package:login/prop-config.dart';
 import 'package:login/analtyicsController.dart';
 import 'package:login/userController.dart';
 
+
 class Home extends StatefulWidget {
 
   Home({
@@ -31,7 +32,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   List<String> pages = [
     Headers.profile,
-    Headers.findBuddies,
+    Headers.friends,
     Headers.messages,
     Headers.search,
     Headers.settings,
@@ -49,10 +50,11 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context){
+    print("\n\nUSER USER: ${widget.user.name}\n\n");
     return Scaffold(
       appBar: AppBar(
         title: Text(Headers.payup),
-        backgroundColor: Colors.lightGreen,
+        backgroundColor: themeColors.accent2,
       ),
       body: TabBarView(
         controller: _controller,
@@ -63,9 +65,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
               return ProfilePage(user: widget.user, analControl: widget.analControl);
               break;
 
-            case Headers.findBuddies:
-              widget.analControl.sendAnalytics('nav_to_buddies');
-              return BuddiesPage(user: widget.user, analControl: widget.analControl);
+            case Headers.friends:
+              widget.analControl.sendAnalytics('nav_to_friends');
+              return FriendsPage(user: widget.user, analControl: widget.analControl);
               break;
 
             case Headers.messages:
@@ -85,12 +87,14 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
               break;
 
             default:
-              return ProfilePage(user: widget.user, analControl: widget.analControl);
+              return Text("Profile");
+              //return ProfilePage(user: widget.user, analControl: widget.analControl);
               break;
           }
         }).toList(),
       ),
       bottomNavigationBar: BottomNavyBar(
+        backgroundColor: themeColors.theme1,
         onItemSelected: (index) => setState(() {
             _index = index;
             _controller.animateTo(_index);
@@ -99,27 +103,32 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           BottomNavyBarItem(
             icon: Icon(Icons.portrait),
             title: Text(Headers.profile),
-            activeColor: Colors.green,
+            inactiveColor: themeColors.accent3,
+            activeColor: themeColors.accent2,
           ),
           BottomNavyBarItem(
               icon: Icon(Icons.people),
-              title: Text(Headers.findBuddies),
-              activeColor: Colors.green,
+              title: Text(Headers.friends),
+              inactiveColor: themeColors.accent3,
+              activeColor: themeColors.accent2,
           ),
           BottomNavyBarItem(
               icon: Icon(Icons.message),
               title: Text(Headers.messages),
-              activeColor: Colors.green,
+              inactiveColor: themeColors.accent3,
+              activeColor: themeColors.accent2,
           ),
           BottomNavyBarItem(
               icon: Icon(Icons.search),
               title: Text(Headers.search),
-              activeColor: Colors.green,
+              inactiveColor: themeColors.accent3,
+              activeColor: themeColors.accent2,
           ),
           BottomNavyBarItem(
               icon: Icon(Icons.settings),
               title: Text(Headers.settings),
-              activeColor: Colors.green,
+              inactiveColor: themeColors.accent3,
+              activeColor: themeColors.accent2,
           ),
         ],
       )

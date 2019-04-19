@@ -17,13 +17,10 @@ class Controller extends ControllerMVC {
   Controller._();
 
   static String username, email, password, password2, name, age;
-  static int _genderBtnValue = 0;
 
   GlobalKey<FormState> get registerformkey => _registerformkey;
 
-  static final GlobalKey<FormState> _registerformkey = GlobalKey<FormState>();
-
-  int get genderBtnValue => _genderBtnValue;
+  static final GlobalKey<FormState> _registerformkey = GlobalKey<FormState>(debugLabel: "SignUpKey");
 
   set set_email(String _email) {
     email = _email;
@@ -38,7 +35,7 @@ class Controller extends ControllerMVC {
     age = _age;
   }
   set set_username(String _username) {
-    username = username;
+    username = _username;
   }
    set set_password2(String _password2) {
     password2 = _password2;
@@ -58,6 +55,7 @@ class Controller extends ControllerMVC {
         return;
       }
       try {
+        print("\nUsername: $username\n");
         FirebaseUser user =
             await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: email,
@@ -66,6 +64,8 @@ class Controller extends ControllerMVC {
         String uid = user.uid;
         String searchKey = name[0].toUpperCase();
         Firestore.instance.collection("users").document("$uid").setData({
+          "friends": null,
+          "betIDs": null,
           "username": "$username",
           "email": "$email",
           "name": "$name",
@@ -74,14 +74,9 @@ class Controller extends ControllerMVC {
           "wins": 0,
           "loses": 0,
           "searchKey": "$searchKey",
-          "friends": null,
-          "betIDs": null,
         });
         user.sendEmailVerification();
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) => WelcomePage(analControl: analControl)));
+        Navigator.pop(context);
       } catch (e) {
         print(e.message);
       }

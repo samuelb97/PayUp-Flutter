@@ -11,29 +11,6 @@ class BuddyDetailBody extends StatelessWidget {
   userController user;
   double km;
   final Distance distance = new Distance();
-  
-  
-
-  Widget _buildLocationInfo(TextTheme textTheme) {
-    GeoPoint targetLocation = document.data['location'];
-    km = distance.as(LengthUnit.Kilometer, new LatLng(user.latitude, user.longitude), new LatLng(targetLocation.latitude, targetLocation.longitude));
-    return new Row(
-      children: <Widget>[
-        new Icon(
-          Icons.place,
-          color: Colors.white,
-          size: 16.0,
-        ),
-        new Padding(
-          padding: const EdgeInsets.only(left: 8.0),
-          child: new Text(
-            ' $km  kilometers away',
-            style: textTheme.subhead.copyWith(color: Colors.white),
-          ),
-        ),
-      ],
-    );
-  }
 
   Widget _createCircleBadge(IconData iconData, Color color) {
     return new Padding(
@@ -61,10 +38,6 @@ class BuddyDetailBody extends StatelessWidget {
         new Text(
           '${document['name']}',
           style: textTheme.headline.copyWith(color: Colors.white),
-        ),
-        new Padding(
-          padding: const EdgeInsets.only(top: 4.0),
-          child: _buildLocationInfo(textTheme),     //make this distance away
         ),
         new Text(
             '${document['gender']}',

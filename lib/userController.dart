@@ -1,5 +1,5 @@
 import 'package:location/location.dart';
-// import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 
@@ -14,20 +14,16 @@ class userController{
 
   static userController get userCon => _this;
 
-  LocationData _location;
   static String _uid;
   static String _age;
-  static String _gender;
-  static String _mobile;
   static String _name;
   static String _username;
-  static String _occupation;
   static String _photoUrl;
+  static int _wins;
+  static int _loses;
 
-  static List _interests;
   static List _friends;
-  static double _latitude;
-  static double _longitude;
+  static List _bets;
  
 
   set set_uid(String uid){
@@ -38,43 +34,33 @@ class userController{
   String get name => _name;
   String get username => _username;
   String get age => _age;
-  String get gender => _gender;
-  String get mobile => _mobile;
-  String get occupation => _occupation;
   String get photoUrl => _photoUrl;
-
-
-  List get interests => _interests;
-  LocationData get location => _location;
-  double get latitude => _latitude;
-  double get longitude => _longitude;
-
   List get friends => _friends;
-  // LatLng get latlng => LatLng(_latitude, _longitude);
+  List get bets => _bets;
 
   
 
-  Future load_data_from_firebase() async {
-    Firestore.instance.collection('users').document(_uid)
+  Future<void> load_data_from_firebase() async {
+    await Firestore.instance.collection('users').document(_uid)
       .get().then((DocumentSnapshot){
         print('Load Data From Firebase');
         print(DocumentSnapshot.data['name'].toString());
         _age = DocumentSnapshot.data['age'].toString();
-        _gender = DocumentSnapshot.data['gender'].toString();
-        _mobile = DocumentSnapshot.data['mobile'].toString();
         _name = DocumentSnapshot.data['name'].toString();
         _username = DocumentSnapshot.data['username'].toString();
-        _occupation = DocumentSnapshot.data['occupation'].toString();
-        _interests = DocumentSnapshot.data['interests'];
         _friends = DocumentSnapshot.data['friends'];
+        _wins = DocumentSnapshot.data['wins'];
+        _loses = DocumentSnapshot.data['loses'];
+        _bets = DocumentSnapshot.data['betIDs'];
         _photoUrl = DocumentSnapshot.data['photoUrl'].toString();
-        GeoPoint __location = DocumentSnapshot.data['location'];
-        _latitude = __location.latitude;
-        _longitude = __location.longitude;
-        print('Location After Load: $_longitude , $_latitude');
+        print('Loaded Data:\n $_age, $_name, $_username, $_wins, $_loses, $_photoUrl\n$_friends\n$_bets\n');
       }
     );
   }
+
+  
+
+
 
   // Future<GeoPoint> getUserLocation() async {
   //   final _getLocation = Location();
@@ -92,26 +78,4 @@ class userController{
   //   }
   // }
 
-  Future updateLocation() async {
-
-    LocationData currentLocation;
-
-    var location = new Location();
-    try {
-      currentLocation = await location.getLocation();
-      
-    } catch (e) {
-      if (e.code == 'PERMISSION_DENIED') {
-        print(e.message);
-      }
-      currentLocation = null;
-    }
-    var geopoint =
-        new GeoPoint(currentLocation.latitude, currentLocation.longitude);
-    Firestore.instance
-        .collection("users")
-        .document("$_uid")
-        .updateData({"location": geopoint});
-    
-  }
 }

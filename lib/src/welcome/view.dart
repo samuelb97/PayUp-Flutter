@@ -16,7 +16,6 @@ class WelcomePage extends StatefulWidget {
 class _WelcomePageState extends StateMVC<WelcomePage> {
   _WelcomePageState() : super(Controller()) {
     _con = Controller.con;
-    print("\nHIT\n");
   }
   Controller _con;
 
@@ -58,7 +57,7 @@ class _WelcomePageState extends StateMVC<WelcomePage> {
                       decoration: InputDecoration(
                         fillColor: Colors.white,
                         hintStyle: TextStyle(color: Colors.white),
-                        hintText: Prompts.type_email,
+                        hintText: Headers.email,
                         contentPadding:
                             EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
                         enabledBorder: OutlineInputBorder(

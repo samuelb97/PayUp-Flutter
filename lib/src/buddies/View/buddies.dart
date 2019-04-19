@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:login/src/buddies/Controller/controller.dart';
-import 'package:login/src/buddies/Model/buddy.dart';
+import 'package:login/src/buddies/Model/friend.dart';
 import 'package:login/src/buddies/Model/item.dart'; 
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:login/analtyicsController.dart';
@@ -10,30 +10,30 @@ import 'package:login/userController.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 
-class BuddiesPage extends StatefulWidget {  
-  BuddiesPage({
+class FriendsPage extends StatefulWidget {  
+  FriendsPage({
     Key key,
     this.analControl,
-    this.buddy,
+    this.friend,
     @required this.user 
     
   })
       : super(key: key);
-  final Buddy buddy;
+  final Friend friend;
   final userController user;
   final analyticsController analControl;
 
   @override
-  _BuddiesPageState createState() => _BuddiesPageState();
+  _FriendsPageState createState() => _FriendsPageState();
 }
 
-class _BuddiesPageState extends StateMVC<BuddiesPage> {
-  _BuddiesPageState() : super(Controller()) {
-    buddyController = Controller.con;
+class _FriendsPageState extends StateMVC<FriendsPage> {
+  _FriendsPageState() : super(Controller()) {
+    friendController = Controller.con;
   }
-  Controller buddyController;
+  Controller friendController;
   
-  List<Buddy> _buddies;
+  List<Friend> _friends;
   var linearGradient = const BoxDecoration(
       gradient: const LinearGradient(
         begin: FractionalOffset.centerRight,
@@ -47,15 +47,15 @@ class _BuddiesPageState extends StateMVC<BuddiesPage> {
   @override
   void initState() {
     super.initState();
-    _loadBuddys();
+    _loadFriends();
   }
 
-  Future<void> _loadBuddys() async {
+  Future<void> _loadFriends() async {
     http.Response response =
         await http.get('https://randomuser.me/api/?results=25');
 
     setState(() {
-      _buddies = Buddy.allFromResponse(response.body);
+      _friends = Friend.allFromResponse(response.body);
     });
   }
 
@@ -94,7 +94,7 @@ class _BuddiesPageState extends StateMVC<BuddiesPage> {
 
             // Loading
             Positioned(
-              child: buddyController.isLoading
+              child: friendController.isLoading
                   ? Container(
                       child: Center(
                         child: CircularProgressIndicator(
