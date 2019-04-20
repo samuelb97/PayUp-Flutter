@@ -5,6 +5,7 @@ import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:login/src/search/searchservice.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:login/prop-config.dart';
 
 
 class SearchPage extends StatefulWidget {
@@ -54,17 +55,21 @@ class _SearchPageState extends StateMVC<SearchPage> {
   @override
   Widget build(BuildContext context){
     return new Scaffold(
-      body: ListView(
+    body: Container(
+      decoration: themeColors.linearGradient,
+      child: ListView(
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.all(10.0),
             child:TextField(
+              style: TextStyle(color: Colors.white),
               onChanged: (val){
                 initiateSearch(val);
               },
               decoration: InputDecoration(
+                fillColor: Colors.white,
                 prefixIcon: IconButton(
-                  color: Colors.black,
+                  color: Colors.white,
                   icon: Icon(Icons.arrow_back),
                   iconSize: 20.0,
                   onPressed: (){
@@ -72,6 +77,7 @@ class _SearchPageState extends StateMVC<SearchPage> {
                   },
                 ),
                 contentPadding: EdgeInsets.only(left: 25.0),
+                hintStyle: TextStyle(color: Colors.white),
                 hintText: 'Search by name',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(4.0))
@@ -80,7 +86,8 @@ class _SearchPageState extends StateMVC<SearchPage> {
           ),
           SizedBox(height: 10.0),
           ListView(
-            padding: EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0, bottom: 10.0),
+            //padding: EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0, bottom: 10.0),
+            
             primary:false,
             shrinkWrap: true,
             children: tempSearchStore.map((element){
@@ -88,7 +95,7 @@ class _SearchPageState extends StateMVC<SearchPage> {
             }).toList(),
           )
         ]
-      )
+      ))
     );
   }
 }
@@ -96,6 +103,7 @@ class _SearchPageState extends StateMVC<SearchPage> {
 Widget buildResultButton(data){
   return FlatButton(
               child: Row(
+                
                 children: <Widget>[
                   Material(
                     child: CachedNetworkImage(
@@ -113,7 +121,7 @@ Widget buildResultButton(data){
                       height: 50.0,
                       fit: BoxFit.cover,
                     ),
-                    borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                    borderRadius: BorderRadius.all(Radius.circular(30.0)),
                     clipBehavior: Clip.hardEdge,
                   ),
                   Flexible(
@@ -141,6 +149,7 @@ Widget buildResultButton(data){
                       margin: EdgeInsets.only(left: 20.0),
                     ),
                   ),
+                  
                 ],
               ),
               onPressed: () {
@@ -158,9 +167,11 @@ Widget buildResultButton(data){
                 //             ),
                 //         fullscreenDialog: true));
               },
-              color: Colors.grey[700],
+              
+              
+              color: Colors.transparent,
               padding: EdgeInsets.fromLTRB(25.0, 10.0, 25.0, 10.0),
-              shape:
-                  RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+              // shape:
+              //     RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
             );
 }
