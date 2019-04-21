@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:login/prop-config.dart';
-import 'package:sticky_headers/sticky_headers.dart';
 import 'package:login/analtyicsController.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:login/src/profile/Controller/profileController.dart';
