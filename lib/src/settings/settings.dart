@@ -87,50 +87,6 @@ class _SettingsPageState extends State<SettingsPage> {
 
   }
 
-  
-  Future<bool> updateDialog() async {
-    return showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Settings', style: TextStyle(fontSize: 15.0)),
-            content: Container(
-              height: 150.0,
-              width: 150.0,
-              child: Column(
-                //mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  //SizedBox(height: 5.0),
-                  FlatButton(
-                    child: new Text('Change Profile Pic'),
-                    onPressed: () => getImage(widget.user),
-                  ),
-                  FlatButton(
-                    child: new Text('Change Password'),
-                    onPressed: () {},
-                  ),
-                  FlatButton(
-                    child: Text('Logout'),
-                    color: Colors.red,
-                    onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => WelcomePage(analControl: widget.analControl))),
-                  ),
-                ],
-              ),
-            ),
-            actions: <Widget>[
-              FlatButton(
-                child: Text('Done'),
-                textColor: Colors.blue,
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              )
-            ],
-          );
-        });
-  }
-
     Future getImage(userController user) async {
     _imageFile = await ImagePicker.pickImage(source: ImageSource.gallery);
 
