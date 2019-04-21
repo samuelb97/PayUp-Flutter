@@ -7,7 +7,7 @@ import 'package:login/src/search/searchservice.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:login/prop-config.dart';
 import 'package:login/src/challenge/betController.dart';
-import 'package:login/src/challenge/challenge_form.dart';
+//import 'package:login/src/challenge/challenge_form.dart';
 
 class ChallengeSearchPage extends StatefulWidget {
   ChallengeSearchPage({Key key, this.analControl, @required this.user})
@@ -15,7 +15,6 @@ class ChallengeSearchPage extends StatefulWidget {
 
   final userController user;
   final analyticsController analControl;
-  //final TextEditingController _controller = new TextEditingController();
 
   @override
   _ChallengeSearchPageState createState() => _ChallengeSearchPageState();

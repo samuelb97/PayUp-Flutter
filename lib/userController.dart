@@ -26,9 +26,14 @@ class userController{
   static List _friends;
   static List _bets;
  
-
-  set set_uid(String uid){
-    _uid = uid;
+  set set_name(String __name){
+    _name = __name;
+  }
+  set set_bets(List __bets){
+    _bets = __bets;
+  }
+  set set_uid(String __uid){
+    _uid = __uid;
   }
   set set_balance(int __balance){
     _balance = __balance;
@@ -45,8 +50,6 @@ class userController{
   List get friends => _friends;
   List get bets => _bets;
 
-  
-
   Future<void> load_data_from_firebase() async {
     await Firestore.instance.collection('users').document(_uid)
       .get().then((DocumentSnapshot){
@@ -60,6 +63,9 @@ class userController{
         _loses = DocumentSnapshot.data['loses'];
         _bets = DocumentSnapshot.data['betIDs'];
         _photoUrl = DocumentSnapshot.data['photoUrl'].toString();
+        if(_bets == null){
+          _bets = [];
+        }
         print('Loaded Data:\n $_age, $_name, $_username, $_wins, $_loses, $_photoUrl\n$_friends\n$_bets\n');
       }
     );

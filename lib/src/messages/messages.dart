@@ -5,6 +5,7 @@ import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:login/src/messages/msgController.dart';
 import 'package:login/src/messages/view/item.dart';
 import 'package:login/userController.dart';
+import 'package:login/prop-config.dart';
 
 class MessagePage extends StatefulWidget {
   MessagePage({Key key, this.analControl, @required this.user})
@@ -22,43 +23,34 @@ class _MessagePageState extends StateMVC<MessagePage> {
     msgController = MsgController.con;
   }
   MsgController msgController;
-  var linearGradient = const BoxDecoration(
-      gradient: const LinearGradient(
-        begin: FractionalOffset.centerRight,
-        end: FractionalOffset.bottomLeft,
-        colors: <Color>[
-          const Color(0xFF413070),
-          const Color(0xFF2B264A),
-        ],
-      ),
-    );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
           children: <Widget>[
-            // List
             Container(
-              decoration: linearGradient,
+              decoration: themeColors.linearGradient,
               child: StreamBuilder(
                 stream: Firestore.instance.collection('users').snapshots(),
                 builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
+                  print("\n\n Docs: ${snapshot.data.documents}\n Length: ${snapshot.data.documents.length}\n");
+                  if (!snapshot.hasData || snapshot.data.documents == null) {
                     return Center(
                       child: CircularProgressIndicator(
                         valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
                       ),
                     );
                   } else {
+                    var docs = snapshot.data.documents;
                     return ListView.builder(
-                      padding: EdgeInsets.all(10.0),
                       itemBuilder: (context, index) => buildItem(
                         context, 
-                        snapshot.data.documents[index], 
+                        docs[index], 
                         widget.user,
                         widget.analControl
                       ),
-                      itemCount: snapshot.data.documents.length,
+                      itemCount: docs.length,
                     );
                   }
                 },

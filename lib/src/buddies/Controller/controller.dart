@@ -44,11 +44,11 @@ class Controller extends ControllerMVC {
     });
   }
 
-  static void NavigateToBuddyDetails(DocumentSnapshot document, userController user, BuildContext context) async {
+  Future<void> NavigateToBuddyDetails(DocumentSnapshot document, userController user, BuildContext context) async {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => BuddyDetailsPage(document, user),
+        builder: (context) => FriendDetailsPage(document, user),
         fullscreenDialog: true
       )
     );

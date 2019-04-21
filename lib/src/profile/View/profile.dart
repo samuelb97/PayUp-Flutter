@@ -245,7 +245,7 @@ class TestHomePageBodyState extends State<TestHomePageBody> {
       child: TabBarView(
       controller: widget.tabController,
       key: _key,
-      children: List<Widget>.generate(tabCount, (int index) { //creates a lists of 2 elements (tab count)
+      children: List<Widget>.generate(tabCount, (int index) { //creates a lists of 3 elements (tab count)
         print("Gen index: $index\n");
         if(index == 0) {
           return ListView.builder(

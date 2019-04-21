@@ -5,11 +5,12 @@ import 'package:login/userController.dart';
 import 'package:login/analtyicsController.dart';
 import 'package:login/src/messages/chat/chat.dart';
 import 'package:login/src/buddies/View/showinterests.dart';
+import 'package:login/prop-config.dart';
 
-class BuddyDetailHeader extends StatelessWidget {
+class FriendDetailHeader extends StatelessWidget {
   static const BACKGROUND_IMAGE = 'images/profile_header_background.png';
 
-  BuddyDetailHeader(this.document, this.user, {Key key});
+  FriendDetailHeader(this.document, this.user, {Key key});
 
   userController user;
   analyticsController analControl;
@@ -22,10 +23,10 @@ class BuddyDetailHeader extends StatelessWidget {
       new Image.asset(
         BACKGROUND_IMAGE,
         width: screenWidth,
-        height: 280.0,
+        height: 240.0,
         fit: BoxFit.cover,
       ),
-      color: const Color(0xBB8338f4),
+      color: themeColors.theme3,
     );
   }
 
@@ -39,127 +40,116 @@ class BuddyDetailHeader extends StatelessWidget {
     );
   }
 
-  Widget _buildFollowerInfo(TextTheme textTheme) {
-    var followerStyle =
-        textTheme.subhead.copyWith(color: const Color(0xBBFFFFFF));
-
-    return new Padding(
-      padding: const EdgeInsets.only(top: 14.0),
-      child: new Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+  Widget _buildFriendInfo() {
+    return Padding(
+      padding: const EdgeInsets.only(left: 30),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          new Text('', style: followerStyle),
-          new Text(
-            '  ',
-            style: followerStyle.copyWith(
-                fontSize: 24.0, fontWeight: FontWeight.normal),
+          Text("${document.data["name"]}",
+            style: TextStyle(
+              fontSize: 20,
+              color: Colors.white
+            )),
+          Text(
+            "@${document.data["username"]}",
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.grey
+            )
           ),
-          new Text('', style: followerStyle),
         ],
       ),
     );
   }
 
-  Widget _buildActionButtons(ThemeData theme, BuildContext context) {
-    return new Padding(
+  Widget _buildActionButtons(BuildContext context) {
+    return Padding(
       padding: const EdgeInsets.only(
         top: 16.0,
         left: 16.0,
         right: 16.0,
       ),
-      child: new Row(
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          _createMessageButton(context,
-            'MESSAGE',
-            backgroundColor: Colors.green[500],
+          Container(
+            width: 120,
+            child: _createMessageButton(context)
           ),
-          _createInterestButton(context,
-            'INTERESTS',
-            backgroundColor: Colors.blue[500],
-          )
-      
+          Container(
+            width: 120,
+            child: _createChallengeButton(context)
+          ),
         ],
       ),
     );
   }
   
-  Widget _createMessageButton(
-    BuildContext context, String text, {
-    Color backgroundColor = Colors.transparent,
-    Color textColor = Colors.white70,
-    
-  }) {
-    return new ClipRRect(
-      borderRadius: new BorderRadius.circular(30.0),
-      
-      child: new MaterialButton(
-        minWidth: 140.0,
-        color: Colors.green[600],
-        textColor: Colors.black,
-        onPressed: () {
-          print('${document}');
-          print('User: ${user.uid}');
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => Chat(
-                        peerId: document.documentID,
-                        peerName: document.data['name'],
-                        peerAvatar: document.data['photoUrl'],
-                        analControl: analControl,
-                        user: user,
-                      ),
-                  fullscreenDialog: true));
-        },
-        child: new Text(text),
+  Widget _createMessageButton(BuildContext context){
+    return RaisedButton(
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Chat(
+              peerId: document.documentID,
+              peerName: document.data['name'],
+              peerAvatar: document.data['photoUrl'],
+              analControl: analControl,
+              user: user,
+            ),
+          fullscreenDialog: true));
+      },
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(24),
       ),
+      padding: EdgeInsets.all(12),
+      color: themeColors.accent1,
+      child: Text("Message",
+          style: TextStyle(color: themeColors.theme3)),
     );
   }
 
-  Widget _createInterestButton(
-    BuildContext context, String text, {
-    Color backgroundColor = Colors.transparent,
-    Color textColor = Colors.white70,
-    
-  }) {
-    
-    return new ClipRRect(
-      borderRadius: new BorderRadius.circular(30.0),
-      child: new MaterialButton(
-        minWidth: 140.0,
-        color: Colors.green[200],
-        textColor: Colors.black,
-        onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => ShowInterestsPage(
-                        document: document
-                      ),
-                  fullscreenDialog: true));
-        },
-        child: new Text(text),
+  Widget _createChallengeButton(BuildContext context){
+    return RaisedButton(
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ShowInterestsPage(
+                  document: document
+                ),
+            fullscreenDialog: true));
+      },
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(24),
       ),
+      padding: EdgeInsets.all(12),
+      color: themeColors.accent2,
+      child: Text("Challenge",
+          style: TextStyle(color: themeColors.theme3)),
     );
   }
+    
 
   @override
   Widget build(BuildContext context) {
-    var theme = Theme.of(context);
-    var textTheme = theme.textTheme;
-
-    return new Stack(
+    return Stack(
       children: <Widget>[
         _buildDiagonalImageBackground(context),
-        new Align(
+        Align(
           alignment: FractionalOffset.bottomCenter,
           heightFactor: 1.4,
-          child: new Column(
+          child: Column(
             children: <Widget>[
-              _buildAvatar(),
-              _buildFollowerInfo(textTheme),
-              _buildActionButtons(theme, context),
+              Row(children: <Widget>[
+                Padding(padding: EdgeInsets.symmetric(horizontal: 10)),
+                _buildAvatar(),
+                _buildFriendInfo(),
+              ]),
+              Padding(padding: EdgeInsets.symmetric(vertical: 10)),
+              _buildActionButtons(context),
             ],
           ),
         ),

@@ -9,7 +9,7 @@ import 'package:login/userController.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
-Widget buildClosedBet(BuildContext context, int index, userController user) {
+Widget buildClosedBet(BuildContext context, int index, var user) {
   if (index >= user.bets.length) {
     return Container();
   } else {

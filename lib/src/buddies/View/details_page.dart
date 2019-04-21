@@ -4,47 +4,34 @@ import 'package:login/src/buddies/View/detail_header.dart';
 import 'package:login/src/buddies/Controller/detail_body.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:login/userController.dart';
+import 'package:login/prop-config.dart';
 
-class BuddyDetailsPage extends StatefulWidget {
-  BuddyDetailsPage(this.document, this.user, {
-    Key key,
-     
+class FriendDetailsPage extends StatefulWidget {
+  FriendDetailsPage(
+    this.document, 
+    this.user, {
+    Key key,  
   });
- userController user;
+  final userController user;
   final DocumentSnapshot document;
-  //final Object avatarTag;
 
   @override
-  _BuddyDetailsPageState createState() => new _BuddyDetailsPageState();
+  _FriendDetailsPageState createState() => _FriendDetailsPageState();
 }
 
-class _BuddyDetailsPageState extends State<BuddyDetailsPage> {
+class _FriendDetailsPageState extends State<FriendDetailsPage> {
   @override
   Widget build(BuildContext context) {
-    var linearGradient = const BoxDecoration(
-      gradient: const LinearGradient(
-        begin: FractionalOffset.centerRight,
-        end: FractionalOffset.bottomLeft,
-        colors: <Color>[
-          const Color(0xFF413070),
-          const Color(0xFF2B264A),
-        ],
-      ),
-    );
-
-    return new Scaffold(
-      body: new SingleChildScrollView(
-        child: new Container(
-          decoration: linearGradient,
-          child: new Column(
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          decoration: themeColors.linearGradient,
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              new BuddyDetailHeader(widget.document, widget.user),
-              new Padding(
-                padding: const EdgeInsets.all(24.0),
-                child: new BuddyDetailBody(widget.document, widget.user),
-              ),
-              new BuddyShowcase(widget.document),
+              FriendDetailHeader(widget.document, widget.user),
+              FriendDetailBody(widget.document, widget.user)
             ],
           ),
         ), 
