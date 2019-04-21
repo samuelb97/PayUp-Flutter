@@ -182,7 +182,7 @@ void _showDialog(String inp){
   showDialog(
     context: context,
     builder: (BuildContext context){
-      return AlertDialog(title: new Text('A password reset link has been sent to $inp'),
+      return AlertDialog(title: new Text('A password reset link has been sent to $inp', textScaleFactor: 0.9),
         actions: <Widget>[
           new FlatButton(
             child: new Text("Close"),

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -73,7 +74,7 @@ class _SettingsPageState extends State<SettingsPage> {
             child: MaterialButton(
               minWidth: MediaQuery.of(context).size.width,
               padding: EdgeInsets.fromLTRB(30.0, 15.0, 30.0, 15.0),
-               onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => WelcomePage(analControl: widget.analControl))),
+               onPressed: logOut,
               child: Text('Logout', textScaleFactor: 1.25)
             ),
           ),
@@ -123,5 +124,10 @@ class _SettingsPageState extends State<SettingsPage> {
         .document("${user.uid}")
         .updateData({"photoUrl": imageUrl});
     Fluttertoast.showToast(msg: 'Profile Picture Updated');
+  }
+
+  void logOut(){
+    FirebaseAuth.instance.signOut();
+    Navigator.push(context, MaterialPageRoute(builder: (context) => WelcomePage(analControl: widget.analControl)));
   }
 }
