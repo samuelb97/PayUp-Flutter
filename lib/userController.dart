@@ -21,6 +21,7 @@ class userController{
   static String _photoUrl;
   static int _wins;
   static int _loses;
+  static int _balance = 0;
 
   static List _friends;
   static List _bets;
@@ -29,12 +30,18 @@ class userController{
   set set_uid(String uid){
     _uid = uid;
   }
+  set set_balance(int __balance){
+    _balance = __balance;
+  }
 
   String get uid => _uid;
   String get name => _name;
   String get username => _username;
   String get age => _age;
   String get photoUrl => _photoUrl;
+  int get wins => _wins;
+  int get loses => _loses;
+  int get balance => _balance;
   List get friends => _friends;
   List get bets => _bets;
 
