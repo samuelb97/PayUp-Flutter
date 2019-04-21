@@ -1,6 +1,8 @@
 import 'package:location/location.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'message.dart';
 
 
 class userController{
@@ -71,7 +73,27 @@ class userController{
     );
   }
 
-  
+
+
+final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+final List<Message> messages = [];
+
+void messageInitState() {
+  _firebaseMessaging.configure(
+    onMessage: (Map<String, dynamic> message) async {
+      print("onMessage: $message");
+      final notification = message['notification'];
+       messages.add(Message(
+              title: notification['title'], body: notification['body']));
+    },
+    onLaunch: (Map<String, dynamic> message) async {
+      print("onLaunch: $message");
+    },
+    onResume: (Map<String, dynamic> message) async {
+      print("onResume: $message");
+    },
+  );
+}
 
 
 

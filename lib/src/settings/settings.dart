@@ -1,6 +1,13 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:login/prop-config.dart';
 import 'package:login/analtyicsController.dart';
+import 'package:login/src/welcome/view.dart';
 import 'package:login/userController.dart';
 import 'package:login/src/settings/controller.dart';
 
@@ -20,72 +27,145 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  var linearGradient = const BoxDecoration(
-      gradient: const LinearGradient(
-        begin: FractionalOffset.centerRight,
-        end: FractionalOffset.bottomLeft,
-        colors: <Color>[
-          const Color(0xFF413070),
-          const Color(0xFF2B264A),
-        ],
-      ),
-    );
+  bool _isLoading;
+  File _imageFile;
+  String _imageUrl;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
         child: Container(
-          decoration: linearGradient,
+          decoration: themeColors.linearGradient,
+          child: Padding(padding: const EdgeInsets.fromLTRB(60, 15, 60, 15),
           child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          ButtonTheme( 
-              minWidth: 120,
-            child: RaisedButton(
-              color: Colors.green[800],
-              splashColor: Colors.green[300],
-              textTheme: ButtonTextTheme.primary,
-              padding: EdgeInsets.all(20.0),
-              elevation: 6,
-              shape: BeveledRectangleBorder(
-                side: BorderSide(
-                  width: 2.0, 
-                  color: Colors.deepPurple[800],
-                ), 
-                borderRadius: BorderRadius.circular(10), 
-              ),
+          Material(
+            borderRadius: BorderRadius.circular(30),
+            color: themeColors.accent,
+            elevation: 5,
+            child: MaterialButton(
+              minWidth: MediaQuery.of(context).size.width,
+              padding: EdgeInsets.fromLTRB(30.0, 15.0, 30.0, 15.0),
+              onPressed: () => getImage(widget.user),
+              child: Text('Change Profile Pic', textScaleFactor: 1.25)
+            ),
+          ),
+          SizedBox(height: 15.0),
+          Material(
+            borderRadius: BorderRadius.circular(30),
+            color: themeColors.accent,
+            elevation: 5,
+            child: MaterialButton(
+              minWidth: MediaQuery.of(context).size.width,
+              padding: EdgeInsets.fromLTRB(30.0, 15.0, 30.0, 15.0),
               onPressed: () {},
-              child: Text(Headers.settings),
+              child: Text('Change Password', textScaleFactor: 1.25)
+            ),
           ),
+          SizedBox(height: 15.0),
+          Material(
+            borderRadius: BorderRadius.circular(30),
+            color: themeColors.accent,
+            elevation: 5,
+            child: MaterialButton(
+              minWidth: MediaQuery.of(context).size.width,
+              padding: EdgeInsets.fromLTRB(30.0, 15.0, 30.0, 15.0),
+               onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => WelcomePage(analControl: widget.analControl))),
+              child: Text('Logout', textScaleFactor: 1.25)
+            ),
           ),
-          ButtonTheme( 
-              minWidth: 120,
-            child: RaisedButton(
-              color: Colors.green[800],
-              splashColor: Colors.green[300],
-              textTheme: ButtonTextTheme.primary,
-              padding: EdgeInsets.all(20.0),
-              elevation: 6,
-              shape: BeveledRectangleBorder(
-                side: BorderSide(
-                  width: 2.0, 
-                  color: Colors.deepPurple[800],
-                ), 
-                borderRadius: BorderRadius.circular(10), 
-              ),
-              onPressed: () { 
-                      Controller.navigateToSupport(context);
-              },
-              child: Text(Prompts.support),
-          ),
-          )
         ],
       ),
+          ),
         ),
       ),
     );
   
 
+  }
+
+  
+  Future<bool> updateDialog() async {
+    return showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Settings', style: TextStyle(fontSize: 15.0)),
+            content: Container(
+              height: 150.0,
+              width: 150.0,
+              child: Column(
+                //mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  //SizedBox(height: 5.0),
+                  FlatButton(
+                    child: new Text('Change Profile Pic'),
+                    onPressed: () => getImage(widget.user),
+                  ),
+                  FlatButton(
+                    child: new Text('Change Password'),
+                    onPressed: () {},
+                  ),
+                  FlatButton(
+                    child: Text('Logout'),
+                    color: Colors.red,
+                    onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => WelcomePage(analControl: widget.analControl))),
+                  ),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('Done'),
+                textColor: Colors.blue,
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          );
+        });
+  }
+
+    Future getImage(userController user) async {
+    _imageFile = await ImagePicker.pickImage(source: ImageSource.gallery);
+
+    if (_imageFile != null) {
+      setState(() {
+        _isLoading = true;
+      });
+      uploadFile(user);
+    }
+  }
+
+  Future uploadFile(userController user) async {
+    String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+    StorageReference reference = FirebaseStorage.instance.ref().child(fileName);
+    StorageUploadTask uploadTask = reference.putFile(_imageFile);
+    StorageTaskSnapshot storageTaskSnapshot = await uploadTask.onComplete;
+    storageTaskSnapshot.ref.getDownloadURL().then((downloadUrl) {
+      _imageUrl = downloadUrl;
+      setState(() {
+        _isLoading = false;
+        onUpdatePic(_imageUrl, user);
+      });
+    }, onError: (err) {
+      setState(() {
+        _isLoading = false;
+      });
+      Fluttertoast.showToast(msg: 'This file is not an image');
+    });
+  }
+
+  void onUpdatePic(String imageUrl, userController user) {
+    Firestore.instance
+        .collection("users")
+        .document("${user.uid}")
+        .updateData({"photoUrl": imageUrl});
+    Fluttertoast.showToast(msg: 'Profile Picture Updated');
   }
 }
