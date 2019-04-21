@@ -1,13 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:login/prop-config.dart';
+import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:login/userController.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'dart:async';
+import 'dart:io';
 
-class betController{
+class betController extends ControllerMVC{
   factory betController(){
     if(_this == null) _this = betController._();
     return _this;
   }
+
+  bool _isLoading;
+  File _imageFile;
+  String _imageUrl;
 
   static betController _this;
   betController._();
@@ -36,6 +46,51 @@ class betController{
 
   static bool _open;
 
+ 
+  static List _friends;
+
+  static String bet_id;
+
+  static String send_uid;
+  static String rec_uid;
+  static String mod_uid;
+
+  static bool user_accept;
+  static bool mod_accept;
+
+  static String winner;
+  static String loser;
+  static String description;
+
+  static String bet_image;
+
+  static int timestamp;
+  
+  static int send_wager;
+  static int rec_wager;
+  static bool open;
+
+  static List friends;
+
+  String get b_id => _bet_id;
+  String get s_uid => _send_uid;
+  String get r_uid => _rec_uid;
+  String get m_uid => _mod_uid;
+
+  bool get user_acc => _user_accept;
+  bool get mod_acc => _mod_accept;
+  String get win => _winner;
+  String get loss => _loser;
+  String get desc => _description;
+  String get bet_im => _bet_image;
+  int get stamp => _timestamp;
+  int get send_w => _send_wager;
+  int get rec_w => _rec_wager;
+  bool get op => _open;
+
+  List get friend => _friends;
+
+
   GlobalKey<FormState> get registerformkey => _formkey;
   static final GlobalKey<FormState> _formkey = GlobalKey<FormState>(debugLabel: "SignUpKey");
 
@@ -44,15 +99,21 @@ class betController{
   }
   set set_rec_uid(String rec_uid) {
     _rec_uid = rec_uid;
+    print("rec_uid");
+    print(_rec_uid);
   }
   set set_mod_uid(String mod_uid) {
     _mod_uid = mod_uid;
   }
   set set_send_wager(int send_wager) {
     _send_wager = send_wager;
+    print("send wager");
+    print(_send_wager);
   }
   set set_rec_wager(int rec_wager) {
     _rec_wager = rec_wager;
+    print("rec_wager");
+    print(_rec_wager);
   }
   set set_timestamp(int timestamp) {
     _timestamp = timestamp;
@@ -66,20 +127,53 @@ class betController{
   set set_description(String description){
     _description =description;
   }
+  set set_rec_friends(List friends){
+    _friends = friends;
+    print("Friends setter");
+    print(_friends);
+  }
+
+  Future <String> getImage(userController user) async {
+    _imageFile = await ImagePicker.pickImage(source: ImageSource.gallery);
+
+    if (_imageFile != null) {
+      setState(() {
+        _isLoading = true; 
+      });
+      return uploadFile(user);
+    }
+  }
+
+  Future <String>uploadFile(userController user) async {
+    String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+    StorageReference reference = FirebaseStorage.instance.ref().child(fileName);
+    StorageUploadTask uploadTask = reference.putFile(_imageFile);
+    StorageTaskSnapshot storageTaskSnapshot = await uploadTask.onComplete;
+    storageTaskSnapshot.ref.getDownloadURL().then((downloadUrl) {
+      _imageUrl = downloadUrl;
+      setState(() {
+        _isLoading = false;
+        return _imageUrl;
+      });
+    }, onError: (err) {
+      setState(() {
+        _isLoading = false;
+        return;
+      });
+      Fluttertoast.showToast(msg: 'This file is not an image');
+    });
+  }
 
 
 
   Future<String> createBet(BuildContext context, userController user) async {
-    final formState = registerformkey.currentState;
-    if (formState.validate()) {
-      formState.save();
-      try{
+    
         var docRef = await Firestore.instance.collection("bets").add({
           "send_uid":_send_uid,
           "rec_uid":_rec_uid,
-          "mod_uid":"",
-          "send_wager":0,
-          "rec_wager":0,
+          "mod_uid":_mod_uid,
+          "send_wager":_send_wager,
+          "rec_wager":_rec_wager,
           "timestamp":_timestamp,
           "bet_image":_bet_image,
           "open": false,
@@ -88,17 +182,12 @@ class betController{
           "user_accept":false,
           "winner":"",
           "loser":"",
-          "description":""
+          "description":_description
         });
+        print(docRef.documentID);
         return docRef.documentID;
         //nav to select mod_uid?
-      }
-      catch(e){
-        print(e.message);
-      }
-      
-    }
-    return "Error";
+     
   }
   
 }
