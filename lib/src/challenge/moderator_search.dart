@@ -7,31 +7,33 @@ import 'package:login/src/search/searchservice.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:login/prop-config.dart';
 import 'package:login/src/challenge/betController.dart';
-//import 'package:login/src/challenge/challenge_form.dart';
+import 'package:login/src/challenge/challenge_form.dart';
 
-class ChallengeSearchPage extends StatefulWidget {
-  ChallengeSearchPage({Key key, this.analControl, @required this.user})
+
+
+class ModeratorSearchPage extends StatefulWidget {
+  ModeratorSearchPage({Key key, this.analControl, @required this.user, this.bet})
       : super(key: key);
 
+  
+   betController bet;
   final userController user;
   final analyticsController analControl;
+  //final TextEditingController _controller = new TextEditingController();
 
   @override
-  _ChallengeSearchPageState createState() => _ChallengeSearchPageState();
+  _ModeratorSearchPageState createState() => _ModeratorSearchPageState();
 }
 
-class _ChallengeSearchPageState extends StateMVC<ChallengeSearchPage> {
+class _ModeratorSearchPageState extends StateMVC<ModeratorSearchPage> {
 
-  
-
-  betController _bet =betController();
 
   var queryResultSet = [];
   var tempSearchStore = [];
   var val;
   final TextEditingController _controller = new TextEditingController();
 
-  initiateSearch(value) {
+  initiateSearch(value) async {
     if (value.length == 0) {
       setState(() {
         queryResultSet = [];
@@ -42,21 +44,26 @@ class _ChallengeSearchPageState extends StateMVC<ChallengeSearchPage> {
     var capitalizedValue =
         value.substring(0, 1).toUpperCase() + value.substring(1);
 
+
     if (queryResultSet.length == 0 && value.length == 1) {
       SearchService().searchByName(value).then((QuerySnapshot docs) {
         for (int i = 0; i < docs.documents.length; i++) {
           if (docs.documents[i].documentID !=
-              widget.user.uid){
+              widget.user.uid && docs.documents[i].documentID != widget.bet.r_uid){
             print(i);
             print(docs.documents[i].documentID);
             print("friend");
             print(widget.user.friends);
-            if(widget.user.friends.contains(docs.documents[i].documentID)){ //displays only friends
-              print("Matched friend id");
+            print("FRIENDS");
+            print(widget.bet.friend);
+            print(widget.bet.r_uid);
+
+            if(widget.user.friends.contains((docs.documents[i].documentID)) && widget.bet.friend.contains(docs.documents[i].documentID)){
               queryResultSet.add(docs.documents[i].data);
             }
-        }}
-      });
+
+          }
+         }} );
     } else {
       tempSearchStore = [];
       queryResultSet.forEach((element) {
@@ -72,7 +79,7 @@ class _ChallengeSearchPageState extends StateMVC<ChallengeSearchPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Choose Your Opponent"),
+          title: Text("Select a Moderator"),
           backgroundColor: themeColors.accent3,
         ),
         body: GestureDetector(
@@ -131,7 +138,7 @@ class _ChallengeSearchPageState extends StateMVC<ChallengeSearchPage> {
                     primary: false,
                     shrinkWrap: true,
                     children: tempSearchStore.map((element) {
-                      return buildResultButton(element, context, _bet, widget.user);
+                      return buildResultButton(element, context, widget.bet, widget.user);
                     }).toList(),
                   )
                 ]))));
@@ -209,29 +216,30 @@ Widget buildResultButton(data, context, betController _bet, userController user)
         ),
       ],
     ),
-    onPressed: () {
+    onPressed: () async {
       print("pressed");
       print(data['name']);
 
       
-
-      _bet.set_send_uid = user.uid;
-      Firestore.instance.collection('users')
+      await Firestore.instance.collection('users')
         .where('username', 
         isEqualTo: data['username'])
-        .getDocuments().then((QuerySnapshot doc){
-          print(doc.documents[0].documentID);
-          _bet.set_rec_uid = doc.documents[0].documentID;
-          _bet.set_rec_friends = doc.documents[0].data['friends'];
+        .getDocuments().then((QuerySnapshot doc) {
+          
+         _bet.set_mod_uid = doc.documents[0].documentID;
         });
-
-        print(data);
-
-        Navigator.pushReplacement(context,
-          MaterialPageRoute(
-            builder: (context) => ChallengeFormPage(user: user, bet: _bet)
-          )
-        );
+      print("modID");
+      print(_bet.m_uid);
+      String bet_id = await _bet.createBet(context, user);
+      user.bets.add(bet_id);
+      Firestore.instance.collection("users")
+        .document("${user.uid}")
+        .updateData({"bets": FieldValue.arrayUnion(["$bet_id"])});
+      Navigator.pop(context);
+        //   MaterialPageRoute(
+        //     builder: (context) => ChallengeFormPage(user: user, bet: _bet)
+        //   )
+        // );
       
       
       
