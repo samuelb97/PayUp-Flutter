@@ -7,6 +7,10 @@ import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:login/src/profile/Controller/profileController.dart';
 import 'package:login/userController.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:login/src/profile/View/items/open.dart';
+import 'package:login/src/profile/View/items/closed.dart';
+import 'package:login/src/profile/View/items/pending.dart';
+import 'package:intl/intl.dart';
 
 Widget buildProfileDelegate(BuildContext context, userController user){
 
@@ -39,23 +43,47 @@ Widget buildProfileDelegate(BuildContext context, userController user){
         Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
           Text(
             '${user.name}',
-            style: Theme.of(context)
-                .textTheme
-                .title
-                .merge(TextStyle(color: Colors.white)),
+            style: TextStyle(
+              fontSize: 18,
+              color: Colors.white,
+              fontWeight: FontWeight.bold
+            ),
             textAlign: TextAlign.center,
           ),
-          Container(height: 1, width: 160, color: Colors.green),
+          Text(
+            '@${user.username}',
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.grey
+            ),
+            textAlign: TextAlign.center,
+          ),
+          Container(height: 1, width: 160, color: themeColors.accent1),
           Padding(
             padding: EdgeInsets.all(4.0),
           ),
           Text(
             '${Userinfo.age}: ${user.age}',
-            style: Theme.of(context)
-                .textTheme
-                .body1
-                .merge(TextStyle(color: Colors.white)),
-            // textAlign: TextAlign.left,
+            style: TextStyle(
+              fontSize: 13,
+              color: Colors.white
+            ),
+          ),
+          Padding(padding: EdgeInsets.symmetric(vertical: 2)),
+          Text(
+            '${Userinfo.record}: ${user.wins}-${user.loses}',
+            style: TextStyle(
+              fontSize: 13,
+              color: Colors.white
+            ),
+          ),
+          Padding(padding: EdgeInsets.symmetric(vertical: 2)),
+          Text(
+            '${Userinfo.balance}: ${user.balance}',
+            style: TextStyle(
+              fontSize: 13,
+              color: Colors.white
+            ),
           ),
         ])
       ]));
@@ -226,7 +254,7 @@ class TestHomePageBodyState extends State<TestHomePageBody> {
             key: PageStorageKey<int>(index),
                  //Makes two keys for two lists
             itemBuilder: (BuildContext cntxt, int idx)
-              => buildOpenBet(cntxt, idx)
+              => buildOpenBet(cntxt, idx, widget.user)
           );
         }
         else if(index == 1){
@@ -234,7 +262,7 @@ class TestHomePageBodyState extends State<TestHomePageBody> {
             itemCount: widget.user.bets.length,
             key: PageStorageKey<int>(index),     //Makes two keys for two lists
             itemBuilder: (cntxt, idx) 
-              => buildClosedBet(cntxt, idx)
+              => buildClosedBet(cntxt, idx, widget.user)
           );
         }
         else{
@@ -242,59 +270,13 @@ class TestHomePageBodyState extends State<TestHomePageBody> {
             itemCount: widget.user.bets.length,
             key: PageStorageKey<int>(index),     //Makes two keys for two lists
             itemBuilder: (cntxt, idx) 
-             => buildPendingBet(cntxt, idx)
+             => buildPendingBet(cntxt, idx, widget.user)
           );
         }
       }))
     );
   }
-  Widget buildOpenBet(BuildContext context, int index) {
-    print("\n\nLength: ${widget.user.bets.length}\nIndex $index\n\n");
-    if(index >= widget.user.bets.length){
-      return Container();
-    }
-    else{
-      return Container(
-        child: Text("Open $index, Bet: ${widget.user.bets[index]}")
-       );
-    }
-  }
-
-  Widget buildClosedBet(BuildContext context, int index) {
-    return Container(
-      child: Text("Closed $index"),
-    );
-  }
-
-  Widget buildPendingBet(BuildContext context, int index) {
-    return Container(
-      child: Text("Pending $index"),
-    );
-  }
-
-  searchByName(String betId){
-    return Firestore.instance.collection('bets').document(betId);
-  }
 }
-
-// Widget buildOpenBet(BuildContext context, int index) {
-//   if(index >= )
-//   return Container(
-//     child: Text("Open $index"),
-//   );
-// }
-
-// Widget buildClosedBet(BuildContext context, int index) {
-//   return Container(
-//     child: Text("Closed $index"),
-//   );
-// }
-
-// Widget buildPendingBet(BuildContext context, int index) {
-//   return Container(
-//     child: Text("Pending $index"),
-//   );
-// }
 
 // searchByName(String betId){
 //   return Firestore.instance.collection('bets').document(betId);

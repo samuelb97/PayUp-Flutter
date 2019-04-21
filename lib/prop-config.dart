@@ -72,6 +72,8 @@ class Userinfo {
   static const String userid = 'Your Account ID';
   static const String interests = 'Interests';
   static const String updateProfilePic = "Update Profile Picture";
+  static const String record = "Record";
+  static const String balance = "Balance";
 }
 
 class Pattern {
