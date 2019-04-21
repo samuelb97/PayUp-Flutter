@@ -6,9 +6,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:login/src/search/searchservice.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:login/prop-config.dart';
+import 'package:login/src/challenge/betController.dart';
+import 'package:login/src/challenge/challenge_form.dart';
 
-class SearchPage extends StatefulWidget {
-  SearchPage({Key key, this.analControl, @required this.user})
+class ChallengeSearchPage extends StatefulWidget {
+  ChallengeSearchPage({Key key, this.analControl, @required this.user})
       : super(key: key);
 
   final userController user;
@@ -16,10 +18,13 @@ class SearchPage extends StatefulWidget {
   //final TextEditingController _controller = new TextEditingController();
 
   @override
-  State createState() => _SearchPageState();
+  _ChallengeSearchPageState createState() => _ChallengeSearchPageState();
 }
 
-class _SearchPageState extends StateMVC<SearchPage> {
+class _ChallengeSearchPageState extends StateMVC<ChallengeSearchPage> {
+
+  betController _bet =betController();
+
   var queryResultSet = [];
   var tempSearchStore = [];
   var val;
@@ -40,9 +45,16 @@ class _SearchPageState extends StateMVC<SearchPage> {
       SearchService().searchByName(value).then((QuerySnapshot docs) {
         for (int i = 0; i < docs.documents.length; i++) {
           if (docs.documents[i].documentID !=
-              widget.user.uid) //new code might not work
-            queryResultSet.add(docs.documents[i].data);
-        }
+              widget.user.uid){
+            print(i);
+            print(docs.documents[i].documentID);
+            print("friend");
+            print(widget.user.friends);
+            if(widget.user.friends.contains(docs.documents[i].documentID)){ //displays only friends
+              print("Matched friend id");
+              queryResultSet.add(docs.documents[i].data);
+            }
+        }}
       });
     } else {
       tempSearchStore = [];
@@ -57,7 +69,11 @@ class _SearchPageState extends StateMVC<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+    return Scaffold(
+        appBar: AppBar(
+          title: Text("Choose Your Opponent"),
+          backgroundColor: themeColors.accent3,
+        ),
         body: GestureDetector(
             behavior: HitTestBehavior.opaque,
             onTap: () {
@@ -90,7 +106,7 @@ class _SearchPageState extends StateMVC<SearchPage> {
                           ),
                           contentPadding: EdgeInsets.only(left: 25.0),
                           hintStyle: TextStyle(color: Colors.white),
-                          hintText: 'Search by name',
+                          hintText: 'Search Friends',
                           enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(4.0),
                               borderSide: BorderSide(color: Colors.white),
@@ -114,14 +130,15 @@ class _SearchPageState extends StateMVC<SearchPage> {
                     primary: false,
                     shrinkWrap: true,
                     children: tempSearchStore.map((element) {
-                      return buildResultButton(element, context);
+                      return buildResultButton(element, context, _bet, widget.user);
                     }).toList(),
                   )
                 ]))));
+
   }
 }
 
-Widget buildResultButton(data, context) {
+Widget buildResultButton(data, context, betController _bet, userController user) {
   return FlatButton(
     child: Column(
       children: <Widget>[
@@ -194,6 +211,26 @@ Widget buildResultButton(data, context) {
     onPressed: () {
       print("pressed");
       print(data['name']);
+
+      _bet.set_send_uid = user.uid;
+      Firestore.instance.collection('users')
+        .where('username', 
+        isEqualTo: data['username'])
+        .getDocuments().then((QuerySnapshot doc){
+          print(doc.documents[0].documentID);
+          _bet.set_rec_uid = doc.documents[0].documentID;
+        });
+
+        Navigator.pushReplacement(context,
+          MaterialPageRoute(
+            builder: (context) => ChallengeFormPage(user: user, bet: _bet)
+          )
+        );
+      
+      
+      
+      
+      
       // Navigator.push(
       //     context,
       //     MaterialPageRoute(
