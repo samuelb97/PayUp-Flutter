@@ -10,6 +10,7 @@ class Chat extends StatelessWidget {
     Key key, 
     @required this.peerId, 
     @required this.peerAvatar,
+    this.isNew,
     this.peerName,
     this.analControl,
     this.user
@@ -18,6 +19,7 @@ class Chat extends StatelessWidget {
   final String peerId;
   final String peerAvatar;
   final String peerName;
+  bool isNew;
   final userController user;
   final analyticsController analControl;
 

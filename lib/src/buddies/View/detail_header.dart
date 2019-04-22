@@ -93,6 +93,7 @@ class FriendDetailHeader extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) => Chat(
+              isNew: true,
               peerId: document.documentID,
               peerName: document.data['name'],
               peerAvatar: document.data['photoUrl'],

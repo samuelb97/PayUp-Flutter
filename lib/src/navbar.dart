@@ -118,6 +118,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
               title: Text(Headers.messages),
               inactiveColor: themeColors.accent3,
               activeColor: themeColors.accent2,
+              
           ),
           BottomNavyBarItem(
               icon: Icon(Icons.search),

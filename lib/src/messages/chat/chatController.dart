@@ -19,6 +19,8 @@ class ChatController extends ControllerMVC {
 
   static ChatController get con => _this;
 
+  bool _isNewChat = false;
+
   String _peerId;
   String _peerAvatar;
   String _id;
@@ -47,6 +49,7 @@ class ChatController extends ControllerMVC {
   TextEditingController get textEditingController => _textEditingController;
   ScrollController get listScrollController => _listScrollController;
   FocusNode get focusNode => _focusNode;
+  bool get isNewChat => _isNewChat;
 
   set set_id(String __id) => _id = __id;
   set set_peerId(String __peerId) => _peerId = __peerId;
@@ -55,6 +58,7 @@ class ChatController extends ControllerMVC {
   set set_groupChatId(String __groupChatId) => _groupChatId = __groupChatId;
   set set_isLoading(bool __isLoading) => _isLoading = __isLoading;
   set set_imageUrl(String __imageUrl) => _imageUrl = __imageUrl;
+  set set_newChat(bool __newChat) => __newChat = __newChat;
 
 
   readLocal() async {
@@ -102,6 +106,8 @@ class ChatController extends ControllerMVC {
     //type: 0 = text, 1 = image, 2 = sticker
     if (content.trim() != '') {
       _textEditingController.clear();
+
+
 
       var documentReference = Firestore.instance
           .collection('messages')
