@@ -3,6 +3,9 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'message.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'dart:async';
 
 
 class userController{
@@ -20,10 +23,11 @@ class userController{
   static String _age;
   static String _name;
   static String _username;
+  static String _pubKey;
   static String _photoUrl;
   static int _wins;
   static int _loses;
-  static int _balance = 0;
+  static int _balance;
 
   static List _friends;
   static List _bets;
@@ -44,6 +48,7 @@ class userController{
   String get uid => _uid;
   String get name => _name;
   String get username => _username;
+  String get pubKey => _pubKey;
   String get age => _age;
   String get photoUrl => _photoUrl;
   int get wins => _wins;
@@ -65,14 +70,22 @@ class userController{
         _loses = DocumentSnapshot.data['loses'];
         _bets = DocumentSnapshot.data['betIDs'];
         _photoUrl = DocumentSnapshot.data['photoUrl'].toString();
+        _pubKey = DocumentSnapshot.data['pubKey'].toString();
         if(_bets == null){
           _bets = [];
         }
         print('Loaded Data:\n $_age, $_name, $_username, $_wins, $_loses, $_photoUrl\n$_friends\n$_bets\n');
       }
     );
+    _balance = await load_balance();
+    print('Loaded balance: $_balance');
   }
 
+Future<int> load_balance() async {
+  final response = 
+  await http.get("https://shrouded-forest-59484.herokuapp.com/checkWallet$_pubKey", headers: {"Accept": "application/json"});
+  return json.decode(response.body)['Balance'];
+}
 
 
 final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();

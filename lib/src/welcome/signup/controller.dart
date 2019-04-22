@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
@@ -5,6 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:login/analtyicsController.dart';
 import 'package:login/prop-config.dart';
 import 'package:login/src/welcome/view.dart';
+import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
 
 class Controller extends ControllerMVC {
@@ -13,6 +16,7 @@ class Controller extends ControllerMVC {
     return _this;
   }
   static Controller _this;
+
 
   Controller._();
 
@@ -61,6 +65,7 @@ class Controller extends ControllerMVC {
           email: email,
           password: password,
         );
+        Wallet userWallet = await getNewWallet();
         String uid = user.uid;
         String searchKey = name[0].toUpperCase();
         Firestore.instance.collection("users").document("$uid").setData({
@@ -74,6 +79,7 @@ class Controller extends ControllerMVC {
           "wins": 0,
           "loses": 0,
           "searchKey": "$searchKey",
+          "pubKey": userWallet.pubkey,
         });
         user.sendEmailVerification();
         Navigator.pop(context);
@@ -121,4 +127,24 @@ class Controller extends ControllerMVC {
     }
     return null;
   }
+
+  static Future<Wallet> getNewWallet() async {
+    final response =
+    await http.get('https://shrouded-forest-59484.herokuapp.com/newWallet', headers: {"Accept": "application/json"});
+    return Wallet.fromJson(json.decode(response.body));
+  }
+}
+
+class Wallet {
+  final String pubkey;
+  final int balance;
+
+  Wallet({this.pubkey, this.balance});
+
+  factory Wallet.fromJson(Map json){
+    return Wallet (
+      pubkey: json['publicKey'],
+      balance: json['balance']);
+  }
+
 }
