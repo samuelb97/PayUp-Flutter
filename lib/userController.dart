@@ -90,7 +90,7 @@ class userController{
 Future<int> load_balance() async {
   final response = 
   await http.get("https://shrouded-forest-59484.herokuapp.com/checkWallet$_pubKey", headers: {"Accept": "application/json"});
-  return json.decode(response.body)['Balance'];
+  return json.decode(response.body)['balance'];
 }
 
   // Future<GeoPoint> getUserLocation() async {

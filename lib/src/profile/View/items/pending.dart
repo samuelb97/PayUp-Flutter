@@ -55,41 +55,68 @@ Widget buildPendingBet(BuildContext context, int index, userController user) {
                         if (!snapshot.hasData){
                           return Container();
                         } else {
+                          String opponentName = "${snapshot.data["name"]}";
                           return Row(children: <Widget>[
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                               Row(children: <Widget>[
-                                Text(
-                                  "  ${user.name}",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                Text(
-                                  " $challengedOrAccepted ",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                                Text(
-                                  "${snapshot.data["name"]}",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                Text(
-                                  "  $userPending",
-                                  style: TextStyle(
-                                    color: Colors.grey,
-                                    fontSize: 14,
-                                    fontStyle: FontStyle.italic,
-                                  ),
+                                Builder(
+                                  builder: (context) {
+                                    if(!bet["user_accept"] && opponenetID == bet["send_uid"]) {
+                                      return Row(children: <Widget>[
+                                        Text(
+                                          "  ${snapshot.data["name"]}",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Text(
+                                          " challenged you",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ]);
+                                    } else {
+                                      return Row(children: <Widget>[
+                                        Text(
+                                          "  ${user.name}",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Text(
+                                          " $challengedOrAccepted ",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                        Text(
+                                          "$opponentName",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Text(
+                                          "  $userPending",
+                                          style: TextStyle(
+                                            color: Colors.grey,
+                                            fontSize: 14,
+                                            fontStyle: FontStyle.italic,
+                                          ),
+                                        ),
+                                      ]); 
+                                    }
+                                  },
                                 ),
                               ]),
                               Padding(padding: EdgeInsets.only(top: 4)),
@@ -161,21 +188,6 @@ Widget buildPendingBet(BuildContext context, int index, userController user) {
                               ),
                             ),
                             Spacer(),
-                            Container(
-                              padding: EdgeInsets.only(top: 10),
-                              child: Text(
-                                "   ${DateFormat('dd MMM kk:mm').format(
-                                    DateTime.fromMillisecondsSinceEpoch(bet['timestamp'])
-                                )}",
-                                style: TextStyle(
-                                    color: Colors.grey,
-                                    fontSize: 10.0,
-                                    fontStyle: FontStyle.italic),
-                              ),
-                            ),
-                            Padding(padding: EdgeInsets.only(
-                              right: MediaQuery.of(context).size.width * .15
-                            )),
                           ]);
                         }
                         else { 
@@ -230,26 +242,87 @@ Widget buildPendingBet(BuildContext context, int index, userController user) {
                                 )
                               ),
                               Spacer(),
-                              Container(
-                                padding: EdgeInsets.only(top: 76),
-                                child: Text(
-                                  "   ${DateFormat('dd MMM kk:mm').format(
-                                      DateTime.fromMillisecondsSinceEpoch(bet['timestamp'])
-                                  )}",
-                                  style: TextStyle(
-                                      color: Colors.grey,
-                                      fontSize: 10.0,
-                                      fontStyle: FontStyle.italic),
-                                ),
-                              ),
-                              Padding(padding: EdgeInsets.only(
-                                right: MediaQuery.of(context).size.width * .15
-                              )),
-                            ])
+                            ]),
                           ]);
                         }
                       }
                     }
+                  ),
+                  Builder(
+                    builder: (context) {
+                      if(!bet["user_accept"] && opponenetID == bet["send_uid"]) {
+                        return Row(children: <Widget>[
+                          Container(
+                            height: 24,
+                            width: 90,
+                            padding: EdgeInsets.only(top: 4),
+                            child: RaisedButton(
+                              onPressed: () {
+                                //TODO: Handle Accept
+                              },
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(24),
+                              ),
+                              color: themeColors.accent1,
+                              child: Text("Accept",
+                                  style: TextStyle(color: themeColors.theme3)),
+                            ),
+                          ),
+                          Padding(padding: EdgeInsets.symmetric(horizontal: 8)),
+                          Container(
+                            height: 24,
+                            width: 90,
+                            padding: EdgeInsets.only(top: 4),
+                            child: RaisedButton(
+                              onPressed: () {
+                                //TODO: Handle Decline
+                              },
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(35),
+                              ),
+                              color: themeColors.theme3,
+                              child: Text("Decline",
+                                  style: TextStyle(color: Colors.white)),
+                            ),
+                          ),
+                          Spacer(),
+                          Container(
+                            padding: EdgeInsets.only(top: 24),
+                            child: Text(
+                              "   ${DateFormat('dd MMM kk:mm').format(
+                                  DateTime.fromMillisecondsSinceEpoch(bet['timestamp'])
+                              )}",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 10.0,
+                                  fontStyle: FontStyle.italic),
+                            ),
+                          ),
+                          Padding(padding: EdgeInsets.only(
+                            right: MediaQuery.of(context).size.width * .15
+                          )),
+                        ]);
+                      } else {
+                        return Row(children: <Widget>[
+                          Spacer(),
+                          Container(
+                            padding: EdgeInsets.only(top: 12),
+                            child: Text(
+                              "   ${DateFormat('dd MMM kk:mm').format(
+                                  DateTime.fromMillisecondsSinceEpoch(bet['timestamp'])
+                              )}",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 10.0,
+                                  fontStyle: FontStyle.italic),
+                            ),
+                          ),
+                          Padding(padding: EdgeInsets.only(
+                            right: MediaQuery.of(context).size.width * .15
+                          )),
+                        ]);
+                      }
+                    },
                   ),
                   Padding(padding: EdgeInsets.only(bottom: 4)),
                   Container(
