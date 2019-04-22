@@ -247,6 +247,11 @@ Widget buildResultButton(data, context, betController _bet, userController user)
       Firestore.instance.collection("users")
         .document("${_bet.r_uid}")
         .updateData({"betIDs": FieldValue.arrayUnion(["$bet_id"])});
+ 
+      Firestore.instance.collection("users")
+        .document("${_bet.m_uid}")
+        .updateData({"modBets": FieldValue.arrayUnion(["$bet_id"])});
+
       Fluttertoast.showToast(msg: 'Challenge request sent to ${_bet.rec_name}');
       Navigator.pop(context);
     },

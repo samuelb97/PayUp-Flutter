@@ -100,9 +100,6 @@ class betController extends ControllerMVC{
   set set_timestamp(int timestamp) {
     _timestamp = timestamp;
   }
-  set set_bet_image(String bet_image){
-    _imageUrl =bet_image;
-  }
   set set_bet_id(String bet_id){
     _bet_id = bet_id;
   }
@@ -125,7 +122,7 @@ class betController extends ControllerMVC{
       setState(() {
         _isLoading = true; 
       });
-      return uploadFile(user);
+      return await uploadFile(user);
     }
   }
 
@@ -134,7 +131,7 @@ class betController extends ControllerMVC{
     StorageReference reference = FirebaseStorage.instance.ref().child(fileName);
     StorageUploadTask uploadTask = reference.putFile(_imageFile);
     StorageTaskSnapshot storageTaskSnapshot = await uploadTask.onComplete;
-    storageTaskSnapshot.ref.getDownloadURL().then((downloadUrl) {
+    await storageTaskSnapshot.ref.getDownloadURL().then((downloadUrl) {
       _imageUrl = downloadUrl;
       setState(() {
         _isLoading = false;
@@ -167,7 +164,10 @@ class betController extends ControllerMVC{
           "user_accept":false,
           "winner":"",
           "loser":"",
-          "description":_description
+          "description":_description,
+          "send_vote":"",
+          "rec_vote":"",
+          "mod_vote":""
         });
         print(docRef.documentID);
         //To do -> add bet to arrays in userController
