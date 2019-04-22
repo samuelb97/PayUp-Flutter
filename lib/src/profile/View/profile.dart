@@ -269,7 +269,7 @@ class TestHomePageBodyState extends State<TestHomePageBody> {
             itemCount: widget.user.bets.length,
             key: PageStorageKey<int>(index),     //Makes two keys for two lists
             itemBuilder: (cntxt, idx) 
-             => buildPendingBet(cntxt, idx, widget.user)
+             => buildPendingBet(cntxt, idx, widget.user),
           );
         }
       }))
