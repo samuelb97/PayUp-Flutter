@@ -24,13 +24,16 @@ Widget buildOpenBet(BuildContext context, int index, userController user) {
             var bet = snapshot.data;
             String opponenetID, challengedOrAccepted;
             int userWager, opponentWager;
+            String yourVote;
             if(bet["send_uid"] == user.uid){
+              yourVote = bet["send_vote"];
               opponenetID = bet["rec_uid"];
               challengedOrAccepted = "challenged";
               userWager = bet["send_wager"];
               opponentWager = bet["rec_wager"];
             }
             else{
+              yourVote = bet["rec_vote"];
               opponenetID = bet["send_uid"];
               challengedOrAccepted = "accepted";
               userWager = bet["rec_wager"];
