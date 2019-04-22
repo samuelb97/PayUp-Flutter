@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:bottom_navy_bar/bottom_navy_bar.dart';
+import 'package:login/bottom_navy_bar.dart';
 import 'package:login/src/buddies/View/friends.dart';
 import 'package:login/src/profile/View/profile.dart';
 import 'package:login/src/messages/messages.dart';
@@ -8,8 +8,8 @@ import 'package:login/src/search/search.dart';
 import 'package:login/prop-config.dart';
 import 'package:login/analtyicsController.dart';
 import 'package:login/userController.dart';
-//import 'package:login/src/challenge/challenge_search.dart';
-
+import 'package:login/src/challenge/challenge_search.dart';
+import 'package:login/notifications.dart';
 
 class Home extends StatefulWidget {
 
@@ -28,6 +28,8 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
+  int msgCounter = 0;
+  int notifCounter = 3;
   int _index = 0;
   TabController _controller;
 
@@ -54,7 +56,48 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     print("\n\nUSER USER: ${widget.user.name}\n\n");
     return Scaffold(
       appBar: AppBar(
-        title: Text(Headers.payup),
+        title: Row(
+          children: <Widget> [
+            Text(Headers.payup),
+            Spacer(),
+            Stack(
+              alignment: Alignment.center,
+              children: <Widget>[
+                Icon(Icons.notifications),
+                Builder(
+                  builder: (context) {
+                    if(notifCounter > 0) {
+                      return Positioned( 
+                        right: 0,
+                        child: Container( 
+                          padding: EdgeInsets.all(1),
+                          decoration: BoxDecoration( 
+                            color: Colors.red[300],
+                            borderRadius: BorderRadius.circular(6)
+                          ),
+                          constraints: BoxConstraints( 
+                            minWidth: 12,
+                            minHeight: 12,
+                          ),
+                          child: Text(
+                            "$notifCounter",
+                            style: TextStyle( 
+                              color: Colors.white,
+                              fontSize: 8,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      );
+                    } else {
+                      return Container();
+                    }
+                  }
+                )
+              ],
+            )
+          ]
+        ),
         backgroundColor: themeColors.accent2,
       ),
       body: TabBarView(
@@ -114,11 +157,44 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
               activeColor: themeColors.accent2,
           ),
           BottomNavyBarItem(
-              icon: Icon(Icons.message),
-              title: Text(Headers.messages),
-              inactiveColor: themeColors.accent3,
-              activeColor: themeColors.accent2,
-              
+            icon:  Stack(
+              children: <Widget>[
+                Icon(Icons.message),
+                Builder(
+                  builder: (context) {
+                    if(msgCounter > 0) {
+                      return Positioned( 
+                        right: 0,
+                        child: Container( 
+                          padding: EdgeInsets.all(1),
+                          decoration: BoxDecoration( 
+                            color: Colors.red[300],
+                            borderRadius: BorderRadius.circular(6)
+                          ),
+                          constraints: BoxConstraints( 
+                            minWidth: 12,
+                            minHeight: 12,
+                          ),
+                          child: Text(
+                            "$msgCounter",
+                            style: TextStyle( 
+                              color: Colors.white,
+                              fontSize: 8,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      );
+                    } else {
+                      return Container();
+                    }
+                  }
+                )
+              ],
+            ),
+            title: Text(Headers.messages),
+            inactiveColor: themeColors.accent3,
+            activeColor: themeColors.accent2,
           ),
           BottomNavyBarItem(
               icon: Icon(Icons.search),
@@ -135,21 +211,21 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           
         ],
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () async {
-      //     return Navigator.push(
-      //       context, 
-      //       MaterialPageRoute(
-      //         builder: (context) => ChallengeSearchPage(user: widget.user, analControl: widget.analControl),
-      //         fullscreenDialog: true
-      //       )
-      //     );
-      //   }, //to challenge search
-      //   tooltip: 'Challenge Reqeust',
-      //   backgroundColor: themeColors.accent2,
-      //   foregroundColor: Colors.white,
-      //   child: Icon(Icons.add),
-      // ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          return Navigator.push(
+            context, 
+            MaterialPageRoute(
+              builder: (context) => ChallengeSearchPage(user: widget.user, analControl: widget.analControl),
+              fullscreenDialog: true
+            )
+          );
+        }, //to challenge search
+        tooltip: 'Challenge Reqeust',
+        backgroundColor: themeColors.accent2,
+        foregroundColor: Colors.white,
+        child: Icon(Icons.add),
+      ),
     );
   }
 }
