@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:login/prop-config.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
@@ -14,6 +15,7 @@ class WelcomePage extends StatefulWidget {
 }
 
 class _WelcomePageState extends StateMVC<WelcomePage> {
+  String inp;
   _WelcomePageState() : super(Controller()) {
     _con = Controller.con;
   }
@@ -112,14 +114,7 @@ class _WelcomePageState extends StateMVC<WelcomePage> {
                             'Forgot password',
                             style: TextStyle(color: Colors.white),
                           ),
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => Forgot(),
-                                  fullscreenDialog: true),
-                            );
-                          },
+                          onPressed: updateDialog
                         ),
                         FlatButton(
                           child: Text(
@@ -141,4 +136,65 @@ class _WelcomePageState extends StateMVC<WelcomePage> {
       )
     );
   }
+  
+  Future<bool> updateDialog() async {
+    return showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Reset Password', style: TextStyle(fontSize: 15.0)),
+            content: Container(
+              height: 125.0,
+              width: 150.0,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  SizedBox(height: 5.0),
+                  TextField(
+                    decoration: InputDecoration(hintText: 'Enter Email'),
+                    onChanged: (value) {
+                      this.inp = value;
+                    },
+                  ),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('Reset'),
+                textColor: Colors.blue,
+                onPressed: () {
+                  resetPassword(inp);
+                  Navigator.of(context).pop();
+                  _showDialog(inp);
+                },
+              )
+            ],
+          );
+        });
+  }
+  
+  Future<void> resetPassword(String email) async {
+    await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+}
+
+void _showDialog(String inp){
+  showDialog(
+    context: context,
+    builder: (BuildContext context){
+      return AlertDialog(title: new Text('A password reset link has been sent to $inp', textScaleFactor: 0.9),
+        actions: <Widget>[
+          new FlatButton(
+            child: new Text("Close"),
+            onPressed: (){
+              Navigator.of(context).pop();
+            },
+          )
+        ],
+      );
+    },
+  );
+}
+
 }

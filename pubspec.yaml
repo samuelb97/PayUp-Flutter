@@ -47,7 +47,7 @@ dependencies:
   sticky_headers: "^0.1.7"
   async_loader: ^0.1.1
   flutter_local_notifications: ^0.6.1
-
+  http:
 dev_dependencies:
   flutter_test:
     sdk: flutter
