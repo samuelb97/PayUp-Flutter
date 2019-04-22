@@ -29,8 +29,10 @@ class userController{
   static int _loses;
   static int _balance;
 
+  static List _messages;
   static List _friends;
   static List _bets;
+  static List _modBets;
  
   set set_name(String __name){
     _name = __name;
@@ -56,6 +58,8 @@ class userController{
   int get balance => _balance;
   List get friends => _friends;
   List get bets => _bets;
+  List get messages => _messages;
+  List get modBets => _modBets;
 
   Future<void> load_data_from_firebase() async {
     await Firestore.instance.collection('users').document(_uid)
@@ -70,6 +74,8 @@ class userController{
         _loses = DocumentSnapshot.data['loses'];
         _bets = DocumentSnapshot.data['betIDs'];
         _photoUrl = DocumentSnapshot.data['photoUrl'].toString();
+        _modBets = DocumentSnapshot.data['modBets'];
+        _messages = DocumentSnapshot.data['messages'];
         _pubKey = DocumentSnapshot.data['pubKey'].toString();
         if(_bets == null){
           _bets = [];
@@ -86,29 +92,6 @@ Future<int> load_balance() async {
   await http.get("https://shrouded-forest-59484.herokuapp.com/checkWallet$_pubKey", headers: {"Accept": "application/json"});
   return json.decode(response.body)['Balance'];
 }
-
-
-final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
-final List<Message> messages = [];
-
-void messageInitState() {
-  _firebaseMessaging.configure(
-    onMessage: (Map<String, dynamic> message) async {
-      print("onMessage: $message");
-      final notification = message['notification'];
-       messages.add(Message(
-              title: notification['title'], body: notification['body']));
-    },
-    onLaunch: (Map<String, dynamic> message) async {
-      print("onLaunch: $message");
-    },
-    onResume: (Map<String, dynamic> message) async {
-      print("onResume: $message");
-    },
-  );
-}
-
-
 
   // Future<GeoPoint> getUserLocation() async {
   //   final _getLocation = Location();
