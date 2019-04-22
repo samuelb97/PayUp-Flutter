@@ -128,6 +128,6 @@ class _SettingsPageState extends State<SettingsPage> {
 
   void logOut(){
     FirebaseAuth.instance.signOut();
-    Navigator.push(context, MaterialPageRoute(builder: (context) => WelcomePage(analControl: widget.analControl)));
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => WelcomePage(analControl: widget.analControl)));
   }
 }
