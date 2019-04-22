@@ -136,6 +136,7 @@ class _WelcomePageState extends StateMVC<WelcomePage> {
       )
     );
   }
+  
   Future<bool> updateDialog() async {
     return showDialog(
         context: context,

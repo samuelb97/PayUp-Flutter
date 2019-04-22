@@ -6,6 +6,8 @@ import 'package:login/analtyicsController.dart';
 import 'package:login/src/messages/chat/chat.dart';
 import 'package:login/src/buddies/View/showinterests.dart';
 import 'package:login/prop-config.dart';
+import 'package:login/src/challenge/betController.dart';
+import 'package:login/src/challenge/challenge_form.dart';
 
 class FriendDetailHeader extends StatelessWidget {
   static const BACKGROUND_IMAGE = 'images/profile_header_background.png';
@@ -115,11 +117,17 @@ class FriendDetailHeader extends StatelessWidget {
   Widget _createChallengeButton(BuildContext context){
     return RaisedButton(
       onPressed: () {
+        betController bet = betController();
+        bet.set_send_uid = user.uid;
+        bet.set_rec_uid = document.documentID;
+        bet.set_rec_friends = document.data['friends'];
+        bet.set_rec_name = document.data['name'];
+
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ShowInterestsPage(
-                  document: document
+            builder: (context) => ChallengeFormPage(
+                  analControl: analControl, user:user, bet:bet
                 ),
             fullscreenDialog: true));
       },

@@ -223,6 +223,7 @@ Widget buildResultButton(data, context, betController _bet, userController user)
           print(doc.documents[0].documentID);
           _bet.set_rec_uid = doc.documents[0].documentID;
           _bet.set_rec_friends = doc.documents[0].data['friends'];
+          _bet.set_rec_name = doc.documents[0].data['name'];
         });
 
         print(data);

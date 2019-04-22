@@ -24,6 +24,8 @@ class betController extends ControllerMVC{
 
   static betController get betCon => _this;
 
+  static String _rec_name;
+
   static String _bet_id;
 
   static String _send_uid;
@@ -49,28 +51,6 @@ class betController extends ControllerMVC{
  
   static List _friends;
 
-  static String bet_id;
-
-  static String send_uid;
-  static String rec_uid;
-  static String mod_uid;
-
-  static bool user_accept;
-  static bool mod_accept;
-
-  static String winner;
-  static String loser;
-  static String description;
-
-  static String bet_image;
-
-  static int timestamp;
-  
-  static int send_wager;
-  static int rec_wager;
-  static bool open;
-
-  static List friends;
 
   String get b_id => _bet_id;
   String get s_uid => _send_uid;
@@ -82,13 +62,15 @@ class betController extends ControllerMVC{
   String get win => _winner;
   String get loss => _loser;
   String get desc => _description;
-  String get bet_im => _bet_image;
+  String get bet_im => _imageUrl;
   int get stamp => _timestamp;
   int get send_w => _send_wager;
   int get rec_w => _rec_wager;
   bool get op => _open;
 
   List get friend => _friends;
+
+  String get rec_name => _rec_name;
 
 
   GlobalKey<FormState> get registerformkey => _formkey;
@@ -119,7 +101,7 @@ class betController extends ControllerMVC{
     _timestamp = timestamp;
   }
   set set_bet_image(String bet_image){
-    _bet_image =bet_image;
+    _imageUrl =bet_image;
   }
   set set_bet_id(String bet_id){
     _bet_id = bet_id;
@@ -131,6 +113,9 @@ class betController extends ControllerMVC{
     _friends = friends;
     print("Friends setter");
     print(_friends);
+  }
+  set set_rec_name(String rec_name){
+    _rec_name = rec_name;
   }
 
   Future <String> getImage(userController user) async {
@@ -175,7 +160,7 @@ class betController extends ControllerMVC{
           "send_wager":_send_wager,
           "rec_wager":_rec_wager,
           "timestamp":_timestamp,
-          "bet_image":_bet_image,
+          "imageUrl":_imageUrl,
           "open": false,
           "complete": false,
           "mod_accept": false,
@@ -185,6 +170,7 @@ class betController extends ControllerMVC{
           "description":_description
         });
         print(docRef.documentID);
+        //To do -> add bet to arrays in userController
         return docRef.documentID;
         //nav to select mod_uid?
      
