@@ -8,7 +8,9 @@ import 'package:login/src/search/search.dart';
 import 'package:login/prop-config.dart';
 import 'package:login/analtyicsController.dart';
 import 'package:login/userController.dart';
-//import 'package:login/src/challenge/challenge_search.dart';
+import 'package:login/src/my_flutter_app_icons.dart';
+
+import 'package:login/src/challenge/challenge_search.dart';
 
 
 class Home extends StatefulWidget {
@@ -135,21 +137,21 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           
         ],
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () async {
-      //     return Navigator.push(
-      //       context, 
-      //       MaterialPageRoute(
-      //         builder: (context) => ChallengeSearchPage(user: widget.user, analControl: widget.analControl),
-      //         fullscreenDialog: true
-      //       )
-      //     );
-      //   }, //to challenge search
-      //   tooltip: 'Challenge Reqeust',
-      //   backgroundColor: themeColors.accent2,
-      //   foregroundColor: Colors.white,
-      //   child: Icon(Icons.add),
-      // ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          return Navigator.push(
+            context, 
+            MaterialPageRoute(
+              builder: (context) => ChallengeSearchPage(user: widget.user, analControl: widget.analControl),
+              fullscreenDialog: true
+            )
+          );
+        }, //to challenge search
+        tooltip: 'Challenge Reqeust',
+        backgroundColor: themeColors.accent2,
+        foregroundColor: Colors.white,
+        child: Icon(MyFlutterApp.icon),
+      ),
     );
   }
 }

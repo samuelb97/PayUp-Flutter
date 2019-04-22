@@ -7,7 +7,7 @@ import 'package:login/src/search/searchservice.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:login/prop-config.dart';
 import 'package:login/src/challenge/betController.dart';
-//import 'package:login/src/challenge/challenge_form.dart';
+import 'package:login/src/challenge/challenge_form.dart';
 
 class ChallengeSearchPage extends StatefulWidget {
   ChallengeSearchPage({Key key, this.analControl, @required this.user})
@@ -223,6 +223,7 @@ Widget buildResultButton(data, context, betController _bet, userController user)
           print(doc.documents[0].documentID);
           _bet.set_rec_uid = doc.documents[0].documentID;
           _bet.set_rec_friends = doc.documents[0].data['friends'];
+          _bet.set_rec_name = doc.documents[0].data['name'];
         });
 
         print(data);

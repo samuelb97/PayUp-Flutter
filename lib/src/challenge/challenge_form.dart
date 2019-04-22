@@ -25,12 +25,14 @@ class ChallengeFormPage extends StatefulWidget {
 }
 
 class _ChallengeFormPageState extends StateMVC<ChallengeFormPage> {
+
+  
    @override
   Widget build(BuildContext context) {
     
     return new Scaffold(
       appBar: AppBar(
-        title: Text("Challenge Specifications"),
+        title: Text("Challenge ${widget.bet.rec_name}"),
         backgroundColor: themeColors.accent2,
         // actions: <Widget>[IconButton(
         //                     color: Colors.white,

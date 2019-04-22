@@ -139,7 +139,7 @@ Widget buildClosedBet(BuildContext context, int index, var user) {
                         if (!snapshot.hasData) {
                           return Container();
                         } else {
-                          if (bet["imageUrl"] == "") {
+                          if (bet["imageUrl"] == "" || bet["imageUrl"] == null) {
                             return Row(children: <Widget>[
                               RichText(
                                 text: TextSpan(

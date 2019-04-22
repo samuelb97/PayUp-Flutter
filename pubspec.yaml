@@ -92,6 +92,10 @@ flutter:
     - family: Aguafina
       fonts:
         - asset: assets/Aguafina.ttf
+
+    - family:  MyFlutterApp
+      fonts:
+        - asset: assets/MyFlutterApp.ttf
   #   - family: Schyler
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf

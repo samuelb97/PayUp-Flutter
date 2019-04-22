@@ -8,6 +8,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:login/prop-config.dart';
 import 'package:login/src/challenge/betController.dart';
 import 'package:login/src/challenge/challenge_form.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 
 
@@ -230,32 +231,24 @@ Widget buildResultButton(data, context, betController _bet, userController user)
         });
       print("modID");
       print(_bet.m_uid);
+
+      _bet.set_timestamp = DateTime.now().millisecondsSinceEpoch;
       String bet_id = await _bet.createBet(context, user);
-      user.bets.add(bet_id);
+
+      List temp = List.from(user.bets);
+      temp.add(bet_id);
+      user.set_bets = temp;
+
+      
       Firestore.instance.collection("users")
         .document("${user.uid}")
-        .updateData({"bets": FieldValue.arrayUnion(["$bet_id"])});
+        .updateData({"betIDs": FieldValue.arrayUnion(["$bet_id"])});
+
+      Firestore.instance.collection("users")
+        .document("${_bet.r_uid}")
+        .updateData({"betIDs": FieldValue.arrayUnion(["$bet_id"])});
+      Fluttertoast.showToast(msg: 'Challenge request sent to ${_bet.rec_name}');
       Navigator.pop(context);
-        //   MaterialPageRoute(
-        //     builder: (context) => ChallengeFormPage(user: user, bet: _bet)
-        //   )
-        // );
-      
-      
-      
-      
-      
-      // Navigator.push(
-      //     context,
-      //     MaterialPageRoute(
-      //         builder: (context) => Chat(
-      //               peerId: document.documentID,
-      //               peerName: document['name'],
-      //               peerAvatar: document['photoUrl'],
-      //               analControl: analControl,
-      //               user: user,
-      //             ),
-      //         fullscreenDialog: true));
     },
 
     color: Colors.transparent,

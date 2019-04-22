@@ -136,7 +136,7 @@ Widget buildPendingBet(BuildContext context, int index, userController user) {
                         return Container();
                       }
                       else {
-                        if(bet["imageUrl"] == ""){
+                        if(bet["imageUrl"] == "" || bet["imageUrl"] == null){
                           return Row(children: <Widget>[
                             RichText(
                               text: TextSpan(
