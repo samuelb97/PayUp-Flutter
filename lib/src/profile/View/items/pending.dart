@@ -188,6 +188,24 @@ Widget buildPendingBet(BuildContext context, int index, userController user) {
                               ),
                             ),
                             Spacer(),
+                            Builder(builder: (context){
+                              if(bet["user_accept"] || user.uid == bet["send_uid"]){
+                                return Container(
+                                  padding: EdgeInsets.only(top: 10, right: MediaQuery.of(context).size.width * .15),
+                                  child: Text(
+                                    "   ${DateFormat('dd MMM kk:mm').format(
+                                        DateTime.fromMillisecondsSinceEpoch(bet['timestamp'])
+                                    )}",
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 10.0,
+                                        fontStyle: FontStyle.italic),
+                                  ),
+                                );
+                              } else {
+                                return Container();
+                              }
+                            })
                           ]);
                         }
                         else { 
@@ -252,9 +270,10 @@ Widget buildPendingBet(BuildContext context, int index, userController user) {
                     builder: (context) {
                       if(!bet["user_accept"] && opponenetID == bet["send_uid"]) {
                         return Row(children: <Widget>[
+                          Padding(padding: EdgeInsets.symmetric(horizontal: 4)),
                           Container(
                             height: 24,
-                            width: 90,
+                            width: 94,
                             padding: EdgeInsets.only(top: 4),
                             child: RaisedButton(
                               onPressed: () {
@@ -268,10 +287,10 @@ Widget buildPendingBet(BuildContext context, int index, userController user) {
                                   style: TextStyle(color: themeColors.theme3)),
                             ),
                           ),
-                          Padding(padding: EdgeInsets.symmetric(horizontal: 8)),
+                          Padding(padding: EdgeInsets.symmetric(horizontal: 4)),
                           Container(
                             height: 24,
-                            width: 90,
+                            width: 94,
                             padding: EdgeInsets.only(top: 4),
                             child: RaisedButton(
                               onPressed: () {
@@ -303,24 +322,7 @@ Widget buildPendingBet(BuildContext context, int index, userController user) {
                           )),
                         ]);
                       } else {
-                        return Row(children: <Widget>[
-                          Spacer(),
-                          Container(
-                            padding: EdgeInsets.only(top: 12),
-                            child: Text(
-                              "   ${DateFormat('dd MMM kk:mm').format(
-                                  DateTime.fromMillisecondsSinceEpoch(bet['timestamp'])
-                              )}",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 10.0,
-                                  fontStyle: FontStyle.italic),
-                            ),
-                          ),
-                          Padding(padding: EdgeInsets.only(
-                            right: MediaQuery.of(context).size.width * .15
-                          )),
-                        ]);
+                        return Container();
                       }
                     },
                   ),

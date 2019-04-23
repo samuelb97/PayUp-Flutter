@@ -10,83 +10,7 @@ import 'package:login/src/profile/View/items/open.dart';
 import 'package:login/src/profile/View/items/closed.dart';
 import 'package:login/src/profile/View/items/pending.dart';
 import 'package:intl/intl.dart';
-
-Widget buildProfileDelegate(BuildContext context, userController user){
-
-    return Container(
-      color: themeColors.theme3,
-      padding: EdgeInsets.only(top: 20.0, left: 30.0, right: 30.0),
-      child: Row(children: <Widget>[
-        Material(
-          borderRadius: BorderRadius.all(Radius.circular(45.0)),
-          clipBehavior: Clip.hardEdge,
-          child: CachedNetworkImage(
-            placeholder: (context, url) => Container(
-                  child: CircularProgressIndicator(
-                    strokeWidth: 1.0,
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
-                  ),
-                  width: 90.0,
-                  height: 90.0,
-                  padding: EdgeInsets.all(12.0),
-                ),
-            imageUrl: '${user.photoUrl}',
-            width: 90.0,
-            height: 90.0,
-            fit: BoxFit.cover,
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.all(16.0),
-        ),
-        Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-          Text(
-            '${user.name}',
-            style: TextStyle(
-              fontSize: 18,
-              color: Colors.white,
-              fontWeight: FontWeight.bold
-            ),
-            textAlign: TextAlign.center,
-          ),
-          Text(
-            '@${user.username}',
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.grey
-            ),
-            textAlign: TextAlign.center,
-          ),
-          Container(height: 1, width: 160, color: themeColors.accent1),
-          Padding(
-            padding: EdgeInsets.all(4.0),
-          ),
-          Text(
-            '${Userinfo.age}: ${user.age}',
-            style: TextStyle(
-              fontSize: 13,
-              color: Colors.white
-            ),
-          ),
-          Padding(padding: EdgeInsets.symmetric(vertical: 2)),
-          Text(
-            '${Userinfo.record}: ${user.wins}-${user.loses}',
-            style: TextStyle(
-              fontSize: 13,
-              color: Colors.white
-            ),
-          ),
-          Padding(padding: EdgeInsets.symmetric(vertical: 2)),
-          Text(
-            '${Userinfo.balance}: ${user.balance}',
-            style: TextStyle(
-              fontSize: 13,
-              color: Colors.white
-            ),
-          ),
-        ])
-      ]));
-}
+import 'package:login/src/profile/View/items/profileInfo.dart';
 
 const tabCount = 3;
 
@@ -170,15 +94,15 @@ class _ProfilePageState extends StateMVC<ProfilePage>
         controller: _scrollController,
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return <Widget>[
-            new SliverFixedExtentList(
+            SliverFixedExtentList(
               itemExtent: 150.0,
               delegate: SliverChildListDelegate([
                 buildProfileDelegate(context, widget.user),
               ],),
             ),
-            new SliverPersistentHeader(
+            SliverPersistentHeader(
               pinned: true,
-              delegate: new TestTabBarDelegate(controller: _tabController),
+              delegate: TestTabBarDelegate(controller: _tabController),
             ),
           ];
         },
@@ -214,16 +138,18 @@ class TestHomePageBodyState extends State<TestHomePageBody> {
     if (!_innerListIsScrolled &&
         widget.scrollController.position.extentAfter == 0.0) {
       setState(() {
+        print("\nScroll Update 1\n");
         _innerListIsScrolled = true;
       });
-    } else if (_innerListIsScrolled &&
-        widget.scrollController.position.extentAfter > 0.0) {
-      setState(() {
-        _innerListIsScrolled = false;
-        // Reset scroll positions of the TabBarView pages
-        _key = PageStorageKey({});
-      });
-    }
+    } //else if (_innerListIsScrolled &&
+    //     widget.scrollController.position.extentAfter > 0.0) {
+    //   setState(() {
+    //     print("\nScroll Update 2\n");
+    //     _innerListIsScrolled = false;
+    //     // Reset scroll positions of the TabBarView pages
+    //     _key = PageStorageKey({});
+    //   });
+    // }
   }
 
   @override
@@ -248,7 +174,7 @@ class TestHomePageBodyState extends State<TestHomePageBody> {
       children: List<Widget>.generate(tabCount, (int index) { //creates a lists of 3 elements (tab count)
         print("Gen index: $index\n");
         if(index == 0) {
-          return ListView.builder(
+          return ListView.builder(               //Open Bets
             itemCount: widget.user.bets.length,
             key: PageStorageKey<int>(index),
                  //Makes two keys for two lists
@@ -257,7 +183,7 @@ class TestHomePageBodyState extends State<TestHomePageBody> {
           );
         }
         else if(index == 1){
-          return ListView.builder(
+          return ListView.builder(              //Closed Bets
             itemCount: widget.user.bets.length,
             key: PageStorageKey<int>(index),     //Makes two keys for two lists
             itemBuilder: (cntxt, idx) 
@@ -265,8 +191,9 @@ class TestHomePageBodyState extends State<TestHomePageBody> {
           );
         }
         else{
-          return ListView.builder(
+          return ListView.builder(              //Pending
             itemCount: widget.user.bets.length,
+            padding: EdgeInsets.only(bottom: 260),
             key: PageStorageKey<int>(index),     //Makes two keys for two lists
             itemBuilder: (cntxt, idx) 
              => buildPendingBet(cntxt, idx, widget.user),

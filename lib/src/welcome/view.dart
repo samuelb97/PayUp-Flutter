@@ -25,7 +25,7 @@ class _WelcomePageState extends StateMVC<WelcomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(Headers.payup + Prompts.login),
+        title: Text(Headers.payup),
         backgroundColor: themeColors.accent2,
         centerTitle: true,
       ),
