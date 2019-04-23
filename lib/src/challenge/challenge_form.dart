@@ -68,6 +68,7 @@ class _ChallengeFormPageState extends StateMVC<ChallengeFormPage> {
                                       int.parse(input) > 99999) {
                                     return "Please enter a valid amount";
                                   }
+                                  else{return null;}
                                 },
                                 decoration: InputDecoration(
                                   fillColor: Colors.white,
@@ -102,6 +103,7 @@ class _ChallengeFormPageState extends StateMVC<ChallengeFormPage> {
                                       int.parse(input) > 99999) {
                                     return "Please enter a valid amount";
                                   }
+                                  else{return null;}
                                 },
                                 decoration: InputDecoration(
                                   fillColor: Colors.white,
@@ -198,7 +200,7 @@ class _ChallengeFormPageState extends StateMVC<ChallengeFormPage> {
                                   .validate()) {
                                 widget.bet.registerformkey.currentState.save();
                               }
-
+                              
                               Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(

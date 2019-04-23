@@ -283,6 +283,8 @@ Widget buildPendingBet(BuildContext context, int index, userController user) {
                               onPressed: () {
                                 handler.updateBetAcceptances(context, user, betId, true);
                                 print("\nbet accepted\n\n");
+                                
+
                                 //TODO: lock button
                               },
                               shape: RoundedRectangleBorder(
@@ -302,6 +304,8 @@ Widget buildPendingBet(BuildContext context, int index, userController user) {
                               onPressed: () {
                                 handler.updateBetAcceptances(context, user, betId, false);
                                 print("\nbet declined\n\n");
+
+                                
                                 //TODO: lock button
                               },
                               shape: RoundedRectangleBorder(
