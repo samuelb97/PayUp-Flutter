@@ -9,11 +9,12 @@ import 'package:login/userController.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
-Widget challengeRespondItem(BuildContext context, betId, user){
+Widget moderateRespondItem(BuildContext context, betId, user){
   return StreamBuilder(
     stream: Firestore.instance.collection('bets').document(betId).snapshots(),
     builder: (context, snapshot) {
-      if (!snapshot.hasData || snapshot.data["open"] || snapshot.data["complete"]){
+      if (!snapshot.hasData || snapshot.data["open"] || snapshot.data["complete"] 
+         || !snapshot.data["user_accept"]){
         return Container();
       } else {
         var bet = snapshot.data;
@@ -46,7 +47,7 @@ Widget challengeRespondItem(BuildContext context, betId, user){
                               ),
                             ),
                             Text(
-                              " challenged you",
+                              " vs",
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 14,
@@ -168,7 +169,7 @@ Widget challengeRespondItem(BuildContext context, betId, user){
                     borderRadius: BorderRadius.circular(24),
                   ),
                   color: themeColors.accent1,
-                  child: Text("Accept",
+                  child: Text("Moderate",
                       style: TextStyle(color: themeColors.theme3)),
                 ),
               ),

@@ -10,6 +10,7 @@ import 'package:login/analtyicsController.dart';
 import 'package:login/userController.dart';
 import 'package:login/src/my_flutter_app_icons.dart';
 import 'package:login/src/challenge/challenge_search.dart';
+import 'package:login/src/notifications/notificationsview.dart';
 
 
 class Home extends StatefulWidget {
@@ -64,7 +65,14 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             Stack(
               alignment: Alignment.center,
               children: <Widget>[
-                Icon(Icons.notifications),
+                IconButton(
+                  icon: Icon(Icons.notifications),
+                  onPressed: (){
+                    Navigator.push(
+                      context, 
+                      MaterialPageRoute(builder: (context) => NotificationsPage(user: widget.user)));
+                  },
+                ),
                 Builder(
                   builder: (context) {
                     if(notifCounter > 0) {
