@@ -235,9 +235,10 @@ Widget buildOpenBet(BuildContext context, int index, userController user) {
 
                                   var body = json.encode(data);
 
-                                  http.post('https://gentle-ridge-52752.herokuapp.com/transact', headers: {"Content-Type": "application/json"}, body:body);
-
-                                  user.set_balance = user.balance + total;
+                                  final response = 
+                                  await http.post('https://gentle-ridge-52752.herokuapp.com/transact-to-winner', headers: {"Content-Type": "application/json"}, body:body);
+                                  
+                                  user.set_balance = json.decode(response.body)['balance'];
                                   
                                 }
                                 // Navigator.pushReplacement(context, 
@@ -291,7 +292,7 @@ Widget buildOpenBet(BuildContext context, int index, userController user) {
 
                                   var body = json.encode(data);
 
-                                  http.post('https://gentle-ridge-52752.herokuapp.com/transact', headers: {"Content-Type": "application/json"}, body:body);
+                                  http.post('https://gentle-ridge-52752.herokuapp.com/transact-to-winner', headers: {"Content-Type": "application/json"}, body:body);
 
                                   //user.set_balance = user.balance + total;
                                   
