@@ -116,19 +116,124 @@ class betHandler extends ControllerMVC{
   }
 
   Future<String> updateBetVotes(BuildContext context, userController user, betID, vote) async {
-    var docRef = Firestore.instance.collection("bets").document("betID");
+    var docRef = Firestore.instance.collection("bets").document(betID);
+    var docSnap = await Firestore.instance.collection("bets").document(betID).get();
 
     //ifs for update send_vote, rec_vote, or mod_vote
-
-    await docRef.updateData({
-      "send_vote": vote,
-    });
-
-
+    if(docSnap.data['send_uid'] == user.uid){
+      await docRef.updateData({
+        "send_vote": vote,
+      });
+    }
+    else if(docSnap.data['rec_uid'] == user.uid){
+      await docRef.updateData({
+        "rec_vote": vote,
+      });
+    }
+    else if(docSnap.data['mod_uid'] == user.uid){
+      await docRef.updateData({
+        "mod_vote": vote,
+      });
+    } 
 
     print("\nupdated bet docRef.documentID\n");
+    
     //To do -> add bet to arrays in userController
     return docRef.documentID;
+    //nav to select mod_uid?
+     
+  }
+
+//if bet not done, returns false
+  Future<String> checkVotesDone(BuildContext context, userController user, betID) async {
+    var docRef = Firestore.instance.collection("bets").document(betID);
+    var docSnap = await Firestore.instance.collection("bets").document(betID).get();
+    
+    print("Checking Votes");
+    print(docSnap.data["rec_vote"]);
+
+    if((docSnap.data["send_vote"] != "" && docSnap.data["rec_vote"] != "") || (docSnap.data["mod_vote"] != "" && docSnap.data["rec_vote"] != "") || (docSnap.data["send_vote"] != "" && docSnap.data["mod_vote"] != "")){
+      print("IN IF\n\n\n");
+      
+      docRef.updateData({
+        "open": false,
+        "complete": true,
+      });
+      if(docSnap.data["send_vote"] == docSnap.data["rec_vote"] && docSnap.data["send_vote"] == docSnap.data["send_uid"]){
+        docRef.updateData({
+          "winner": docSnap.data["send_uid"],
+          "loser": docSnap.data["rec_uid"],
+        });
+        var winnerDocument = await Firestore.instance.collection("users").document(docSnap.data["send_uid"]).get();
+        return winnerDocument.data["pubKey"];
+      }
+      else if(docSnap.data["send_vote"] == docSnap.data["rec_vote"] && docSnap.data["send_vote"] == docSnap.data["rec_uid"]){
+        docRef.updateData({
+          "winner": docSnap.data["rec_uid"],
+          "loser": docSnap.data["send_uid"],
+        });
+        var winnerDocument = await Firestore.instance.collection("users").document(docSnap.data["rec_uid"]).get();
+        return winnerDocument.data["pubKey"];
+      }
+      else{
+        if(docSnap.data["mod_vote"] == docSnap.data["send_uid"]){
+          docRef.updateData({
+            "winner": docSnap.data["send_uid"],
+            "loser": docSnap.data["rec_uid"],
+          });
+          var winnerDocument = await Firestore.instance.collection("users").document(docSnap.data["mod_vote"]).get();
+          return winnerDocument.data["pubKey"];
+        }
+        else if(docSnap.data["mod_vote"] == docSnap.data["rec_uid"]){
+          docRef.updateData({
+            "winner": docSnap.data["rec_uid"],
+            "loser": docSnap.data["send_uid"],
+          });
+          var winnerDocument = await Firestore.instance.collection("users").document(docSnap.data["mod_vote"]).get();
+          return winnerDocument.data["pubKey"];
+        }
+      }
+    }
+    return null;
+  }
+
+  Future<bool> updateBetAcceptances(BuildContext context, userController user, betID, accept) async {
+    var docRef = Firestore.instance.collection("bets").document(betID);
+    var docSnap = await Firestore.instance.collection("bets").document(betID).get();
+
+    //ifs for update send_vote, rec_vote, or mod_vote
+    if(docSnap.data['rec_uid'] == user.uid){
+      if(accept){
+        await docRef.updateData({
+          "user_accept": true,
+        });
+        return true;
+      }
+      else{
+        docRef.delete();
+        return false;
+      }
+    }
+    else if(docSnap.data['mod_uid'] == user.uid){
+      if(accept){
+        await docRef.updateData({
+          "mod_accept": true,
+        });
+        return true;
+      }
+      else{
+        docRef.delete();
+        return false;
+      }
+    }
+    return null;
+
+    
+
+
+    //print("\nupdated bet docRef.documentID\n");
+    //To do -> add bet to arrays in userController
+
     //nav to select mod_uid?
      
   }
