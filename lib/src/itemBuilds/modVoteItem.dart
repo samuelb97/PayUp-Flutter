@@ -7,11 +7,11 @@ import 'package:intl/intl.dart';
 
 
 Widget buildBetVoteImage(BuildContext context, imageUrl, 
-  sendName, recName, timestamp
+  sendName, recName, timestamp, userController user, bet, betId
 ){
   return Builder(builder: (context) {
       if(imageUrl == "" || imageUrl == null) {
-        return buildVoteBtns(context, timestamp, sendName, recName);
+        return buildVoteBtns(context, timestamp, sendName, recName, user, bet, betId);
       } else {
         return Row(children: <Widget>[
           Container(
@@ -36,7 +36,7 @@ Widget buildBetVoteImage(BuildContext context, imageUrl,
               ),
             )
           ),
-          buildVoteBtns(context, timestamp, sendName, recName, true),
+          buildVoteBtns(context, timestamp, sendName, recName, user, bet, betId, true),
         ]);
       }
     }
@@ -44,7 +44,7 @@ Widget buildBetVoteImage(BuildContext context, imageUrl,
 }
 
 Widget buildVoteBtns(BuildContext context, timestamp, sendName,
-  recName, [bool vertical = false]
+  recName, userController user, bet, betId, [bool vertical = false]
 ){
   Widget buildVoteSend(){
     return Container(

@@ -18,9 +18,16 @@ Widget challengeRespondItem(BuildContext context, betId, user){
         return Container();
       } else {
         var bet = snapshot.data;
-        String opponenetID = bet["rec_uid"];
         int userWager = bet["rec_wager"];
+        String opponentID = bet["send_uid"];
         int opponentWager = bet["send_wager"];
+        if(user.uid == bet["send_uid"]){
+          opponentID = bet["rec_uid"];
+          opponentWager = bet["send_wager"];
+          userWager = bet["send_wager"];
+        }
+        
+        
         return Container(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -28,11 +35,12 @@ Widget challengeRespondItem(BuildContext context, betId, user){
               Container(
                 width: MediaQuery.of(context).size.width,
                 child: StreamBuilder(
-                  stream: Firestore.instance.collection('users').document(opponenetID).snapshots(),
+                  stream: Firestore.instance.collection('users').document(opponentID).snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData){
                       return Container();
                     } else {
+                      print("Opp Else\n Name: ${snapshot.data["name"]}\n");
                       return Row(children: <Widget>[
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
