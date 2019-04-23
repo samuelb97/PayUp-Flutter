@@ -92,10 +92,10 @@ Widget buildModViewTopRow(BuildContext context, description,
   );
 }
 
-Widget buildBetImage(BuildContext context, imageUrl, timestamp){
+Widget buildBetImage(BuildContext context, imageUrl, timestamp, betId, userController user){
   return Builder(builder: (context) {
       if(imageUrl == "" || imageUrl == null) {
-        return buildAcceptBtns(context, timestamp);
+        return buildAcceptBtns(context, timestamp, betId, user);
       } else {
         return Row(children: <Widget>[
           Container(
@@ -120,15 +120,16 @@ Widget buildBetImage(BuildContext context, imageUrl, timestamp){
               ),
             )
           ),
-          buildAcceptBtns(context, timestamp, true),
+          buildAcceptBtns(context, timestamp, betId, user, true),
         ]);
       }
     }
   );
 }
 
-Widget buildAcceptBtns(BuildContext context, timestamp, [bool vertical = false]){
-
+Widget buildAcceptBtns(BuildContext context, timestamp, betId, 
+  userController user, [bool vertical = false])
+{
   Widget buildAccept(){
     return Container(
       height: 30,

@@ -59,7 +59,7 @@ Widget moderateRespondItem(BuildContext context, betId, userController user){
                             sendUserPhotoUrl, recUserPhotoUrl
                           ),
 
-                          buildBetImage(context, bet["imageUrl"], bet["timestamp"]),
+                          buildBetImage(context, bet["imageUrl"], bet["timestamp"], betId, user),
                           
                           buildItemDivider(context), 
 
