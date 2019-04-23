@@ -183,7 +183,7 @@ Widget challengeRespondItem(BuildContext context, betId, user){
                     //TODO: Handle Decline
                   },
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(35),
+                    borderRadius: BorderRadius.circular(24),
                   ),
                   color: themeColors.theme3,
                   child: Text("Decline",

@@ -4,16 +4,20 @@ import 'package:login/prop-config.dart';
 import 'package:login/userController.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:login/src/itemBuilds/modItems.dart';
+import 'package:login/src/itemBuilds/modVoteItem.dart';
 import 'package:intl/intl.dart';
 
 
-Widget moderateRespondItem(BuildContext context, betId, userController user){
+Widget moderateVoteItem(BuildContext context, betId, userController user){
 
   return StreamBuilder(
     stream: Firestore.instance.collection('bets').document(betId).snapshots(),
     builder: (context, snapshot1) {
-      if (!snapshot1.hasData || snapshot1.data["open"] || snapshot1.data["complete"] 
-         || !snapshot1.data["user_accept"]){
+      if (!snapshot1.hasData || !snapshot1.data["open"] || snapshot1.data["complete"] 
+         || (snapshot1.data["mod_vote"] != null && snapshot1.data["mod_vote"] != "") 
+         || (snapshot1.data["rec_vote"] == "" && snapshot1.data["send_vote"] == "")
+         || (snapshot1.data["rec_vote"] == null && snapshot1.data["send_vote"] == null)
+         ){
         return Container();
       } else {
         var bet = snapshot1.data;
@@ -59,7 +63,11 @@ Widget moderateRespondItem(BuildContext context, betId, userController user){
                             sendUserPhotoUrl, recUserPhotoUrl
                           ),
 
-                          buildBetImage(context, bet["imageUrl"], bet["timestamp"]),
+                          buildBetVoteImage(
+                            context, bet["imageUrl"], 
+                            sendUserName, recUserName,
+                            bet["timestamp"], 
+                          ),
                           
                           buildItemDivider(context), 
 
@@ -76,4 +84,3 @@ Widget moderateRespondItem(BuildContext context, betId, userController user){
     }
   );
 }
-  
