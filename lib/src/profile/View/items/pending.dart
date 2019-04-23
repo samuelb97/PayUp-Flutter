@@ -9,16 +9,19 @@ import 'package:login/userController.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:login/src/betHandler/betHandler.dart';
+import 'dart:async';
 
 Widget buildPendingBet(BuildContext context, int index, userController user) {
 
   betHandler handler = new betHandler();
 
     if(index >= user.bets.length){
+      print("User Bets Length: ${user.bets.length}\n");
       return Container();
     }
     else{
-      var betId = user.bets[index];
+      var betId = user.bets[user.bets.length - index - 1];
+      print("Index: $index\n");
       return StreamBuilder(
         stream: Firestore.instance.collection('bets').document(betId).snapshots(),
         builder: (context, snapshot) {
@@ -26,18 +29,19 @@ Widget buildPendingBet(BuildContext context, int index, userController user) {
             return Container();
           } else {
             var bet = snapshot.data;
-            String opponenetID, challengedOrAccepted;
+            String opponentID, challengedOrAccepted;
             int userWager, opponentWager;
             String modPending = "pending";
             String userPending = "pending";
+
             if(bet["send_uid"] == user.uid){
-              opponenetID = bet["rec_uid"];
+              opponentID = bet["rec_uid"];
               challengedOrAccepted = "challenged";
               userWager = bet["send_wager"];
               opponentWager = bet["rec_wager"];
             }
             else{
-              opponenetID = bet["send_uid"];
+              opponentID = bet["send_uid"];
               challengedOrAccepted = "accepted";
               userWager = bet["rec_wager"];
               opponentWager = bet["send_wager"];
@@ -54,12 +58,14 @@ Widget buildPendingBet(BuildContext context, int index, userController user) {
                     //height: 50,
                     width: MediaQuery.of(context).size.width,
                     child: StreamBuilder(
-                      stream: Firestore.instance.collection('users').document(opponenetID).snapshots(),
+                      stream: Firestore.instance.collection('users').document(opponentID).snapshots(),
                       builder: (context, snapshot) {
                         if (!snapshot.hasData){
                           return Container();
                         } else {
+                          print("Before Name $index\n");
                           String opponentName = "${snapshot.data["name"]}";
+                          print("After first Name $opponentName");
                           return Row(children: <Widget>[
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -67,10 +73,10 @@ Widget buildPendingBet(BuildContext context, int index, userController user) {
                               Row(children: <Widget>[
                                 Builder(
                                   builder: (context) {
-                                    if(!bet["user_accept"] && opponenetID == bet["send_uid"]) {
+                                    if(!bet["user_accept"] && opponentID == bet["send_uid"]) {
                                       return Row(children: <Widget>[
                                         Text(
-                                          "  ${snapshot.data["name"]}",
+                                          "  ${opponentName}",
                                           style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 14,
@@ -272,7 +278,7 @@ Widget buildPendingBet(BuildContext context, int index, userController user) {
                   ),
                   Builder(
                     builder: (context) {
-                      if(!bet["user_accept"] && opponenetID == bet["send_uid"]) {
+                      if(!bet["user_accept"] && opponentID == bet["send_uid"]) {
                         return Row(children: <Widget>[
                           Padding(padding: EdgeInsets.symmetric(horizontal: 4)),
                           Container(

@@ -21,7 +21,8 @@ Widget challengeRespondItem(BuildContext context, betId, user){
     stream: Firestore.instance.collection('bets').document(betId).snapshots(),
     builder: (context, snapshot) {
       if (!snapshot.hasData || snapshot.data["open"] || snapshot.data["complete"] 
-        || snapshot.data["send_uid"] == user.uid){
+        || snapshot.data["send_uid"] == user.uid || snapshot.data["user_accept"])
+        {
         return Container();
       } else {
         var bet = snapshot.data;
