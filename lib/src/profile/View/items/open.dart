@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:login/prop-config.dart';
@@ -8,8 +10,16 @@ import 'package:login/src/profile/Controller/profileController.dart';
 import 'package:login/userController.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
+import 'package:login/src/betHandler/betHandler.dart';
+import 'dart:async';
+import 'package:http/http.dart' as http;
+import 'package:login/src/navbar.dart';
 
 Widget buildOpenBet(BuildContext context, int index, userController user) {
+
+  analyticsController analControl = new analyticsController();
+  betHandler handler = new betHandler();
+
   if(index >= user.bets.length){
     return Container();
   }
@@ -207,11 +217,38 @@ Widget buildOpenBet(BuildContext context, int index, userController user) {
                             padding: EdgeInsets.only(top: 4),
                             child: RaisedButton(
                               highlightColor: Colors.white,
-                              onPressed: btnDisable ? null : () {
+                              onPressed: btnDisable ? null : () async {
                                 btnDisable = true;
                                 isWon = true;
-                                //TODO: Handle Win Vote
+                                String temp = await handler.updateBetVotes(context, user, betId, user.uid);
+
+                                print("\n\n\nWinner registered:  $temp");
+
+                                String winner_pubKey = await handler.checkVotesDone(context, user, betId);
+                                print("Winner pubKey:  $winner_pubKey");
+                                if(winner_pubKey != null){
+                                  int total = bet['rec_wager'] + bet['send_wager'];
+                                  Map data ={
+                                    'recipient': winner_pubKey,
+                                    'amount': total
+                                  };
+
+                                  var body = json.encode(data);
+
+                                  http.post('https://gentle-ridge-52752.herokuapp.com/transact', headers: {"Content-Type": "application/json"}, body:body);
+
+                                  user.set_balance = user.balance + total;
+                                  
+                                }
+                                // Navigator.pushReplacement(context, 
+                                //   MaterialPageRoute(builder: (context) => Home(user: user, analControl: analControl))
+                                // );
+
+
+
+                                //TODO: transaction if bet_done is true
                               },
+                              
                               shape: RoundedRectangleBorder(
                                 side: BorderSide(color: (!isWon && btnDisable) ? Colors.grey : themeColors.accent1),
                                 borderRadius: BorderRadius.circular(35),
@@ -227,10 +264,51 @@ Widget buildOpenBet(BuildContext context, int index, userController user) {
                             width: 94,
                             padding: EdgeInsets.only(top: 4),
                             child: RaisedButton(
-                              onPressed: btnDisable ? null : () {
+                              onPressed: btnDisable ? null : () async {
+                                String temp;
                                 btnDisable = true;
                                 isWon = false;
-                                //TODO: Handle Win Vote
+                                print("snapshot data comparator: \n\n");
+                                print(bet['rec_uid']);
+                                if(user.uid == bet['send_id']){
+                                  temp = await handler.updateBetVotes(context, user, betId, bet['rec_uid']);
+                                }
+                                else{
+                                  temp = await handler.updateBetVotes(context, user, betId, bet['send_uid']);
+                                }
+
+                                print("\n\n\nWinner registered:  $temp");
+
+                                String winner_pubKey = await handler.checkVotesDone(context, user, betId);
+                                print("Winner pubKey:  $winner_pubKey");
+
+                                if(winner_pubKey != null){
+                                  int total = bet['rec_wager'] + bet['send_wager'];
+                                  Map data ={
+                                    'recipient': winner_pubKey,
+                                    'amount': total
+                                  };
+
+                                  var body = json.encode(data);
+
+                                  http.post('https://gentle-ridge-52752.herokuapp.com/transact', headers: {"Content-Type": "application/json"}, body:body);
+
+                                  //user.set_balance = user.balance + total;
+                                  
+                                }
+                                // Navigator.pushReplacement(context, 
+                                //   MaterialPageRoute(builder: (context) => Home(user: user, analControl: analControl))
+                                // );
+
+                                // if(winner_pubKey != null){
+                                  
+                                // }
+
+                                // if(bet_done){
+                                //   print("\n\nBet done, winner is Sam");
+                                // }
+
+                                //TODO: Transaction if bet_done is true 
                               },
                               shape: RoundedRectangleBorder(
                                 side: BorderSide(color: (isWon && btnDisable) ? Colors.grey : themeColors.accent1),

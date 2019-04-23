@@ -8,8 +8,12 @@ import 'package:login/src/profile/Controller/profileController.dart';
 import 'package:login/userController.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
+import 'package:login/src/betHandler/betHandler.dart';
 
 Widget buildPendingBet(BuildContext context, int index, userController user) {
+
+  betHandler handler;
+
     if(index >= user.bets.length){
       return Container();
     }
@@ -277,7 +281,9 @@ Widget buildPendingBet(BuildContext context, int index, userController user) {
                             padding: EdgeInsets.only(top: 4),
                             child: RaisedButton(
                               onPressed: () {
-                                //TODO: Handle Accept
+                                handler.updateBetAcceptances(context, user, betId, true);
+                                print("\nbet accepted\n\n");
+                                //TODO: lock button
                               },
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(24),
@@ -294,7 +300,9 @@ Widget buildPendingBet(BuildContext context, int index, userController user) {
                             padding: EdgeInsets.only(top: 4),
                             child: RaisedButton(
                               onPressed: () {
-                                //TODO: Handle Decline
+                                handler.updateBetAcceptances(context, user, betId, false);
+                                print("\nbet declined\n\n");
+                                //TODO: lock button
                               },
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(35),

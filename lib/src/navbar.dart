@@ -22,7 +22,7 @@ class Home extends StatefulWidget {
   }) : super(key: key);
 
   final userController user;
-  final analyticsController analControl;
+   analyticsController analControl;
   
   @override
   _HomeState createState() => _HomeState();
