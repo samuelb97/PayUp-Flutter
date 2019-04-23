@@ -98,7 +98,15 @@ Widget buildClosedBet(BuildContext context, int index, var user) {
                                       color: Colors.white,
                                       fontSize: 14,
                                     ),
-                                  )
+                                  ),
+                                  Text( 
+                                "  $plusMinus$netGain",
+                                style: TextStyle(
+                                  color: netColor,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: (netGain / 100 > 0) ? 10 : 12,
+                                )
+                              ),
                                 ]),
                             Spacer(),
                             Container(
@@ -163,13 +171,6 @@ Widget buildClosedBet(BuildContext context, int index, var user) {
                                               fontWeight: FontWeight.bold)),
                                     ]),
                               ),
-                              Text( 
-                                "  $plusMinus$netGain",
-                                style: TextStyle(
-                                  color: netColor,
-                                  fontWeight: FontWeight.bold,
-                                )
-                              ),
                               Spacer(),
                               Container(
                                 padding: EdgeInsets.only(top: 10),
@@ -224,7 +225,7 @@ Widget buildClosedBet(BuildContext context, int index, var user) {
                                       style: TextStyle(
                                         color: netColor,
                                         fontWeight: FontWeight.bold,
-                                        fontSize: (netGain / 100 > 0) ? 11 : 13,
+                                        fontSize: (netGain / 100 > 0) ? 8 : 11,
                                       )
                                     )
                                   ]),
