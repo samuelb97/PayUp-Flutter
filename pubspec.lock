@@ -206,7 +206,7 @@ packages:
       name: image_picker
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.5.4"
+    version: "0.5.4+1"
   intl:
     dependency: "direct main"
     description:
@@ -255,7 +255,7 @@ packages:
       name: mvc_pattern
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.3.5"
+    version: "3.3.6"
   path:
     dependency: transitive
     description:

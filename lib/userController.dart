@@ -19,6 +19,7 @@ class userController{
 
   static userController get userCon => _this;
 
+  
   static String _uid;
   static String _age;
   static String _name;
@@ -28,6 +29,7 @@ class userController{
   static int _wins;
   static int _loses;
   static int _balance;
+  static int _notifs = 0;
 
   static List _messages;
   static List _friends;
@@ -56,10 +58,20 @@ class userController{
   int get wins => _wins;
   int get loses => _loses;
   int get balance => _balance;
+  int get notifs => _notifs;
   List get friends => _friends;
   List get bets => _bets;
   List get messages => _messages;
   List get modBets => _modBets;
+
+  int incrementNotifs(){
+    _notifs = _notifs + 1;
+    return _notifs;
+  }
+  int decrementNotifs(){
+    _notifs = _notifs - 1;
+    return _notifs;
+  }
 
   Future<void> load_data_from_firebase() async {
     await Firestore.instance.collection('users').document(_uid)
