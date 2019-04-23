@@ -12,7 +12,7 @@ import 'package:login/src/betHandler/betHandler.dart';
 
 Widget buildPendingBet(BuildContext context, int index, userController user) {
 
-  betHandler handler;
+  betHandler handler = new betHandler();
 
     if(index >= user.bets.length){
       return Container();
@@ -305,7 +305,7 @@ Widget buildPendingBet(BuildContext context, int index, userController user) {
                                 handler.updateBetAcceptances(context, user, betId, false);
                                 print("\nbet declined\n\n");
 
-                                
+
                                 //TODO: lock button
                               },
                               shape: RoundedRectangleBorder(
