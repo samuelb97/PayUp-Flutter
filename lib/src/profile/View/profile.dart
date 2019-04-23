@@ -168,40 +168,52 @@ class TestHomePageBodyState extends State<TestHomePageBody> {
   Widget build(BuildContext context) {
     return Container(
       decoration: themeColors.linearGradient,
-      child: TabBarView(
-      controller: widget.tabController,
-      key: _key,
-      children: List<Widget>.generate(tabCount, (int index) { //creates a lists of 3 elements (tab count)
-        print("Gen index: $index\n");
-        print("User Bets Length: ${widget.user.bets.length}");
-        if(index == 0) {
-          return ListView.builder(               //Open Bets
-            itemCount: widget.user.bets.length,
-            key: PageStorageKey<int>(index),
-                 //Makes two keys for two lists
-            itemBuilder: (cntxt, idx)
-              => buildOpenBet(cntxt, idx, widget.user)
-          );
-        }
-        else if(index == 1){
-          return ListView.builder(              //Closed Bets
-            itemCount: widget.user.bets.length,
-            key: PageStorageKey<int>(index),     //Makes two keys for two lists
-            itemBuilder: (cntxt, idx) 
-              => buildClosedBet(cntxt, idx, widget.user)
-          );
-        }
-        else{
-          print("Before ListView Pending");
-          return ListView.builder(              //Pending
-            itemCount: widget.user.bets.length,
-            padding: EdgeInsets.only(bottom: 260),
-            key: PageStorageKey<int>(index),     //Makes two keys for two lists
-            itemBuilder: (cntxt, idx) 
-             => buildPendingBet(cntxt, idx, widget.user),
-          );
-        }
-      }))
+      child: StreamBuilder(
+        stream: Firestore.instance.collection('users').document(widget.user.uid).snapshots(),
+        builder: (context, snapshot) {
+          if(!snapshot.hasData){
+            return Container(child: Text("Can't Find Your User"));
+          }
+          else {
+            var liveUser = snapshot.data;
+            widget.user.set_bets = liveUser["betIDs"];
+            return TabBarView(
+              controller: widget.tabController,
+              key: _key,
+              children: List<Widget>.generate(tabCount, (int index) { //creates a lists of 3 elements (tab count)
+                print("Gen index: $index\n");
+                print("User Bets Length: ${widget.user.bets.length}");
+                if(index == 0) {
+                  return ListView.builder(               //Open Bets
+                    itemCount: widget.user.bets.length,
+                    key: PageStorageKey<int>(index),
+                        //Makes two keys for two lists
+                    itemBuilder: (cntxt, idx)
+                      => buildOpenBet(cntxt, idx, widget.user)
+                  );
+                }
+                else if(index == 1){
+                  return ListView.builder(              //Closed Bets
+                    itemCount: widget.user.bets.length,
+                    key: PageStorageKey<int>(index),     //Makes two keys for two lists
+                    itemBuilder: (cntxt, idx) 
+                      => buildClosedBet(cntxt, idx, widget.user)
+                  );
+                }
+                else{
+                  print("Before ListView Pending");
+                  return ListView.builder(              //Pending
+                    itemCount: widget.user.bets.length,
+                    padding: EdgeInsets.only(bottom: 260),
+                    key: PageStorageKey<int>(index),     //Makes two keys for two lists
+                    itemBuilder: (cntxt, idx) 
+                    => buildPendingBet(cntxt, idx, widget.user),
+                  );
+                }
+              }));
+          }
+        },
+      )
     );
   }
 }

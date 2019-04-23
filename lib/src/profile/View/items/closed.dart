@@ -224,6 +224,7 @@ Widget buildClosedBet(BuildContext context, int index, var user) {
                                       style: TextStyle(
                                         color: netColor,
                                         fontWeight: FontWeight.bold,
+                                        fontSize: (netGain / 100 > 0) ? 11 : 13,
                                       )
                                     )
                                   ]),

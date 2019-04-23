@@ -20,8 +20,8 @@ Widget challengeRespondItem(BuildContext context, betId, user, callback){
   return StreamBuilder(
     stream: Firestore.instance.collection('bets').document(betId).snapshots(),
     builder: (context, snapshot) {
-      if (!snapshot.hasData || snapshot.data["open"] || snapshot.data["complete"] 
-        || snapshot.data["send_uid"] == user.uid || snapshot.data["user_accept"])
+      if (!snapshot.hasData ||  snapshot.data["user_accept"] || snapshot.data["open"] || snapshot.data["complete"] 
+        || snapshot.data["send_uid"] == user.uid)
         {
         return Container();
       } else {
