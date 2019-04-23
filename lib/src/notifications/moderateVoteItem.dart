@@ -66,7 +66,7 @@ Widget moderateVoteItem(BuildContext context, betId, userController user){
                           buildBetVoteImage(
                             context, bet["imageUrl"], 
                             sendUserName, recUserName,
-                            bet["timestamp"], 
+                            bet["timestamp"], user, bet, betId,
                           ),
                           
                           buildItemDivider(context), 
