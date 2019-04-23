@@ -163,14 +163,18 @@ Widget buildAcceptBtns(BuildContext context, timestamp, betId,
             'amount': send_wager
           };
 
-          await http.post(sendToHouseWith+send_pubKey, headers: {"Accept": "application/json"}, body: json.encode(data));
+          var body = json.encode(data);
 
-          data = {
+          await http.post('https://shrouded-forest-59484.herokuapp.com/doTransactionWith$send_pubKey', headers: {"Content-Type": "application/json"}, body: body);
+
+          Map data2 = {
             'recipient': houseKey,
             'amount': rec_wager
           };
+
+          body = json.encode(data2);
           
-          http.post(sendToHouseWith+rec_pubKey, headers: {"Accept": "application/json"}, body: json.encode(data));
+          await http.post('https://shrouded-forest-59484.herokuapp.com/doTransactionWith$rec_pubKey', headers: {"Content-Type": "application/json"}, body: body);
 
         },
         shape: RoundedRectangleBorder(
