@@ -7,7 +7,7 @@ import 'package:login/src/itemBuilds/modItems.dart';
 import 'package:intl/intl.dart';
 
 
-Widget moderateRespondItem(BuildContext context, betId, userController user){
+Widget moderateRespondItem(BuildContext context, betId, userController user, callback){
 
   return StreamBuilder(
     stream: Firestore.instance.collection('bets').document(betId).snapshots(),
@@ -59,7 +59,7 @@ Widget moderateRespondItem(BuildContext context, betId, userController user){
                             sendUserPhotoUrl, recUserPhotoUrl
                           ),
 
-                          buildBetImage(context, bet["imageUrl"], bet["timestamp"], betId, user),
+                          buildBetImage(context, bet["imageUrl"], bet["timestamp"], betId, user, callback),
                           
                           buildItemDivider(context), 
 

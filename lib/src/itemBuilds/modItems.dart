@@ -4,10 +4,14 @@ import 'package:login/prop-config.dart';
 import 'package:login/userController.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
+import 'package:login/src/betHandler/betHandler.dart';
+import 'package:http/http.dart' as http;
+import 'dart:async';
+import 'dart:convert';
 
  
 Widget buildModViewTopRow(BuildContext context, description, 
-  sendName, recName, sendPhoto, recPhoto
+  sendName, recName, sendPhoto, recPhoto,
 ) {
   return Container( 
     padding: EdgeInsets.only(bottom: 8),
@@ -92,10 +96,10 @@ Widget buildModViewTopRow(BuildContext context, description,
   );
 }
 
-Widget buildBetImage(BuildContext context, imageUrl, timestamp, betId, userController user){
+Widget buildBetImage(BuildContext context, imageUrl, timestamp, betId, userController user, callback){
   return Builder(builder: (context) {
       if(imageUrl == "" || imageUrl == null) {
-        return buildAcceptBtns(context, timestamp, betId, user);
+        return buildAcceptBtns(context, timestamp, betId, user, callback);
       } else {
         return Row(children: <Widget>[
           Container(
@@ -120,7 +124,7 @@ Widget buildBetImage(BuildContext context, imageUrl, timestamp, betId, userContr
               ),
             )
           ),
-          buildAcceptBtns(context, timestamp, betId, user, true),
+          buildAcceptBtns(context, timestamp, betId, user, callback, true),
         ]);
       }
     }
@@ -128,16 +132,46 @@ Widget buildBetImage(BuildContext context, imageUrl, timestamp, betId, userContr
 }
 
 Widget buildAcceptBtns(BuildContext context, timestamp, betId, 
-  userController user, [bool vertical = false])
+  userController user,  callback, [bool vertical = false]) 
 {
+  betHandler handler = new betHandler();
+  String houseKey = "044d53efca68e36c6cdd2560666ce3c320ac09b270fafa599fe85feb1c3db5a44042457fd549fcf89c2f61877f4dd114a24974ff68fe95e8fd335c389d67036cf6/";
+  String sendToHouseWith = "https://shrouded-forest-59484.herokuapp.com/doTransactionWith";
   Widget buildAccept(){
     return Container(
       height: 30,
       width: 100,
       padding: EdgeInsets.only(top: 4, left: 8),
       child: RaisedButton(
-        onPressed: () {
-          //TODO: Handle Mod Accept
+        onPressed: () async {
+          handler.updateBetAcceptances(context, user, betId, true);
+          print("\nbet accepted\n\n");
+          var betSnap = await Firestore.instance.collection("bets").document(betId).get();
+          int rec_wager = betSnap.data['rec_wager'];
+          int send_wager = betSnap.data['send_wager'];
+          String send_uid = betSnap.data['send_uid'];
+          String rec_uid = betSnap.data['rec_uid'];
+
+          var sendSnap = await Firestore.instance.collection("users").document(send_uid).get();
+          var recSnap = await Firestore.instance.collection("users").document(rec_uid).get();
+          String send_pubKey = sendSnap.data['pubKey'];
+          String rec_pubKey = recSnap.data['pubKey'];
+          print("INFO:     $send_wager\n$rec_wager\n$send_pubKey\n$rec_pubKey\n");
+
+          Map data = {
+            'recipient': houseKey,
+            'amount': send_wager
+          };
+
+          await http.post(sendToHouseWith+send_pubKey, headers: {"Accept": "application/json"}, body: json.encode(data));
+
+          data = {
+            'recipient': houseKey,
+            'amount': rec_wager
+          };
+          
+          http.post(sendToHouseWith+rec_pubKey, headers: {"Accept": "application/json"}, body: json.encode(data));
+
         },
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(24),
@@ -156,7 +190,17 @@ Widget buildAcceptBtns(BuildContext context, timestamp, betId,
       padding: EdgeInsets.only(top: 4, left: 8),
       child: RaisedButton(
         onPressed: () {
-          //TODO: Handle Mod Decline
+          handler.updateBetAcceptances(context, user, betId, false);
+          List temp = List.from(user.bets);
+          List temp1 = List.from(user.modBets);
+          temp.remove(betId);
+          temp1.remove(betId);
+          user.set_bets = temp;
+          user.set_mod_Bets = temp1;
+          callback();
+          print("\nbet declined\n\n");
+
+
         },
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(35),
@@ -204,7 +248,7 @@ Widget buildAcceptBtns(BuildContext context, timestamp, betId,
 
   return Row(children: <Widget>[
     buildAccept(),
-    buildAccept(),
+    buildDecline(),
     Spacer(),
     buildTimestamp(24),
     Padding(padding: EdgeInsets.only(

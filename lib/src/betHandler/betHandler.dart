@@ -200,9 +200,17 @@ class betHandler extends ControllerMVC{
   Future<bool> updateBetAcceptances(BuildContext context, userController user, betID, accept) async {
     var docRef = Firestore.instance.collection("bets").document(betID);
     var docSnap = await Firestore.instance.collection("bets").document(betID).get();
+    var rec_docRef = Firestore.instance.collection("users").document(docSnap.data['rec_uid']);
+    var send_docRef = Firestore.instance.collection("users").document(docSnap.data['send_uid']);
+    var mod_docRef = Firestore.instance.collection("users").document(docSnap.data['mod_uid']);
+
+    var rec_docSnap = await Firestore.instance.collection("users").document(docSnap.data['rec_uid']).get();
+    var send_docSnap = await Firestore.instance.collection("users").document(docSnap.data['send_uid']).get();
+    var mod_docSnap = await Firestore.instance.collection("users").document(docSnap.data['mod_uid']).get();
 
     //ifs for update send_vote, rec_vote, or mod_vote
     if(docSnap.data['rec_uid'] == user.uid){
+      
       if(accept){
         await docRef.updateData({
           "user_accept": true,
@@ -210,7 +218,21 @@ class betHandler extends ControllerMVC{
         return true;
       }
       else{
+        await rec_docRef.updateData({
+          "betIDs": FieldValue.arrayRemove(["${docRef.documentID}"]),
+        });
+
+        await send_docRef.updateData({
+          "betIDs": FieldValue.arrayRemove(["${docRef.documentID}"]),
+        });
+
+        await mod_docRef.updateData({
+          "modBets": FieldValue.arrayRemove(["${docRef.documentID}"]),
+        });
+
+
         docRef.delete();
+        
         return false;
       }
     }
@@ -218,10 +240,25 @@ class betHandler extends ControllerMVC{
       if(accept){
         await docRef.updateData({
           "mod_accept": true,
+          "open": true,
         });
         return true;
       }
       else{
+        
+        await rec_docRef.updateData({
+          "betIDs": FieldValue.arrayRemove(["${docRef.documentID}"]),
+        });
+
+        await send_docRef.updateData({
+          "betIDs": FieldValue.arrayRemove(["${docRef.documentID}"]),
+        });
+
+        await mod_docRef.updateData({
+          "modBets": FieldValue.arrayRemove(["${docRef.documentID}"]),
+        });
+
+
         docRef.delete();
         return false;
       }

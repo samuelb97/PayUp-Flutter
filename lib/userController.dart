@@ -48,6 +48,9 @@ class userController{
   set set_balance(int __balance){
     _balance = __balance;
   }
+  set set_mod_Bets(List modBets){
+    _modBets = modBets;
+  }
 
   String get uid => _uid;
   String get name => _name;

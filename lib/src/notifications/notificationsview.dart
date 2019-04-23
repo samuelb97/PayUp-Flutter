@@ -21,12 +21,23 @@ class NotificationsPage extends StatefulWidget {
   _NotificationsPageState createState() => _NotificationsPageState();
 }
 
-class _NotificationsPageState extends StateMVC<NotificationsPage> {
+class _NotificationsPageState extends State<NotificationsPage> {
 
+  List bets;
+  List modBets;
+
+  toggleBets(){
+    setState(() {
+     bets = widget.user.bets; 
+     modBets = widget.user.modBets;
+    });
+  }
+  
   List headers = ['Challenge Requests', 'Moderator Requests', 'Moderator Votes'];
   List<Widget> challengeList = new List();
   List<Widget> modReqList = new List();
   List<Widget> modVoteList = new List();
+
   @override
   Widget build(BuildContext context){
     return Scaffold(
@@ -59,31 +70,33 @@ class _NotificationsPageState extends StateMVC<NotificationsPage> {
             ),
             content: new Builder(
               builder:(context){
+                bets = widget.user.bets;
+                modBets = widget.user.modBets;
                 print("list view index:  $index\n");
                 if(index == 0){
-                  for(int i = 0; i < widget.user.bets.length; i++){
+                  for(int i = 0; i < bets.length; i++){
                     print("Challenge $i\n");
                     print("Challenge response\n\n");
                     
-                    challengeList.add(challengeRespondItem(context, widget.user.bets[i], widget.user));
+                    challengeList.add(challengeRespondItem(context, bets[i], widget.user, toggleBets));
                   }
                   return Column(children: challengeList);
                 }
                 if(index == 1){
-                  for(int i = 0; i < widget.user.modBets.length; i++){
+                  for(int i = 0; i < modBets.length; i++){
                     print("Moderator $i\n");
                     print("Moderate response\n\n");
 
-                    modReqList.add(moderateRespondItem(context, widget.user.modBets[i], widget.user));
+                    modReqList.add(moderateRespondItem(context, modBets[i], widget.user, toggleBets));
                   }
                   return Column(children: modReqList);
                 }
                 if(index == 2){
-                  for(int i = 0; i < widget.user.modBets.length; i++){
+                  for(int i = 0; i < modBets.length; i++){
                     print("Moderator $i\n");
                     print("Moderate response\n\n");
 
-                    modVoteList.add(moderateVoteItem(context, widget.user.modBets[i], widget.user));
+                    modVoteList.add(moderateVoteItem(context, modBets[i], widget.user));
                   }
                   return Column(children: modVoteList);
                 }
@@ -98,6 +111,6 @@ class _NotificationsPageState extends StateMVC<NotificationsPage> {
         }
       ),
 
-        ));
+    ));
   }
 }

@@ -282,9 +282,10 @@ Widget buildPendingBet(BuildContext context, int index, userController user) {
                             child: RaisedButton(
                               onPressed: () {
                                 handler.updateBetAcceptances(context, user, betId, true);
+                                
                                 print("\nbet accepted\n\n");
                                 
-
+                              
                                 //TODO: lock button
                               },
                               shape: RoundedRectangleBorder(
@@ -303,6 +304,13 @@ Widget buildPendingBet(BuildContext context, int index, userController user) {
                             child: RaisedButton(
                               onPressed: () {
                                 handler.updateBetAcceptances(context, user, betId, false);
+                                List temp = List.from(user.bets);
+                                List temp1 = List.from(user.modBets);
+                                temp.remove(betId);
+                                temp1.remove(betId);
+                                user.set_bets = temp;
+                                user.set_mod_Bets = temp1;
+                                
                                 print("\nbet declined\n\n");
 
 

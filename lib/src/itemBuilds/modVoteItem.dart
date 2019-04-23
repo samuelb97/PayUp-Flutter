@@ -4,11 +4,16 @@ import 'package:login/prop-config.dart';
 import 'package:login/userController.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
+import 'package:login/src/betHandler/betHandler.dart';
+import 'package:http/http.dart' as http;
+import 'dart:async';
+import 'dart:convert';
 
 
 Widget buildBetVoteImage(BuildContext context, imageUrl, 
   sendName, recName, timestamp, userController user, bet, betId
 ){
+
   return Builder(builder: (context) {
       if(imageUrl == "" || imageUrl == null) {
         return buildVoteBtns(context, timestamp, sendName, recName, user, bet, betId);
@@ -46,14 +51,36 @@ Widget buildBetVoteImage(BuildContext context, imageUrl,
 Widget buildVoteBtns(BuildContext context, timestamp, sendName,
   recName, userController user, bet, betId, [bool vertical = false]
 ){
+  betHandler handler = new betHandler();
+  
   Widget buildVoteSend(){
     return Container(
       height: 30,
       width: 100,
       padding: EdgeInsets.only(top: 4, left: 8),
       child: RaisedButton(
-        onPressed: () {
-          //TODO: Handle Mod Vote SendUser
+        onPressed: () async {
+          String temp = await handler.updateBetVotes(context, user, betId, bet['send_uid']);
+
+          print("\n\n\nWinner registered:  $temp");
+
+          String winner_pubKey = await handler.checkVotesDone(context, user, betId);
+          print("Winner pubKey:  $winner_pubKey");
+          if(winner_pubKey != null){
+            int total = bet['rec_wager'] + bet['send_wager'];
+            Map data ={
+              'recipient': winner_pubKey,
+              'amount': total
+            };
+
+            var body = json.encode(data);
+
+            final response = 
+            await http.post('https://gentle-ridge-52752.herokuapp.com/transact-to-winner', headers: {"Content-Type": "application/json"}, body:body);
+            
+            //user.set_balance = json.decode(response.body)['balance'];
+            
+          }
         },
         shape: RoundedRectangleBorder(
           side: BorderSide(color: themeColors.accent1),
@@ -72,8 +99,28 @@ Widget buildVoteBtns(BuildContext context, timestamp, sendName,
       width: 100,
       padding: EdgeInsets.only(top: 4, left: 8),
       child: RaisedButton(
-        onPressed: () {
-          //TODO: Handle Mod Vote RecUser
+        onPressed: () async {
+          String temp = await handler.updateBetVotes(context, user, betId, bet['rec_uid']);
+
+          print("\n\n\nWinner registered:  $temp");
+
+          String winner_pubKey = await handler.checkVotesDone(context, user, betId);
+          print("Winner pubKey:  $winner_pubKey");
+          if(winner_pubKey != null){
+            int total = bet['rec_wager'] + bet['send_wager'];
+            Map data ={
+              'recipient': winner_pubKey,
+              'amount': total
+            };
+
+            var body = json.encode(data);
+
+            final response = 
+            await http.post('https://gentle-ridge-52752.herokuapp.com/transact-to-winner', headers: {"Content-Type": "application/json"}, body:body);
+            
+            //user.set_balance = json.decode(response.body)['balance'];
+            
+          }
         },
         shape: RoundedRectangleBorder(
           side: BorderSide(color: themeColors.accent1),

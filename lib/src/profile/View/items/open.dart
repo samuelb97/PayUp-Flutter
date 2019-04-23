@@ -233,10 +233,8 @@ Widget buildOpenBet(BuildContext context, int index, userController user) {
                                     'amount': total
                                   };
 
-                                  var body = json.encode(data);
-
                                   final response = 
-                                  await http.post('https://gentle-ridge-52752.herokuapp.com/transact-to-winner', headers: {"Content-Type": "application/json"}, body:body);
+                                  await http.post('https://gentle-ridge-52752.herokuapp.com/transact-to-winner', headers: {"Content-Type": "application/json"}, body:json.encode(data));
                                   
                                   user.set_balance = json.decode(response.body)['balance'];
                                   

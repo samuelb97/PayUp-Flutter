@@ -13,7 +13,7 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 
-Widget challengeRespondItem(BuildContext context, betId, user){
+Widget challengeRespondItem(BuildContext context, betId, user, callback){
 
   betHandler handler = new betHandler();
 
@@ -196,8 +196,15 @@ Widget challengeRespondItem(BuildContext context, betId, user){
                 padding: EdgeInsets.only(top: 4),
                 child: RaisedButton(
                   onPressed: () {
-                    handler.updateBetAcceptances(context, user, betId, true);
-                    print("\nbet accepted\n\n");
+                    handler.updateBetAcceptances(context, user, betId, false);
+                    List temp = List.from(user.bets);
+                    List temp1 = List.from(user.modBets);
+                    temp.remove(betId);
+                    temp1.remove(betId);
+                    user.set_bets = temp;
+                    user.set_mod_Bets = temp1;
+                    callback();
+                    print("\nbet Declined\n\n");
                   },
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(24),
