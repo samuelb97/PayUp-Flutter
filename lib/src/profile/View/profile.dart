@@ -141,15 +141,15 @@ class TestHomePageBodyState extends State<TestHomePageBody> {
         print("\nScroll Update 1\n");
         _innerListIsScrolled = true;
       });
-    } //else if (_innerListIsScrolled &&
-    //     widget.scrollController.position.extentAfter > 0.0) {
-    //   setState(() {
-    //     print("\nScroll Update 2\n");
-    //     _innerListIsScrolled = false;
-    //     // Reset scroll positions of the TabBarView pages
-    //     _key = PageStorageKey({});
-    //   });
-    // }
+    } else if (_innerListIsScrolled &&
+        widget.scrollController.position.extentAfter > 0.0) {
+      setState(() {
+        print("\nScroll Update 2\n");
+        _innerListIsScrolled = false;
+        // Reset scroll positions of the TabBarView pages
+        _key = PageStorageKey({});
+      });
+    }
   }
 
   @override
@@ -173,12 +173,13 @@ class TestHomePageBodyState extends State<TestHomePageBody> {
       key: _key,
       children: List<Widget>.generate(tabCount, (int index) { //creates a lists of 3 elements (tab count)
         print("Gen index: $index\n");
+        print("User Bets Length: ${widget.user.bets.length}");
         if(index == 0) {
           return ListView.builder(               //Open Bets
             itemCount: widget.user.bets.length,
             key: PageStorageKey<int>(index),
                  //Makes two keys for two lists
-            itemBuilder: (BuildContext cntxt, int idx)
+            itemBuilder: (cntxt, idx)
               => buildOpenBet(cntxt, idx, widget.user)
           );
         }
@@ -191,6 +192,7 @@ class TestHomePageBodyState extends State<TestHomePageBody> {
           );
         }
         else{
+          print("Before ListView Pending");
           return ListView.builder(              //Pending
             itemCount: widget.user.bets.length,
             padding: EdgeInsets.only(bottom: 260),

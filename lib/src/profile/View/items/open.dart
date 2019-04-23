@@ -24,7 +24,7 @@ Widget buildOpenBet(BuildContext context, int index, userController user) {
     return Container();
   }
   else{
-    var betId = user.bets[index];
+    var betId = user.bets[user.bets.length - index - 1];
     bool btnDisable = false;
     bool isWon = false;
     Color wonColor = themeColors.theme3;

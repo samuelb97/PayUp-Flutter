@@ -13,7 +13,7 @@ Widget buildClosedBet(BuildContext context, int index, var user) {
   if (index >= user.bets.length) {
     return Container();
   } else {
-    var betId = user.bets[index];
+    var betId = user.bets[user.bets.length - index - 1];
     return StreamBuilder(
         stream:
             Firestore.instance.collection('bets').document(betId).snapshots(),

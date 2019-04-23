@@ -21,7 +21,8 @@ Widget challengeRespondItem(BuildContext context, betId, user, callback){
     stream: Firestore.instance.collection('bets').document(betId).snapshots(),
     builder: (context, snapshot) {
       if (!snapshot.hasData || snapshot.data["open"] || snapshot.data["complete"] 
-        || snapshot.data["send_uid"] == user.uid){
+        || snapshot.data["send_uid"] == user.uid || snapshot.data["user_accept"])
+        {
         return Container();
       } else {
         var bet = snapshot.data;
@@ -33,7 +34,6 @@ Widget challengeRespondItem(BuildContext context, betId, user, callback){
           opponentWager = bet["send_wager"];
           userWager = bet["send_wager"];
         }
-        
         
         return Container(
           child: Column(
@@ -113,6 +113,7 @@ Widget challengeRespondItem(BuildContext context, betId, user, callback){
                     return Container();
                   }
                   else {
+                    print("Second STB\n");
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget> [
