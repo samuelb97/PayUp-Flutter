@@ -8,8 +8,15 @@ import 'package:login/src/profile/Controller/profileController.dart';
 import 'package:login/userController.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
+import 'package:login/src/betHandler/betHandler.dart';
+import 'package:http/http.dart' as http;
+import 'dart:async';
+import 'dart:convert';
 
 Widget challengeRespondItem(BuildContext context, betId, user){
+
+  betHandler handler = new betHandler();
+
   return StreamBuilder(
     stream: Firestore.instance.collection('bets').document(betId).snapshots(),
     builder: (context, snapshot) {
@@ -163,7 +170,8 @@ Widget challengeRespondItem(BuildContext context, betId, user){
                 padding: EdgeInsets.only(top: 4),
                 child: RaisedButton(
                   onPressed: () {
-                    //TODO: Handle Accept
+                    handler.updateBetAcceptances(context, user, betId, true);
+                    print("\nbet accepted\n\n");
                   },
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(24),
@@ -180,7 +188,8 @@ Widget challengeRespondItem(BuildContext context, betId, user){
                 padding: EdgeInsets.only(top: 4),
                 child: RaisedButton(
                   onPressed: () {
-                    //TODO: Handle Decline
+                    handler.updateBetAcceptances(context, user, betId, true);
+                    print("\nbet accepted\n\n");
                   },
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(24),
