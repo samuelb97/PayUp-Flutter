@@ -27,7 +27,6 @@ Widget challengeRespondItem(BuildContext context, betId, user){
           userWager = bet["send_wager"];
         }
         
-        
         return Container(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -106,6 +105,7 @@ Widget challengeRespondItem(BuildContext context, betId, user){
                     return Container();
                   }
                   else {
+                    print("Second STB\n");
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget> [
