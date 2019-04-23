@@ -68,7 +68,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 IconButton(
                   icon: Icon(Icons.notifications),
                   onPressed: (){
-                    Navigator.pushReplacement(
+                    Navigator.push(
                       context, 
                       MaterialPageRoute(builder: (context) => NotificationsPage(user: widget.user)));
                   },
