@@ -220,14 +220,6 @@ Widget buildClosedBet(BuildContext context, int index, var user) {
                                                         FontWeight.bold)),
                                           ]),
                                     ),
-                                    Text( 
-                                      "  $plusMinus$netGain",
-                                      style: TextStyle(
-                                        color: netColor,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: (netGain / 100 > 0) ? 8 : 11,
-                                      )
-                                    )
                                   ]),
                                   Row(children: <Widget>[
                                     Container(
