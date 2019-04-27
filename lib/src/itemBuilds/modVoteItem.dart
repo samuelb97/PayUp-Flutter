@@ -169,7 +169,7 @@ Widget buildVoteBtns(BuildContext context, timestamp, sendName,
 
   return Row(children: <Widget>[
     buildVoteSend(),
-    buildVoteSend(),
+    buildVoteDecline(),
     Spacer(),
     buildTimestamp(24),
     Padding(padding: EdgeInsets.only(
