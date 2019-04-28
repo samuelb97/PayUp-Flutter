@@ -33,6 +33,7 @@ class userController{
 
   static List _messages;
   static List _friends;
+  static List _friend_requests;
   static List _bets;
   static List _modBets;
  
@@ -50,6 +51,12 @@ class userController{
   }
   set set_mod_Bets(List modBets){
     _modBets = modBets;
+  }
+  set set_friends(List __friends){
+    _friends = __friends;
+  }
+  set set_friend_requests(List __friend_requests){
+    _friend_requests = __friend_requests;
   }
   set set_messages(List messages){
     _messages = messages;
@@ -69,6 +76,7 @@ class userController{
   List get bets => _bets;
   List get messages => _messages;
   List get modBets => _modBets;
+  List get friend_req => _friend_requests;
 
   int incrementNotifs(){
     _notifs = _notifs + 1;
@@ -88,6 +96,7 @@ class userController{
         _name = DocumentSnapshot.data['name'].toString();
         _username = DocumentSnapshot.data['username'].toString();
         _friends = DocumentSnapshot.data['friends'];
+        _friend_requests = DocumentSnapshot.data['friend_requests'];
         _wins = DocumentSnapshot.data['wins'];
         _loses = DocumentSnapshot.data['loses'];
         _bets = DocumentSnapshot.data['betIDs'];
