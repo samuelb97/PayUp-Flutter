@@ -58,6 +58,9 @@ class userController{
   set set_friend_requests(List __friend_requests){
     _friend_requests = __friend_requests;
   }
+  set set_messages(List messages){
+    _messages = messages;
+  }
 
   String get uid => _uid;
   String get name => _name;

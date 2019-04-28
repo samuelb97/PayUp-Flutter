@@ -5,6 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:login/userController.dart';
 import 'dart:async';
 import 'dart:io';
  
@@ -107,8 +108,6 @@ class ChatController extends ControllerMVC {
     if (content.trim() != '') {
       _textEditingController.clear();
 
-
-
       var documentReference = Firestore.instance
           .collection('messages')
           .document(_groupChatId)
@@ -128,10 +127,29 @@ class ChatController extends ControllerMVC {
         );
       });
       _listScrollController.animateTo(0.0, duration: Duration(milliseconds: 300), curve: Curves.easeOut);
+      
     } else {
       Fluttertoast.showToast(msg: 'Nothing to send');
     }
   }
+
+  void addChatToUsers(userController user) {
+    var thisUser = Firestore.instance.collection("users").document(user.uid);
+    var peerUser = Firestore.instance.collection("users").document(_peerId);
+
+    thisUser.updateData({
+      "messages" : FieldValue.arrayUnion(["$_groupChatId"]),
+    });
+
+    peerUser.updateData({
+      "messages" : FieldValue.arrayUnion(["$_groupChatId"]),
+    });
+
+    List temp = List.from(user.messages);
+    temp.add(_groupChatId);
+    user.set_messages = temp;
+  }
+
 
   bool isLastMessageLeft(int index) {
     if ((index > 0 && _listMessage != null && _listMessage[index - 1]['idFrom'] == _id) || index == 0) {

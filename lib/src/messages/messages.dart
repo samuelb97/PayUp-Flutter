@@ -32,25 +32,26 @@ class _MessagePageState extends StateMVC<MessagePage> {
             Container(
               decoration: themeColors.linearGradient,
               child: StreamBuilder(
-                stream: Firestore.instance.collection('users').snapshots(),
+                stream: Firestore.instance.collection('users').document(widget.user.uid).snapshots(),
                 builder: (context, snapshot) {
-                  print("\n\n Docs: ${snapshot.data.documents}\n Length: ${snapshot.data.documents.length}\n");
-                  if (!snapshot.hasData || snapshot.data.documents == null) {
+                  if (!snapshot.hasData) {
                     return Center(
                       child: CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+                        valueColor: AlwaysStoppedAnimation<Color>(themeColors.accent1),
                       ),
                     );
                   } else {
-                    var docs = snapshot.data.documents;
+                    var messages = snapshot.data["messages"];
+                    print("\nUser Messages: ${snapshot.data}\n");
+                    print("User Messages Length : ${messages.length}\n");
                     return ListView.builder(
                       itemBuilder: (context, index) => buildItem(
                         context, 
-                        docs[index], 
+                        messages[index],
                         widget.user,
                         widget.analControl
                       ),
-                      itemCount: docs.length,
+                      itemCount: messages.length,
                     );
                   }
                 },
@@ -62,7 +63,7 @@ class _MessagePageState extends StateMVC<MessagePage> {
                   ? Container(
                       child: Center(
                         child: CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation<Color>(Colors.greenAccent)),
+                          valueColor: AlwaysStoppedAnimation<Color>(themeColors.accent1)),
                       ),
                       color: Colors.white.withOpacity(0.8),
                     )

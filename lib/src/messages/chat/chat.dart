@@ -4,6 +4,7 @@ import 'package:login/userController.dart';
 import 'package:login/src/messages/chat/view/view.dart';
 import 'package:login/src/messages/chat/chatController.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
+import 'package:login/prop-config.dart';
 
 class Chat extends StatelessWidget {
   Chat({
@@ -28,7 +29,7 @@ class Chat extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(peerName),
-        backgroundColor: Colors.lightGreen,
+        backgroundColor: themeColors.accent2,
       ),
       body: ChatScreen(
         peerId: peerId,
@@ -85,19 +86,22 @@ class _ChatScreenState extends StateMVC<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      child: Stack(
-        children: <Widget>[
-          Column(
-            children: <Widget>[
-              // List of messages
-              buildListMessage(chatController),
-              // Input content
-              buildInput(chatController),
-            ],
-          ),
-          // Loading
-          buildLoading(chatController.isLoading)
-        ],
+      child: Container(
+        decoration: themeColors.linearGradient,
+        child: Stack(
+          children: <Widget>[
+            Column(
+              children: <Widget>[
+                // List of messages
+                buildListMessage(chatController),
+                // Input content
+                buildInput(chatController, widget.user),
+              ],
+            ),
+            // Loading
+            buildLoading(chatController.isLoading)
+          ],
+        ),
       ),
       onWillPop: () => chatController.onBackPress(context),
     );

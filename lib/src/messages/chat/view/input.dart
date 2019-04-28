@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:login/src/messages/chat/chatController.dart';
+import 'package:login/userController.dart';
+import 'package:login/prop-config.dart';
 
- Widget buildInput(ChatController chatController) {
-   print('\n\nBuildInput\n\n');
+ Widget buildInput(ChatController chatController, userController user) {
+    print('\n\nBuildInput\n\n');
+    print("\nList Messages: ${chatController.listMessage}\n");
     return Container(
       child: Row(
         children: <Widget>[
@@ -13,7 +16,7 @@ import 'package:login/src/messages/chat/chatController.dart';
               child: IconButton(
                 icon: Icon(Icons.image),
                 onPressed: chatController.getImage,
-                color: Colors.lightGreen,
+                color: themeColors.accent2,
               ),
             ),
             color: Colors.white,
@@ -23,11 +26,11 @@ import 'package:login/src/messages/chat/chatController.dart';
           Flexible(
             child: Container(
               child: TextField(
-                style: TextStyle(color: Colors.lightGreen, fontSize: 15.0),
+                style: TextStyle(color: themeColors.accent2, fontSize: 15.0),
                 controller: chatController.textEditingController,
                 decoration: InputDecoration.collapsed(
                   hintText: 'Type your message...',
-                  hintStyle: TextStyle(color: Colors.grey),
+                  hintStyle: TextStyle(color: themeColors.accent2),
                 ),
                 focusNode: chatController.focusNode,
               ),
@@ -40,11 +43,21 @@ import 'package:login/src/messages/chat/chatController.dart';
               margin: EdgeInsets.symmetric(horizontal: 8.0),
               child: IconButton(
                 icon: Icon(Icons.send),
-                onPressed: () => chatController.onSendMessage(
-                  chatController.textEditingController.text, 
-                  0
-                ),
-                color: Colors.lightGreen,
+                onPressed: () {
+                  chatController.onSendMessage(
+                    chatController.textEditingController.text, 
+                    0
+                  );
+                  if(chatController.listMessage.length == 0 
+                    || chatController.listMessage == null
+                    || !user.messages.contains(chatController.groupChatId)
+                    ) 
+                  {
+                    print("\nFirst Message\n");
+                    chatController.addChatToUsers(user);
+                  }
+                },
+                color: themeColors.accent2,
               ),
             ),
             color: Colors.white,
