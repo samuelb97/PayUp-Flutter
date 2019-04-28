@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:login/src/messages/chat/view/view.dart';
 import 'package:login/src/messages/chat/chatController.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:login/prop-config.dart';
 
 
 Widget buildListMessage(ChatController chatController) {
@@ -9,7 +10,7 @@ Widget buildListMessage(ChatController chatController) {
     child: chatController.groupChatId == ''
         ? Center(
             child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.lightGreen)))
+                valueColor: AlwaysStoppedAnimation<Color>(themeColors.accent1)))
         : StreamBuilder(
             stream: Firestore.instance
                 .collection('messages')
@@ -22,7 +23,7 @@ Widget buildListMessage(ChatController chatController) {
               if (!snapshot.hasData) {
                 return Center(
                     child: CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.lightGreen)));
+                        valueColor: AlwaysStoppedAnimation<Color>(themeColors.accent1)));
               } else {
                 chatController.set_listMessage = snapshot.data.documents;
                 return ListView.builder(

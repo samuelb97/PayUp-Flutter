@@ -23,7 +23,7 @@ Widget buildItem(BuildContext context, data,
                 placeholder: (context, url) => Container(
                       child: CircularProgressIndicator(
                         strokeWidth: 1.0,
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+                        valueColor: AlwaysStoppedAnimation<Color>(themeColors.accent1),
                       ),
                       width: 50.0,
                       height: 50.0,

@@ -51,6 +51,9 @@ class userController{
   set set_mod_Bets(List modBets){
     _modBets = modBets;
   }
+  set set_messages(List messages){
+    _messages = messages;
+  }
 
   String get uid => _uid;
   String get name => _name;

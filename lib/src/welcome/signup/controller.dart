@@ -71,6 +71,9 @@ class Controller extends ControllerMVC {
         Firestore.instance.collection("users").document("$uid").setData({
           "friends": null,
           "betIDs": null,
+          "modBets": null,
+          "friend_requests": null,
+          "messages": null,
           "username": "$username",
           "email": "$email",
           "name": "$name",

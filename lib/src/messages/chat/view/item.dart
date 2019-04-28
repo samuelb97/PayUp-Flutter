@@ -3,6 +3,7 @@ import 'package:login/src/messages/chat/chatController.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:intl/intl.dart';
+import 'package:login/prop-config.dart';
 
 Widget buildItem(
     int index, DocumentSnapshot document, ChatController chatController) {
@@ -15,12 +16,15 @@ Widget buildItem(
             ? Container(
                 child: Text(
                   document['content'],
-                  style: TextStyle(color: Colors.greenAccent),
+                  style: TextStyle(color: Colors.white),
+                ),
+                constraints: BoxConstraints(
+                  maxWidth: 200.0,
                 ),
                 padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
-                width: 200.0,
+                //width: 200.0,
                 decoration: BoxDecoration(
-                    color: Colors.grey,
+                    color: themeColors.accent2,
                     borderRadius: BorderRadius.circular(8.0)),
                 margin: EdgeInsets.only(
                     bottom:
@@ -40,7 +44,7 @@ Widget buildItem(
                           height: 200.0,
                           padding: EdgeInsets.all(70.0),
                           decoration: BoxDecoration(
-                            color: Colors.grey,
+                            color: themeColors.accent2,
                             borderRadius: BorderRadius.all(
                               Radius.circular(8.0),
                             ),
@@ -88,7 +92,7 @@ Widget buildItem(
                               child: CircularProgressIndicator(
                                 strokeWidth: 1.0,
                                 valueColor: AlwaysStoppedAnimation<Color>(
-                                    Colors.lightGreen),
+                                    themeColors.accent1),
                               ),
                               width: 35.0,
                               height: 35.0,
@@ -111,10 +115,13 @@ Widget buildItem(
                         document['content'],
                         style: TextStyle(color: Colors.white),
                       ),
-                      padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
-                      width: 200.0,
+                      padding: EdgeInsets.fromLTRB(15.0, 10.0, 10.0, 10.0),
+                      //width: 200.0,
+                      constraints: BoxConstraints(
+                        maxWidth: 200.0,
+                      ),
                       decoration: BoxDecoration(
-                          color: Colors.greenAccent,
+                          color: Colors.grey[700],
                           borderRadius: BorderRadius.circular(8.0)),
                       margin: EdgeInsets.only(left: 10.0),
                     )
@@ -125,13 +132,13 @@ Widget buildItem(
                               placeholder: (context, url) => Container(
                                     child: CircularProgressIndicator(
                                       valueColor: AlwaysStoppedAnimation<Color>(
-                                          Colors.lightGreen),
+                                          themeColors.accent1),
                                     ),
                                     width: 200.0,
                                     height: 200.0,
                                     padding: EdgeInsets.all(70.0),
                                     decoration: BoxDecoration(
-                                      color: Colors.grey,
+                                      color: themeColors.accent2,
                                       borderRadius: BorderRadius.all(
                                         Radius.circular(8.0),
                                       ),
