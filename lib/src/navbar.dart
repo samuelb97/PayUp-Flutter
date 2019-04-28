@@ -11,6 +11,7 @@ import 'package:login/userController.dart';
 import 'package:login/src/my_flutter_app_icons.dart';
 import 'package:login/src/challenge/challenge_search.dart';
 import 'package:login/src/notifications/notificationsview.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 
 class Home extends StatefulWidget {
@@ -56,7 +57,18 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context){
     print("\n\nUSER USER: ${widget.user.name}\n\n");
-    return Scaffold(
+    return StreamBuilder( 
+      stream: Firestore.instance.collection('users').document(widget.user.uid).snapshots(),
+      builder: (context, snapshot){
+        var userSnap = snapshot.data;
+        widget.user.set_mod_Bets = userSnap["modBets"];
+        widget.user.set_bets = userSnap["betIDs"];
+        widget.user; //friend requests
+      },
+    );
+    
+    
+    Scaffold(
       appBar: AppBar(
         title: Row(
           children: <Widget> [
