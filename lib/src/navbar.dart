@@ -63,190 +63,188 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         var userSnap = snapshot.data;
         widget.user.set_mod_Bets = userSnap["modBets"];
         widget.user.set_bets = userSnap["betIDs"];
-        widget.user; //friend requests
-      },
-    );
-    
-    
-    Scaffold(
-      appBar: AppBar(
-        title: Row(
-          children: <Widget> [
-            Text(Headers.payup),
-            Spacer(),
-            Stack(
-              alignment: Alignment.center,
-              children: <Widget>[
-                IconButton(
-                  icon: Icon(Icons.notifications),
-                  onPressed: (){
-                    Navigator.push(
-                      context, 
-                      MaterialPageRoute(builder: (context) => NotificationsPage(user: widget.user)));
-                  },
-                ),
-                Builder(
-                  builder: (context) {
-                    if(notifCounter > 0) {
-                      return Positioned( 
-                        right: 0,
-                        child: Container( 
-                          padding: EdgeInsets.all(1),
-                          decoration: BoxDecoration( 
-                            color: Colors.red[300],
-                            borderRadius: BorderRadius.circular(6)
-                          ),
-                          constraints: BoxConstraints( 
-                            minWidth: 12,
-                            minHeight: 12,
-                          ),
-                          child: Text(
-                            "$notifCounter",
-                            style: TextStyle( 
-                              color: Colors.white,
-                              fontSize: 8,
+        widget.user.set_friend_requests = userSnap["friend_requests"];
+        return Scaffold(
+          appBar: AppBar(
+            title: Row(
+              children: <Widget> [
+                Text(Headers.payup),
+                Spacer(),
+                Stack(
+                  alignment: Alignment.center,
+                  children: <Widget>[
+                    IconButton(
+                      icon: Icon(Icons.notifications),
+                      onPressed: (){
+                        Navigator.push(
+                          context, 
+                          MaterialPageRoute(builder: (context) => NotificationsPage(user: widget.user)));
+                      },
+                    ),
+                    Builder(
+                      builder: (context) {
+                        if(notifCounter > 0) {
+                          return Positioned( 
+                            right: 0,
+                            child: Container( 
+                              padding: EdgeInsets.all(1),
+                              decoration: BoxDecoration( 
+                                color: Colors.red[300],
+                                borderRadius: BorderRadius.circular(6)
+                              ),
+                              constraints: BoxConstraints( 
+                                minWidth: 12,
+                                minHeight: 12,
+                              ),
+                              child: Text(
+                                "$notifCounter",
+                                style: TextStyle( 
+                                  color: Colors.white,
+                                  fontSize: 8,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
                             ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      );
-                    } else {
-                      return Container();
-                    }
-                  }
+                          );
+                        } else {
+                          return Container();
+                        }
+                      }
+                    )
+                  ],
                 )
-              ],
-            )
-          ]
-        ),
-        backgroundColor: themeColors.accent2,
-      ),
-      body: TabBarView(
-        controller: _controller,
-        children: pages.map((title) {
-          switch (title) {
-            case Headers.profile:
-              widget.analControl.sendAnalytics('nav_to_profile');
-              return ProfilePage(user: widget.user, analControl: widget.analControl);
-              break;
-
-            case Headers.friends:
-              widget.analControl.sendAnalytics('nav_to_friends');
-              return FriendsPage(user: widget.user, analControl: widget.analControl);
-              break;
-
-            case Headers.messages:
-              widget.analControl.sendAnalytics('nav_to_messages');
-              return MessagePage(user: widget.user, analControl: widget.analControl);
-              //return MessagePage(user: widget.user, analControl: widget.analControl);
-              break;
-
-            case Headers.search:
-              widget.analControl.sendAnalytics('nav_to_search');
-              return SearchPage(user: widget.user, analControl: widget.analControl);
-              break;
-
-            case Headers.settings:
-              widget.analControl.sendAnalytics('nav_to_settings');
-              return SettingsPage(user: widget.user, analControl: widget.analControl);
-              break;
-
-            default:
-              return Text("Profile");
-              //return ProfilePage(user: widget.user, analControl: widget.analControl);
-              break;
-          }
-        }).toList(),
-      ),
-      bottomNavigationBar: BottomNavyBar(
-        backgroundColor: themeColors.theme1,
-        onItemSelected: (index) => setState(() {
-            _index = index;
-            _controller.animateTo(_index);
-        }),
-        items: [
-          BottomNavyBarItem(
-            icon: Icon(Icons.portrait),
-            title: Text(Headers.profile),
-            inactiveColor: themeColors.accent3,
-            activeColor: themeColors.accent2,
-          ),
-          BottomNavyBarItem(
-              icon: Icon(Icons.people),
-              title: Text(Headers.friends),
-              inactiveColor: themeColors.accent3,
-              activeColor: themeColors.accent2,
-          ),
-          BottomNavyBarItem(
-            icon:  Stack(
-              children: <Widget>[
-                Icon(Icons.message),
-                Builder(
-                  builder: (context) {
-                    if(msgCounter > 0) {
-                      return Positioned( 
-                        right: 0,
-                        child: Container( 
-                          padding: EdgeInsets.all(1),
-                          decoration: BoxDecoration( 
-                            color: Colors.red[300],
-                            borderRadius: BorderRadius.circular(6)
-                          ),
-                          constraints: BoxConstraints( 
-                            minWidth: 12,
-                            minHeight: 12,
-                          ),
-                          child: Text(
-                            "$msgCounter",
-                            style: TextStyle( 
-                              color: Colors.white,
-                              fontSize: 8,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      );
-                    } else {
-                      return Container();
-                    }
-                  }
-                )
-              ],
+              ]
             ),
-            title: Text(Headers.messages),
-            inactiveColor: themeColors.accent3,
-            activeColor: themeColors.accent2,
+            backgroundColor: themeColors.accent2,
           ),
-          BottomNavyBarItem(
-              icon: Icon(Icons.search),
-              title: Text(Headers.search),
-              inactiveColor: themeColors.accent3,
-              activeColor: themeColors.accent2,
+          body: TabBarView(
+            controller: _controller,
+            children: pages.map((title) {
+              switch (title) {
+                case Headers.profile:
+                  widget.analControl.sendAnalytics('nav_to_profile');
+                  return ProfilePage(user: widget.user, analControl: widget.analControl);
+                  break;
+
+                case Headers.friends:
+                  widget.analControl.sendAnalytics('nav_to_friends');
+                  return FriendsPage(user: widget.user, analControl: widget.analControl);
+                  break;
+
+                case Headers.messages:
+                  widget.analControl.sendAnalytics('nav_to_messages');
+                  return MessagePage(user: widget.user, analControl: widget.analControl);
+                  //return MessagePage(user: widget.user, analControl: widget.analControl);
+                  break;
+
+                case Headers.search:
+                  widget.analControl.sendAnalytics('nav_to_search');
+                  return SearchPage(user: widget.user, analControl: widget.analControl);
+                  break;
+
+                case Headers.settings:
+                  widget.analControl.sendAnalytics('nav_to_settings');
+                  return SettingsPage(user: widget.user, analControl: widget.analControl);
+                  break;
+
+                default:
+                  return Text("Profile");
+                  //return ProfilePage(user: widget.user, analControl: widget.analControl);
+                  break;
+              }
+            }).toList(),
           ),
-          BottomNavyBarItem(
-              icon: Icon(Icons.settings),
-              title: Text(Headers.settings),
-              inactiveColor: themeColors.accent3,
-              activeColor: themeColors.accent2,
+          bottomNavigationBar: BottomNavyBar(
+            backgroundColor: themeColors.theme1,
+            onItemSelected: (index) => setState(() {
+                _index = index;
+                _controller.animateTo(_index);
+            }),
+            items: [
+              BottomNavyBarItem(
+                icon: Icon(Icons.portrait),
+                title: Text(Headers.profile),
+                inactiveColor: themeColors.accent3,
+                activeColor: themeColors.accent2,
+              ),
+              BottomNavyBarItem(
+                  icon: Icon(Icons.people),
+                  title: Text(Headers.friends),
+                  inactiveColor: themeColors.accent3,
+                  activeColor: themeColors.accent2,
+              ),
+              BottomNavyBarItem(
+                icon:  Stack(
+                  children: <Widget>[
+                    Icon(Icons.message),
+                    Builder(
+                      builder: (context) {
+                        if(msgCounter > 0) {
+                          return Positioned( 
+                            right: 0,
+                            child: Container( 
+                              padding: EdgeInsets.all(1),
+                              decoration: BoxDecoration( 
+                                color: Colors.red[300],
+                                borderRadius: BorderRadius.circular(6)
+                              ),
+                              constraints: BoxConstraints( 
+                                minWidth: 12,
+                                minHeight: 12,
+                              ),
+                              child: Text(
+                                "$msgCounter",
+                                style: TextStyle( 
+                                  color: Colors.white,
+                                  fontSize: 8,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          );
+                        } else {
+                          return Container();
+                        }
+                      }
+                    )
+                  ],
+                ),
+                title: Text(Headers.messages),
+                inactiveColor: themeColors.accent3,
+                activeColor: themeColors.accent2,
+              ),
+              BottomNavyBarItem(
+                  icon: Icon(Icons.search),
+                  title: Text(Headers.search),
+                  inactiveColor: themeColors.accent3,
+                  activeColor: themeColors.accent2,
+              ),
+              BottomNavyBarItem(
+                  icon: Icon(Icons.settings),
+                  title: Text(Headers.settings),
+                  inactiveColor: themeColors.accent3,
+                  activeColor: themeColors.accent2,
+              ),
+              
+            ],
           ),
-          
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          return Navigator.push(
-            context, 
-            MaterialPageRoute(
-              builder: (context) => ChallengeSearchPage(user: widget.user, analControl: widget.analControl),
-              fullscreenDialog: true
-            )
-          );
-        }, //to challenge search
-        tooltip: 'Challenge Reqeust',
-        backgroundColor: themeColors.accent2,
-        foregroundColor: Colors.white,
-        child: Icon(MyFlutterApp.icon),
-      ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () async {
+              return Navigator.push(
+                context, 
+                MaterialPageRoute(
+                  builder: (context) => ChallengeSearchPage(user: widget.user, analControl: widget.analControl),
+                  fullscreenDialog: true
+                )
+              );
+            }, //to challenge search
+            tooltip: 'Challenge Reqeust',
+            backgroundColor: themeColors.accent2,
+            foregroundColor: Colors.white,
+            child: Icon(MyFlutterApp.icon),
+          ),
+        );
+      },
     );
   }
 }

@@ -38,24 +38,36 @@ Widget friendRequestItem(BuildContext context, userController user){
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                          Row(children: <Widget>[  
-                            Text(
-                              "  ${snapshot.data["name"]}",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
+                          Container( 
+                            constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * .77),
+                            padding: EdgeInsets.only(left: 8.0),
+                            child: RichText(
+                              text: TextSpan(
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  color: Colors.grey
+                                ),
+                                children: <TextSpan>[
+                                  TextSpan(
+                                    text: "${snapshot.data["name"]}",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: " sent you a friend request",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ]
                               ),
-                            ),
-                            Text(
-                              " sent you a friend request",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 14,
-                              ),
-                            ),
-                          ]),
-                          Padding(padding: EdgeInsets.only(top: 4)),
+                            ),                           
+                          ),
+                        Padding(padding: EdgeInsets.only(top: 4)),
                         ]),
                         Spacer(),
                         Container(
@@ -87,6 +99,7 @@ Widget friendRequestItem(BuildContext context, userController user){
               ),
               
               Row(children: <Widget>[
+              Padding(padding: EdgeInsets.only(left: 8.0)),
               Container(
                 height: 24,
                 width: 90,
@@ -147,7 +160,7 @@ Widget friendRequestItem(BuildContext context, userController user){
                 right: MediaQuery.of(context).size.width * .15
               )),
             ]),
-              Padding(padding: EdgeInsets.only(bottom: 4)),
+              Padding(padding: EdgeInsets.only(bottom: 10)),
               Container(
                 width: MediaQuery.of(context).size.width * .85,
                 height: 1,
