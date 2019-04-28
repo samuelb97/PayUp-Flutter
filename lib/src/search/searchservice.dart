@@ -7,4 +7,9 @@ class SearchService {
       isEqualTo: searchField.substring(0,1).toUpperCase())
     .getDocuments();
   }
+  searchByUsername(String username){
+    return Firestore.instance.collection('users')
+    .where('username',
+      isEqualTo: username).getDocuments();
+  }
 }

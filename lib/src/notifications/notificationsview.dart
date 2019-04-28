@@ -9,6 +9,7 @@ import 'package:sticky_headers/sticky_headers.dart';
 import 'package:login/src/notifications/challengeRespondItem.dart';
 import 'package:login/src/notifications/moderateRespondItem.dart';
 import 'package:login/src/notifications/moderateVoteItem.dart';
+import 'package:login/src/notifications/friendRequestRespondItem.dart';
 
 class NotificationsPage extends StatefulWidget {
   NotificationsPage({Key key, this.analControl, @required this.user})
@@ -25,6 +26,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
 
   List bets;
   List modBets;
+  List friend_requests;
 
   toggleBets(){
     setState(() {
@@ -33,10 +35,11 @@ class _NotificationsPageState extends State<NotificationsPage> {
     });
   }
   
-  List headers = ['Challenge Requests', 'Moderator Requests', 'Moderator Votes'];
+  List headers = ['Challenge Requests', 'Moderator Requests', 'Moderator Votes', 'Friend Requests'];
   List<Widget> challengeList = new List();
   List<Widget> modReqList = new List();
   List<Widget> modVoteList = new List();
+  List<Widget> friendReqList = new List();
 
   @override
   Widget build(BuildContext context){
@@ -52,7 +55,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
         padding:EdgeInsets.only(bottom: 260),
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
-        itemCount: 3,
+        itemCount: 4,
         itemBuilder:(context,index){
           return new StickyHeader( 
             header: new Container( 
@@ -72,6 +75,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
               builder:(context){
                 bets = widget.user.bets;
                 modBets = widget.user.modBets;
+                friend_requests = widget.user.friend_req;
                 print("list view index:  $index\n");
                 if(index == 0){
                   for(int i = 0; i < bets.length; i++){
@@ -99,6 +103,13 @@ class _NotificationsPageState extends State<NotificationsPage> {
                     modVoteList.add(moderateVoteItem(context, modBets[i], widget.user));
                   }
                   return Column(children: modVoteList);
+                }
+                if(index == 3){
+                  for(int i = 0; i < friend_requests.length; i++){
+                    
+                    friendReqList.add(friendRequestItem(context, widget.user));
+                  }
+                  return Column(children: friendReqList);
                 }
                 else {
                   return Container();

@@ -70,6 +70,7 @@ class Controller extends ControllerMVC {
         String searchKey = name[0].toUpperCase();
         Firestore.instance.collection("users").document("$uid").setData({
           "friends": null,
+          "friend_reqests":null,
           "betIDs": null,
           "username": "$username",
           "email": "$email",

@@ -50,7 +50,7 @@ class _BuddyShowcaseState extends State<BuddyShowcase>
           new SizedBox.fromSize(
             size: const Size.fromHeight(300.0),
             child: new Text(
-              '${widget.document['aboutMe']}',
+              '${widget.document['bio']}',
               style: TextStyle(color: Colors.white, fontSize: 16.0),
             ),
           ),

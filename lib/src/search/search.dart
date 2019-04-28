@@ -6,6 +6,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:login/src/search/searchservice.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:login/prop-config.dart';
+import 'package:login/src/buddies/View/details_page.dart';
+import 'package:login/src/buddies/View/non_friend_details_page.dart';
 
 class SearchPage extends StatefulWidget {
   SearchPage({Key key, this.analControl, @required this.user})
@@ -40,7 +42,7 @@ class _SearchPageState extends StateMVC<SearchPage> {
       SearchService().searchByName(value).then((QuerySnapshot docs) {
         for (int i = 0; i < docs.documents.length; i++) {
           if (docs.documents[i].documentID !=
-              widget.user.uid) //new code might not work
+              widget.user.uid) 
             queryResultSet.add(docs.documents[i].data);
         }
       });
@@ -114,14 +116,14 @@ class _SearchPageState extends StateMVC<SearchPage> {
                     primary: false,
                     shrinkWrap: true,
                     children: tempSearchStore.map((element) {
-                      return buildResultButton(element, context);
+                      return buildResultButton(element, context, widget.user);
                     }).toList(),
                   )
                 ]))));
   }
 }
 
-Widget buildResultButton(data, context) {
+Widget buildResultButton(data, context, user) {
   return FlatButton(
     child: Column(
       children: <Widget>[
@@ -153,19 +155,19 @@ Widget buildResultButton(data, context) {
                     Container(
                       child: Text(
                         '${data['name']}',
-                        style: TextStyle(color: Colors.lightGreen),
+                        style: TextStyle(color: Colors.white),
                       ),
                       alignment: Alignment.centerLeft,
                       margin: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 5.0),
                     ),
-                    // Container(
-                    //   child: Text(
-                    //     '${data.last['content']}',
-                    //     style: TextStyle(color: Colors.lightGreen),
-                    //   ),
-                    //   alignment: Alignment.centerLeft,
-                    //   margin: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0),
-                    // )
+                    Container(
+                      child: Text(
+                        '@${data['username']}',
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                      alignment: Alignment.centerLeft,
+                      margin: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 5.0),
+                    )
                   ],
                 ),
                 margin: EdgeInsets.only(left: 20.0),
@@ -194,6 +196,17 @@ Widget buildResultButton(data, context) {
     onPressed: () {
       print("pressed");
       print(data['name']);
+
+      SearchService().searchByUsername(data['username']).then((QuerySnapshot docs){
+        if(user.friends.contains(docs.documents[0].documentID)){
+          NavigateToFriendDetails(docs.documents[0], user, context);
+        }
+        else{
+          NavigateToUserDetails(docs.documents[0], user, context);
+        }
+      });
+
+
       // Navigator.push(
       //     context,
       //     MaterialPageRoute(
@@ -212,4 +225,24 @@ Widget buildResultButton(data, context) {
     // shape:
     //     RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
   );
+}
+
+Future<void> NavigateToFriendDetails(DocumentSnapshot document, userController user, BuildContext context) async {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => FriendDetailsPage(document, user),
+        fullscreenDialog: true
+      )
+    );
+}
+
+Future<void> NavigateToUserDetails(DocumentSnapshot document, userController user, BuildContext context) async {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => UserDetailsPage(document, user),
+        fullscreenDialog: true
+      )
+    );
 }
