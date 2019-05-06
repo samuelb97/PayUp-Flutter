@@ -12,7 +12,7 @@ import 'package:login/src/profile/View/items/pending.dart';
 import 'package:intl/intl.dart';
 
 
-Widget buildProfileDelegate(BuildContext context, userController user){
+Widget buildProfileDelegate(BuildContext context, userController user) {
     return Container(
       color: themeColors.theme3,
       padding: EdgeInsets.only(top: 20.0, left: 30.0, right: 30.0),
@@ -69,13 +69,27 @@ Widget buildProfileDelegate(BuildContext context, userController user){
             ),
           ),
           Padding(padding: EdgeInsets.symmetric(vertical: 2)),
-          Text(
-            '${Userinfo.record}: ${user.wins}-${user.loses}',
-            style: TextStyle(
-              fontSize: 13,
-              color: Colors.white
-            ),
-          ),
+
+          FutureBuilder(
+            future: win_loss(context, user),
+            initialData: " ",
+            builder: (BuildContext context, AsyncSnapshot<String> text) {
+              return new Container(
+                child: new Text(
+                  "Record: " + text.data,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 13.0,
+                  ),
+              ));
+            }),
+          // Text(
+          //   '${Userinfo.record}: ${win_loss(context, user)}',
+          //   style: TextStyle(
+          //     fontSize: 13,
+          //     color: Colors.white
+          //   ),
+          // ),
           Padding(padding: EdgeInsets.symmetric(vertical: 2)),
           Text(
             '${Userinfo.balance}: ${user.balance}',
@@ -86,4 +100,19 @@ Widget buildProfileDelegate(BuildContext context, userController user){
           ),
         ])
       ]));
+}
+
+Future<String> win_loss(BuildContext context, userController user) async {
+  int wins = 0;
+  int losses = 0;
+  for(var bets in user.bets){
+    var docRef = await Firestore.instance.collection('bets').document(bets).get();
+    if(docRef['winner'] == user.uid){
+      wins++;
+    }
+    else if(docRef['loser'] == user.uid){
+      losses++;
+    }
+  }
+  return "$wins-$losses";
 }
