@@ -62,6 +62,10 @@ class userController{
     _messages = messages;
   }
 
+  set balance(int bal){
+    _balance = bal;
+  }
+
   String get uid => _uid;
   String get name => _name;
   String get username => _username;
@@ -115,8 +119,12 @@ class userController{
   }
 
 Future<int> load_balance() async {
-  final response = 
-  await http.get("https://shrouded-forest-59484.herokuapp.com/checkWallet$_pubKey", headers: {"Accept": "application/json"});
+  final response = await http.get(
+    "https://shrouded-forest-59484.herokuapp.com/checkWallet$_pubKey", 
+    headers: {"Accept": "application/json"}
+  );
+  _balance = json.decode(response.body)['balance'];
+
   return json.decode(response.body)['balance'];
 }
 
