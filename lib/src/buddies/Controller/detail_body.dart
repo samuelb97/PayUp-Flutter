@@ -35,17 +35,18 @@ class FriendDetailBody extends StatelessWidget {
     friend.uid = document.documentID.toString();
     friend.bets = document.data["betIDs"];
     friend.name = document.data["name"];
-    return ListView(
-      shrinkWrap: true,
-      children: <Widget>[
-        Container(height: 1, color: themeColors.accent2),
-        ListView.builder(
-          shrinkWrap: true,
-          itemCount: length,
-          itemBuilder: (context, index)
-            => buildClosedBet(context, index, friend)
-        )
-      ]
-    );
+    return SingleChildScrollView(
+      child: ListView(
+        shrinkWrap: true,
+        children: <Widget>[
+          Container(height: 1, color: themeColors.accent2),
+          ListView.builder(
+            shrinkWrap: true,
+            itemCount: length,
+            itemBuilder: (context, index)
+              => buildClosedBet(context, index, friend)
+          )
+        ]
+      ));
   }
 }

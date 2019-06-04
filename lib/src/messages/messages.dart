@@ -5,7 +5,7 @@ import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:login/src/messages/msgController.dart';
 import 'package:login/src/messages/view/item.dart';
 import 'package:login/userController.dart';
-import 'package:login/prop-config.dart';
+import 'package:login/prop-config.dart'; 
 
 class MessagePage extends StatefulWidget {
   MessagePage({Key key, this.analControl, @required this.user})

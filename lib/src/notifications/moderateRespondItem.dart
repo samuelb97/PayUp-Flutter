@@ -12,7 +12,7 @@ Widget moderateRespondItem(BuildContext context, betId, userController user, cal
   return StreamBuilder(
     stream: Firestore.instance.collection('bets').document(betId).snapshots(),
     builder: (context, snapshot1) {
-      if (!snapshot1.hasData || snapshot1.data["open"] || snapshot1.data["complete"] 
+      if (!snapshot1.hasData || snapshot1.data["status"] != "pending" 
          || !snapshot1.data["user_accept"]){
         return Container();
       } else {

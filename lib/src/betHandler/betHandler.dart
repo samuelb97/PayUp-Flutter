@@ -160,8 +160,9 @@ class betHandler extends ControllerMVC{
         docRef.updateData({
           "winner": docSnap.data["send_uid"],
           "loser": docSnap.data["rec_uid"],
-          "open": false,
-          "complete": true,
+          "status": "closed"
+          // "open": false,
+          // "complete": true,
         });
         var winnerDocument = await Firestore.instance.collection("users").document(docSnap.data["send_uid"]).get();
         return winnerDocument.data["pubKey"];
@@ -170,8 +171,9 @@ class betHandler extends ControllerMVC{
         docRef.updateData({
           "winner": docSnap.data["rec_uid"],
           "loser": docSnap.data["send_uid"],
-          "open": false,
-          "complete": true,
+          "status": "closed",
+          // "open": false,
+          // "complete": true,
         });
         var winnerDocument = await Firestore.instance.collection("users").document(docSnap.data["rec_uid"]).get();
         return winnerDocument.data["pubKey"];
@@ -181,8 +183,9 @@ class betHandler extends ControllerMVC{
           docRef.updateData({
             "winner": docSnap.data["send_uid"],
             "loser": docSnap.data["rec_uid"],
-            "open": false,
-            "complete": true,
+            "status": "closed",
+          // "open": false,
+          // "complete": true,
           });
           var winnerDocument = await Firestore.instance.collection("users").document(docSnap.data["mod_vote"]).get();
           return winnerDocument.data["pubKey"];
@@ -191,8 +194,9 @@ class betHandler extends ControllerMVC{
           docRef.updateData({
             "winner": docSnap.data["rec_uid"],
             "loser": docSnap.data["send_uid"],
-            "open": false,
-            "complete": true,
+            "status": "closed",
+          // "open": false,
+          // "complete": true,
           });
           var winnerDocument = await Firestore.instance.collection("users").document(docSnap.data["mod_vote"]).get();
           return winnerDocument.data["pubKey"];
@@ -245,7 +249,7 @@ class betHandler extends ControllerMVC{
       if(accept){
         await docRef.updateData({
           "mod_accept": true,
-          "open": true,
+          "status": "open",
         });
         return true;
       }

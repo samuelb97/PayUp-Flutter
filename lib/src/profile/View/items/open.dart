@@ -31,7 +31,7 @@ Widget buildOpenBet(BuildContext context, int index, userController user) {
     return StreamBuilder(
       stream: Firestore.instance.collection('bets').document(betId).snapshots(),
       builder: (context, snapshot) {
-        if (!snapshot.hasData || !snapshot.data["open"]){
+        if (!snapshot.hasData || snapshot.data["status"] != "open"){
           return Container();
         } else {
           var bet = snapshot.data;

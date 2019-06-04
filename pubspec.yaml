@@ -92,6 +92,10 @@ flutter:
     - family: Aguafina
       fonts:
         - asset: assets/Aguafina.ttf
+    
+    - family: Quantify
+      fonts:
+        - asset: assets/Quantify.ttf
 
     - family:  MyFlutterApp
       fonts:

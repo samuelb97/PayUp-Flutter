@@ -18,7 +18,7 @@ Widget buildClosedBet(BuildContext context, int index, var user) {
         stream:
             Firestore.instance.collection('bets').document(betId).snapshots(),
         builder: (context, snapshot) {
-          if (!snapshot.hasData || !snapshot.data["complete"]) {
+          if (!snapshot.hasData || snapshot.data["status"] != "closed") {
             return Container();
           } else {
             var bet = snapshot.data;
