@@ -62,6 +62,10 @@ class userController{
     _messages = messages;
   }
 
+  set balance(int bal){
+    _balance = bal;
+  }
+
   String get uid => _uid;
   String get name => _name;
   String get username => _username;
