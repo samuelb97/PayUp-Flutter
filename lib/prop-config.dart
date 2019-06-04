@@ -49,7 +49,8 @@ class Headers {
   static const String settings = 'Settings';
   static const String welcomePage = 'Welcome Page';
   static const String search = 'Search';
-}
+  static const String payment = 'Payment';
+  }
 
 class Path {
   static const String user = 'users/';
@@ -145,6 +146,8 @@ class Screens {
 }
 
 class themeColors {
+  static Color textWhite = Colors.white;
+  static Color textGrey = Colors.grey;
   static Color accent = Colors.green;
   static Color accent4 = Color(0xFF083F1E);
   static Color accent3 = Colors.green[900];
