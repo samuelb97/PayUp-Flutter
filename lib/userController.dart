@@ -36,6 +36,7 @@ class userController{
   static List _friend_requests;
   static List _bets;
   static List _modBets;
+  static List _payMethods;
  
   set set_name(String __name){
     _name = __name;
@@ -81,6 +82,7 @@ class userController{
   List get messages => _messages;
   List get modBets => _modBets;
   List get friend_req => _friend_requests;
+  List get payMethods => _payMethods;
 
   int incrementNotifs(){
     _notifs = _notifs + 1;
@@ -107,6 +109,7 @@ class userController{
         _photoUrl = DocumentSnapshot.data['photoUrl'].toString();
         _modBets = DocumentSnapshot.data['modBets'];
         _messages = DocumentSnapshot.data['messages'];
+        _payMethods = DocumentSnapshot.data["payMethods"];
         _pubKey = DocumentSnapshot.data['pubKey'].toString();
         if(_bets == null){
           _bets = [];

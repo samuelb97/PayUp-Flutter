@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:login/src/buddies/View/friends.dart';
+import 'package:login/src/payment/payment.dart';
+import 'package:login/src/home/home.dart';
 import 'package:login/src/profile/View/profile.dart';
 import 'package:login/src/messages/messages.dart';
 import 'package:login/src/settings/settings.dart';
@@ -54,18 +56,15 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   //int _index = 0;
   int _selectedDrawerIndex = 2;
 
-  List<String> pages = [
-    Headers.profile,
-    Headers.friends,
-    Headers.messages,
-    Headers.search,
-    Headers.settings,
-  ];
-
   Widget _getDrawerItemWidget(int pos) {
     switch (pos) {
       
       //TODO: Case 0 (home), case 4 (groups), case 6 (payment)
+
+      case 0:
+        widget.analControl.sendAnalytics('nav_to_search');
+        return HomePage(user: widget.user, analControl: widget.analControl);
+        break;
 
       case 1:
         widget.analControl.sendAnalytics('nav_to_search');
@@ -88,8 +87,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         //return MessagePage(user: widget.user, analControl: widget.analControl);
         break;
 
-      
-
+      case 6:
+        widget.analControl.sendAnalytics('nav_to_payment');
+        return PaymentPage(user: widget.user, analControl: widget.analControl);
+        break;
 
       case 7:
         widget.analControl.sendAnalytics('nav_to_settings');
