@@ -33,9 +33,46 @@ class _PaymentPageState extends StateMVC<PaymentPage> {
         body: SingleChildScrollView( 
           child: Container( 
             decoration: themeColors.linearGradient,
-            child: Column(children: <Widget>[
-              
-            ],)
+            child: Column(
+              children: <Widget>[
+                Padding(padding: EdgeInsets.only(top: 10),),
+                Row(children: <Widget>[
+                  Padding(padding: EdgeInsets.symmetric(horizontal: 4),),
+                  Material( 
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                    child: DecoratedBox( 
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage("../../../assets/payUpLogo1Beta.png")
+                        )
+                      )
+                    )
+                  ),
+                  Padding(padding: EdgeInsets.symmetric(horizontal: 4),),
+                  Column(children: <Widget>[
+                    Text(
+                      Headers.payup,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w300,
+                        color: themeColors.textWhite,
+                      ),
+                    ),
+                    Text( 
+                      "Balance: ${widget.user.balance}",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w100,
+                        color: themeColors.textWhite,
+                      ),
+                    )
+                  ]),
+                  Spacer(),
+                ]),
+                Padding(padding: EdgeInsets.symmetric(vertical: 2.0, horizontal: 4),),
+                Text( 
+                  "Money will only used in PayUp if you have loaded your balance from your payment options, we will not take your money ever without asking"
+                )
+              ],
+            )
           ),
         )
 
