@@ -25,7 +25,7 @@ Widget buildPendingBet(BuildContext context, int index, userController user) {
       return StreamBuilder(
         stream: Firestore.instance.collection('bets').document(betId).snapshots(),
         builder: (context, snapshot) {
-          if (!snapshot.hasData || snapshot.data["open"] || snapshot.data["complete"]){
+          if (!snapshot.hasData || snapshot.data["status"] != "pending"){
             return Container();
           } else {
             var bet = snapshot.data;

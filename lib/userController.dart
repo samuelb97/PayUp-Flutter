@@ -112,6 +112,7 @@ class userController{
           _bets = [];
         }
         print('Loaded Data:\n $_age, $_name, $_username, $_wins, $_loses, $_photoUrl\n$_friends\n$_bets\n');
+        print('Loading balance\n');
       }
     );
     _balance = await load_balance();
@@ -119,13 +120,9 @@ class userController{
   }
 
 Future<int> load_balance() async {
-  final response = await http.get(
-    "https://shrouded-forest-59484.herokuapp.com/checkWallet$_pubKey", 
-    headers: {"Accept": "application/json"}
-  );
-  _balance = json.decode(response.body)['balance'];
-
-  return json.decode(response.body)['balance'];
+  //final response = 
+  //await http.get("https://shrouded-forest-59484.herokuapp.com/checkWallet$_pubKey", headers: {"Accept": "application/json"});
+  return 500;
 }
 
   // Future<GeoPoint> getUserLocation() async {

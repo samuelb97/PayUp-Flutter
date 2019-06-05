@@ -25,7 +25,7 @@ class _WelcomePageState extends StateMVC<WelcomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(Headers.payup),
+        title: Text(Headers.payup, style: TextStyle(fontFamily: 'Quantify', fontSize: 28.0)),
         backgroundColor: themeColors.accent2,
         centerTitle: true,
       ),
