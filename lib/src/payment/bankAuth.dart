@@ -6,6 +6,7 @@ import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:login/src/profile/Controller/updateController.dart';
 import 'package:login/analtyicsController.dart';
 import 'package:login/userController.dart';
+import 'package:http/http.dart';
 
 String url = "http://10.0.0.33:5000/bankAuth";
 
@@ -18,13 +19,9 @@ class BankAuthPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final flutterWebviewPlugin = new FlutterWebviewPlugin();
+    final client = Client();
 
-    flutterWebviewPlugin.onStateChanged.listen((WebViewStateChanged state) {
-      print(state.type);
-      print(state.toString());
-      print("Listening State");
-    });
+    client.readBytes(url)
 
     return WebviewScaffold(
       appBar: AppBar(
