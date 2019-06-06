@@ -50,7 +50,7 @@ class Headers {
   static const String welcomePage = 'Welcome Page';
   static const String search = 'Search';
   static const String payment = 'Payment';
-  }
+}
 
 class Path {
   static const String user = 'users/';

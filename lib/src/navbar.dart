@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:login/src/buddies/View/friends.dart';
+import 'package:login/src/payment/payment.dart';
+import 'package:login/src/home/home.dart';
 import 'package:login/src/profile/View/profile.dart';
 import 'package:login/src/messages/messages.dart';
 import 'package:login/src/settings/settings.dart';
@@ -13,7 +15,7 @@ import 'package:login/src/notifications/notificationsview.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:firebase_database/firebase_database.dart';
+
 
 
 
@@ -78,6 +80,11 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       
       //TODO: Case 0 (home), case 4 (groups), case 6 (payment)
 
+      case 0:
+        widget.analControl.sendAnalytics('nav_to_search');
+        return HomePage(user: widget.user, analControl: widget.analControl);
+        break;
+
       case 1:
         widget.analControl.sendAnalytics('nav_to_search');
         return SearchPage(user: widget.user, analControl: widget.analControl);
@@ -99,8 +106,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         //return MessagePage(user: widget.user, analControl: widget.analControl);
         break;
 
-      
-
+      case 6:
+        widget.analControl.sendAnalytics('nav_to_payment');
+        return PaymentPage(user: widget.user, analControl: widget.analControl);
+        break;
 
       case 7:
         widget.analControl.sendAnalytics('nav_to_settings');

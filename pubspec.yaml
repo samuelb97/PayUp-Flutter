@@ -48,6 +48,7 @@ dependencies:
   async_loader: ^0.1.1
   flutter_local_notifications: ^0.6.1
   http:
+  flutter_webview_plugin: ^0.3.5
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -71,6 +72,22 @@ flutter:
     - assets/logo1.png
     - assets/alucard.jpg
     - assets/profileBG.png
+    - assets/payUpLogo1Beta.png
+    - assets/banks/American Express.PNG
+    - assets/banks/Bank of America.PNG
+    - assets/banks/BBVA.PNG
+    - assets/banks/Capital One.PNG
+    - assets/banks/Charles Schwab.PNG
+    - assets/banks/Chase.PNG
+    - assets/banks/citi.PNG
+    - assets/banks/Fidelity.PNG
+    - assets/banks/PNC.PNG
+    - assets/banks/Regions.PNG
+    - assets/banks/Simple.PNG
+    - assets/banks/Suntrust.PNG
+    - assets/banks/US Bank.PNG
+    - assets/banks/USAA.PNG
+    - assets/banks/Wells Fargo.PNG
 
   #  - images/a_dot_ham.jpeg
 
