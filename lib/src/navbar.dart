@@ -12,6 +12,9 @@ import 'package:login/src/challenge/challenge_search.dart';
 import 'package:login/src/notifications/notificationsview.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_database/firebase_database.dart';
+
 
 
 
@@ -29,7 +32,7 @@ class Home extends StatefulWidget {
     @required this.user,
   }) : super(key: key);
 
-  final drawerItems = [
+  final drawerItems = [ 
     new DrawerItem("PayUp", Icons.home),
     new DrawerItem("Search", Icons.search),
     new DrawerItem("My Action", Icons.person),
@@ -49,6 +52,8 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+
   int msgCounter = 0;
   int notifCounter = 3;
   //int _index = 0;
@@ -61,6 +66,12 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     Headers.search,
     Headers.settings,
   ];
+
+  void initFCM() async {
+    String token = await _firebaseMessaging.getToken();
+
+    sendRegistrationToServer(token, widget.user);
+  }
 
   Widget _getDrawerItemWidget(int pos) {
     switch (pos) {
@@ -108,15 +119,12 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     Navigator.of(context).pop(); // close the drawer
   }
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _controller = TabController(
-  //       vsync: this,
-  //       length: pages.length,
-  //       initialIndex: _index
-  //   );
-  // }
+  @override
+  void initState() {
+    super.initState();
+    initFCM();
+  }
+
 
   
   @override
@@ -329,4 +337,11 @@ Future<String> win_loss(BuildContext context, userController user) async {
     }
   }
   return "$wins-$losses";
+}
+
+Future<void> sendRegistrationToServer(String token, userController user) async {
+  print("sendRegistrationToServer: sending token to server: " + token);
+  var docRef = await Firestore.instance.collection('users').document(user.uid).updateData({
+    "field_messaging_token": token,
+  });
 }
