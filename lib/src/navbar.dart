@@ -132,6 +132,19 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   void initState() {
     super.initState();
     initFCM();
+
+    _firebaseMessaging.configure(onLaunch: (Map<String, dynamic> msg) {
+      print(" onLaunch called");
+    }, onResume: (Map<String, dynamic> msg) {
+      print(" onResume called");
+    }, onMessage: (Map<String, dynamic> msg) {
+      print(" onMessage called");
+    });
+
+    _firebaseMessaging.requestNotificationPermissions(const IosNotificationSettings(sound: true, alert: true, badge: true));
+    _firebaseMessaging.onIosSettingsRegistered.listen((IosNotificationSettings setting) {
+      print('IOS Setting Registered');
+    });
   }
 
 
