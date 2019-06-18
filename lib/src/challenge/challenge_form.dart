@@ -64,12 +64,14 @@ class _ChallengeFormPageState extends StateMVC<ChallengeFormPage> {
                                   left: 15.0, right: 15.0, top: 15.0),
                               child: TextFormField(
                                 validator: (input) {
-                                  if (!isNumeric(input) ||
-                                      int.parse(input) > 99999) {
-                                    return "Please enter a valid amount";
+                                  if (isNumeric(input) ||
+                                      int.parse(input) < 99999) {
+                                    return null;
                                   }
-                                  else{return null;}
+                                  else{return "Please enter a valid amount";}
                                 },
+                                keyboardType: TextInputType.number,
+                                
                                 decoration: InputDecoration(
                                   fillColor: Colors.white,
                                   hintStyle: TextStyle(color: Colors.white),
@@ -99,12 +101,13 @@ class _ChallengeFormPageState extends StateMVC<ChallengeFormPage> {
                               margin: EdgeInsets.only(left: 15.0, right: 15.0),
                               child: TextFormField(
                                 validator: (input) {
-                                  if (!isNumeric(input) ||
-                                      int.parse(input) > 99999) {
-                                    return "Please enter a valid amount";
+                                  if (isNumeric(input) ||
+                                      int.parse(input) < 99999) {
+                                    return null;
                                   }
-                                  else{return null;}
+                                  else{return "Please enter a valid amount";}
                                 },
+                                keyboardType: TextInputType.number,
                                 decoration: InputDecoration(
                                   fillColor: Colors.white,
                                   hintStyle: TextStyle(color: Colors.white),
