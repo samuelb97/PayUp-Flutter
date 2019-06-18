@@ -89,7 +89,7 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
     Future getImage(userController user) async {
-    _imageFile = await ImagePicker.pickImage(source: ImageSource.gallery);
+    _imageFile = await ImagePicker.pickImage(source: ImageSource.camera);
 
     if (_imageFile != null) {
       setState(() {

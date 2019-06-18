@@ -65,9 +65,11 @@ class userController{
   set set_payMethods(List methods){
     _payMethods = methods;
   }
-
   set balance(int bal){
     _balance = bal;
+  }
+  set photoUrl(String url){
+    _photoUrl = url;
   }
 
   String get uid => _uid;

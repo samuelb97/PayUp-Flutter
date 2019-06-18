@@ -113,6 +113,9 @@ class _FriendsPageState extends StateMVC<FriendsPage> {
           Builder(
             builder: (context) {
               if(tempSearchStore.isEmpty){
+                if(widget.user.friends == null){
+                  return Container();
+                }
                 return ListView.builder(
                   shrinkWrap: true,
                   itemCount: widget.user.friends.length,

@@ -157,6 +157,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         widget.user.set_bets = userSnap["betIDs"];
         widget.user.set_friend_requests = userSnap["friend_requests"];
         widget.user.set_payMethods = userSnap["payMethods"];
+        widget.user.photoUrl = userSnap["photoUrl"];
+        widget.user.set_friends = userSnap["friends"];
+        widget.user.set_friend_requests = userSnap["friend_requests"];
         var drawerOptions = <Widget>[];
 
         for (var i = 0; i < widget.drawerItems.length; i++) {
@@ -347,6 +350,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 Future<String> win_loss(BuildContext context, userController user) async {
   int wins = 0;
   int losses = 0;
+  if(user.bets == null){
+    return "0-0";
+  }
   for(var bets in user.bets){
     var docRef = await Firestore.instance.collection('bets').document(bets).get();
     if(docRef['winner'] == user.uid){

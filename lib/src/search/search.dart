@@ -198,7 +198,10 @@ Widget buildResultButton(data, context, user) {
       print(data['name']);
 
       SearchService().searchByUsername(data['username']).then((QuerySnapshot docs){
-        if(user.friends.contains(docs.documents[0].documentID)){
+        if(user.friends == null){
+          NavigateToUserDetails(docs.documents[0], user, context);
+        }
+        else if(user.friends.contains(docs.documents[0].documentID)){
           NavigateToFriendDetails(docs.documents[0], user, context);
         }
         else{

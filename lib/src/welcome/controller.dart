@@ -113,8 +113,8 @@ class Controller extends ControllerMVC {
             fullscreenDialog: true));
   }
 
-  static void NavigateToHome(BuildContext context,
-      analyticsController analControl, userController _user) {}
+  // static void NavigateToHome(BuildContext context,
+  //     analyticsController analControl, userController _user) {}
 
   static Future sleep1() {
     return new Future.delayed(const Duration(seconds: 1), () => "1");

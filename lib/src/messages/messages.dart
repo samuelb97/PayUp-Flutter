@@ -43,7 +43,12 @@ class _MessagePageState extends StateMVC<MessagePage> {
                   } else {
                     var messages = snapshot.data["messages"];
                     print("\nUser Messages: ${snapshot.data}\n");
-                    print("User Messages Length : ${messages.length}\n");
+                    //print("User Messages Length : ${messages.length}\n");
+                    if(messages == null){
+                      return Container(
+                        //You Have No messages
+                      );
+                    }
                     return ListView.builder(
                       itemBuilder: (context, index) => buildItem(
                         context, 

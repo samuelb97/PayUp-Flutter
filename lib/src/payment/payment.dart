@@ -193,6 +193,10 @@ Widget payUpDivider(BuildContext context){
 Widget paymentMethods(BuildContext context, userController user){
   
   List<Widget> paymentMethods = [];
+  
+  if(user.payMethods == null){
+    return Container();
+  }
 
   for (var card in user.payMethods){
     var temp = card.toString().split("::");

@@ -56,7 +56,10 @@ class ProfilePageState extends State<ProfilePage> {
             child: TabBarView(
               children: List<Widget>.generate(3, (int index) { //creates a lists of 3 elements (tab count)
                 print("Gen index: $index\n");
-                print("User Bets Length: ${widget.user.bets.length}");
+                //print("User Bets Length: ${widget.user.bets.length}");
+                if(widget.user.bets == null){
+                  return Container();
+                }
                 if(index == 0) {
                   return ListView.builder(               //Open Bets
                     itemCount: widget.user.bets.length,
