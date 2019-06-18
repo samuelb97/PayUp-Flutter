@@ -21,7 +21,7 @@ class BankAuthPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final client = Client();
 
-    client.readBytes(url)
+    client.readBytes(url);
 
     return WebviewScaffold(
       appBar: AppBar(

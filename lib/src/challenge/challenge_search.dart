@@ -8,6 +8,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:login/prop-config.dart';
 import 'package:login/src/challenge/betController.dart';
 import 'package:login/src/challenge/challenge_form.dart';
+import 'package:login/src/challenge/multiple_bet_details.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class ChallengeSearchPage extends StatefulWidget {
   ChallengeSearchPage({Key key, this.analControl, @required this.user})
@@ -22,7 +24,7 @@ class ChallengeSearchPage extends StatefulWidget {
 
 class _ChallengeSearchPageState extends StateMVC<ChallengeSearchPage> {
 
-  
+  List<String> challengeList = new List();
 
   betController _bet =betController();
 
@@ -72,74 +74,161 @@ class _ChallengeSearchPageState extends StateMVC<ChallengeSearchPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Choose Your Opponent"),
+          title: Text("Choose Your Opponent(s)"),
           backgroundColor: themeColors.accent3,
         ),
         body: GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onTap: () {
-              FocusScope.of(context).requestFocus(new FocusNode());
-            },
-            child: Container(
-                decoration: themeColors.linearGradient,
-                child: ListView(children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: TextField(
-                      
-                      controller: _controller,
-                      style: TextStyle(color: Colors.white),
-                      decoration: InputDecoration(
-                          
-                        
-                        fillColor: Colors.white,
-                           
-                          prefixIcon: IconButton(
-                            color: Colors.white,
-                            icon: Icon(Icons.cancel),
-                            iconSize: 20.0,
-                            onPressed: () {
-                              _controller.clear();
-                              initiateSearch("");
-                              FocusScope.of(context)
-                                  .requestFocus(new FocusNode());
-                            },
-                          ),
-                          contentPadding: EdgeInsets.only(left: 25.0),
-                          hintStyle: TextStyle(color: Colors.white),
-                          hintText: 'Search Friends',
-                          enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(4.0),
-                              borderSide: BorderSide(color: Colors.white),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(4.0)),
-                            borderSide: BorderSide(color: themeColors.accent1)
-                          ),
-                        ),
-                              
-                              
-                      onChanged: (val) {
-                        initiateSearch(val);
-                      },
-                    ),
+      behavior: HitTestBehavior.opaque,
+      onTap: () {
+        FocusScope.of(context).requestFocus(new FocusNode());
+      },
+      child: Container(
+        decoration: themeColors.linearGradient,
+        child: ListView(children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: TextField(
+              controller: _controller,
+              style: TextStyle(color: Colors.white),
+              decoration: InputDecoration(
+                fillColor: Colors.white,   
+                  prefixIcon: IconButton(
+                    color: Colors.white,
+                    icon: Icon(Icons.cancel),
+                    iconSize: 20.0,
+                    onPressed: () {
+                      _controller.clear();
+                      initiateSearch("");
+                      FocusScope.of(context)
+                          .requestFocus(new FocusNode());
+                    },
                   ),
-                  SizedBox(height: 10.0),
-                  ListView(
-                    //padding: EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0, bottom: 10.0),
+                  contentPadding: EdgeInsets.only(left: 25.0),
+                  hintStyle: TextStyle(color: Colors.white),
+                  hintText: 'Search Friends',
+                  enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(4.0),
+                      borderSide: BorderSide(color: Colors.white),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                    borderSide: BorderSide(color: themeColors.accent1)
+                  ),
+                ),     
+              onChanged: (val) {
+                initiateSearch(val);
+              },
+            ),
+          ),
+          
+          Builder(
+            builder: (context) {
+              if(tempSearchStore.isEmpty){
+                return ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: widget.user.friends.length,
+                  itemBuilder: (context, index){
+                    return StreamBuilder( 
+                      stream: Firestore.instance.collection("users")
+                        .document(widget.user.friends[index]).snapshots(),
+                      builder: (context, snapshot){
+                        if(!snapshot.hasData){
+                          return Container();
+                        }
+                        else {
+                          return buildResultButton(snapshot.data, context, _bet, widget.user, challengeList);
+                        }
+                      },
+                    );
+                  },
+                );
+              }
+              else{
+                return ListView(
+                  primary: false,
+                  shrinkWrap: true,
+                  children: tempSearchStore.map((element) {
+                    return buildResultButton(element, context, _bet, widget.user, challengeList);
+                  }).toList(),
+                );
+              }
+            }
+          ),
+        ]))),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () async {
 
-                    primary: false,
-                    shrinkWrap: true,
-                    children: tempSearchStore.map((element) {
-                      return buildResultButton(element, context, _bet, widget.user);
-                    }).toList(),
-                  )
-                ]))));
+          //check if one or multiple people selected via bet list(list of usernames)
+            if(challengeList.length == 1){
+              Navigator.pushReplacement(context,
+                MaterialPageRoute(
+                  builder: (context) => ChallengeFormPage(user: widget.user, bet: _bet)
+                )
+              );
+            } else if(challengeList.isEmpty){
+              Fluttertoast.showToast(msg: 'Select at least one friend');
+            } else{
+              Navigator.pushReplacement(context,
+                MaterialPageRoute(
+                  builder: (context) => MultipleBetDetailsPage(user: widget.user, bet: _bet)
+                )
+              );
+            }
+          },
+//to challenge search
+          tooltip: 'Challenge Reqeust',
+          backgroundColor: themeColors.accent2,
+          foregroundColor: Colors.white,
+          child: Icon(Icons.arrow_forward),
+          mini: true,
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+        bottomNavigationBar: BottomAppBar(child: Container(
+            
+              height: 60,
+              color: themeColors.accent2,
+              // width: MediaQuery.of(context).size.width * .85,
+              child: new ListView.builder(
+                padding: EdgeInsets.fromLTRB(25, 20, 0, 0),
+                scrollDirection: Axis.horizontal,
+                itemBuilder: _challengeListItem,
+                itemCount: challengeList.length,
+              )
+ 
+            ),),
+    );
 
   }
-}
 
-Widget buildResultButton(data, context, betController _bet, userController user) {
+  Widget _challengeListItem(BuildContext context, int index){
+    if(challengeList.length > 1){
+      if(index == challengeList.length - 1){
+        return Container(
+          child: Text("@" + challengeList[index], style: TextStyle(color: Colors.white, fontSize: 15),),
+          decoration: BoxDecoration(color: themeColors.accent2),
+      );} else {
+        return Container(
+          child: Text("@" + challengeList[index] + ", ", style: TextStyle(color: Colors.white, fontSize: 15),),
+          decoration: BoxDecoration(color: themeColors.accent2),
+        );
+      }
+
+    } else {
+      return Container(
+          child: Text("@" + challengeList[index], style: TextStyle(color: Colors.white, fontSize: 15),),
+          decoration: BoxDecoration(color: themeColors.accent2),);
+    }
+  }
+
+  // Widget _challengeButton(List challengeList){
+  //   if(challengeList.isNotEmpty){
+  //     return 
+  //   } else {
+  //     return Container();
+  //   }
+  // }
+
+  Widget buildResultButton(data, context, betController _bet, userController user, challengeList) {
   return FlatButton(
     child: Column(
       children: <Widget>[
@@ -171,7 +260,15 @@ Widget buildResultButton(data, context, betController _bet, userController user)
                     Container(
                       child: Text(
                         '${data['name']}',
-                        style: TextStyle(color: Colors.lightGreen),
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      alignment: Alignment.centerLeft,
+                      margin: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 5.0),
+                    ),
+                    Container(
+                      child: Text(
+                        '@${data['username']}',
+                        style: TextStyle(color: Colors.grey, fontSize: 12),
                       ),
                       alignment: Alignment.centerLeft,
                       margin: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 5.0),
@@ -199,6 +296,9 @@ Widget buildResultButton(data, context, betController _bet, userController user)
             //   ),
             //   ),
             // ),
+          Icon(
+            _buildIcon(challengeList, data)
+          )
           ],
         ),
         Container(
@@ -213,7 +313,15 @@ Widget buildResultButton(data, context, betController _bet, userController user)
       print("pressed");
       print(data['name']);
 
-      
+      if(challengeList.contains(data['username'])){
+        setState(() {
+          challengeList.remove(data['username']);
+        });
+      } else {
+        setState(() {
+          challengeList.add(data['username']);
+        });
+      }
 
       _bet.set_send_uid = user.uid;
       Firestore.instance.collection('users')
@@ -227,12 +335,6 @@ Widget buildResultButton(data, context, betController _bet, userController user)
         });
 
         print(data);
-
-        Navigator.pushReplacement(context,
-          MaterialPageRoute(
-            builder: (context) => ChallengeFormPage(user: user, bet: _bet)
-          )
-        );
       
       
       
@@ -256,4 +358,15 @@ Widget buildResultButton(data, context, betController _bet, userController user)
     // shape:
     //     RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
   );
+}
+}
+
+
+
+IconData _buildIcon(List challengeList, data){
+  if(challengeList.contains(data['username'])){
+    return Icons.check_box;
+  } else {
+    return Icons.check_box_outline_blank;
+  }
 }
