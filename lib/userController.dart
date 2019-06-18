@@ -62,6 +62,9 @@ class userController{
   set set_messages(List messages){
     _messages = messages;
   }
+  set set_payMethods(List methods){
+    _payMethods = methods;
+  }
 
   set balance(int bal){
     _balance = bal;

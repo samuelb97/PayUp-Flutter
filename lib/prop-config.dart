@@ -202,6 +202,10 @@ class themeColors {
   );
 }
 
+class Backend {
+  static String url = "http://10.0.0.33:5000/";
+}
+
 // credit :  Icon made by Freepik from www.flaticon.com 
 
 final GlobalKey<AsyncLoaderState> asyncLoaderState = GlobalKey<AsyncLoaderState>();

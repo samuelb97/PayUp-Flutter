@@ -17,9 +17,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 
-
-
-
 class DrawerItem {
   String title;
   IconData icon;
@@ -159,6 +156,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         widget.user.set_mod_Bets = userSnap["modBets"];
         widget.user.set_bets = userSnap["betIDs"];
         widget.user.set_friend_requests = userSnap["friend_requests"];
+        widget.user.set_payMethods = userSnap["payMethods"];
         var drawerOptions = <Widget>[];
 
         for (var i = 0; i < widget.drawerItems.length; i++) {

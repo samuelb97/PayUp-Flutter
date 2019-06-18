@@ -8,6 +8,10 @@ import 'package:login/src/navbar.dart';
 import 'package:login/prop-config.dart';
 import 'package:async_loader/async_loader.dart';
 import 'dart:async';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 class Controller extends ControllerMVC {
   factory Controller() {
@@ -52,6 +56,9 @@ class Controller extends ControllerMVC {
           _user.set_uid = user.uid;
           await _user.load_data_from_firebase();
           print("\nPost Load\n");
+
+          await _getAndSaveToken(email, password);
+
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
@@ -111,5 +118,26 @@ class Controller extends ControllerMVC {
 
   static Future sleep1() {
     return new Future.delayed(const Duration(seconds: 1), () => "1");
+  }
+
+  static _getAndSaveToken(email, password) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = await _getTokenFromHttp(email, password);
+    await prefs.setString('jwt', token);
+    print("\nGOT TOKEN\n");
+    print(prefs.getString('jwt'));
+  }
+
+  static Future<String> _getTokenFromHttp(email, password) async {
+    //Get Backend Python Token
+    var response = await http.post(
+      "${Backend.url}login", 
+      headers: {"Content-Type": "application/json"},
+      body: json.encode({'username': '$email', 'password': '$password'}),
+    );
+    var parsed = json.decode(response.body);
+    print(parsed);
+    String token = parsed['access_token'];
+    return token;
   }
 }
