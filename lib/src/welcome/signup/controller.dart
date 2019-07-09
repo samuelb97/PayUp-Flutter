@@ -65,25 +65,27 @@ class Controller extends ControllerMVC {
           email: email,
           password: password,
         );
-        Wallet userWallet = await getNewWallet();
+        print("Auth Created\n");
         String uid = user.uid;
         String searchKey = name[0].toUpperCase();
+        print("Search Key Created\n");
         Firestore.instance.collection("users").document("$uid").setData({
-          "friends": null,
-          "friend_reqests":null,
-          "betIDs": null,
-          "modBets": null,
-          "friend_requests": null,
-          "messages": null,
+          "friends": [],
+          "friend_reqests": [],
+          "betIDs": [],
+          "modBets": [],
+          "friend_requests": [],
+          "messages": [],
           "username": "$username",
           "email": "$email",
           "name": "$name",
           "age": "$age",
           "photoUrl": null,
-          "wins": 0,
-          "loses": 0,
+          // "wins": 0,
+          // "loses": 0,
+          "payMethods": null,
+          "notifications": 0,
           "searchKey": "$searchKey",
-          "pubKey": userWallet.pubkey,
         });
         user.sendEmailVerification();
         Navigator.pop(context);
@@ -130,25 +132,6 @@ class Controller extends ControllerMVC {
       return Requirements.mobile_valid_2;
     }
     return null;
-  }
-
-  static Future<Wallet> getNewWallet() async {
-    final response =
-    await http.get('https://shrouded-forest-59484.herokuapp.com/newWallet', headers: {"Accept": "application/json"});
-    return Wallet.fromJson(json.decode(response.body));
-  }
-}
-
-class Wallet {
-  final String pubkey;
-  final int balance;
-
-  Wallet({this.pubkey, this.balance});
-
-  factory Wallet.fromJson(Map json){
-    return Wallet (
-      pubkey: json['publicKey'],
-      balance: json['balance']);
   }
 
 }

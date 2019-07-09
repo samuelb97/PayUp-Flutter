@@ -43,6 +43,9 @@ class HomePageState extends State<HomePage> {
               itemBuilder: (context, index){
                 print(snapshot.data.documents[index]["description"]);
                 var doc = snapshot.data.documents[index];
+                if(widget.user.friends == null){
+                  return Container();
+                }
                 if(widget.user.friends.contains(doc["send_uid"]) || widget.user.friends.contains(doc["rec_uid"])) {
                   return friendBet(context, doc);
                 }

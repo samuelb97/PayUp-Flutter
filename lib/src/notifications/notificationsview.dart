@@ -78,6 +78,9 @@ class _NotificationsPageState extends State<NotificationsPage> {
                 friend_requests = widget.user.friend_req;
                 print("list view index:  $index\n");
                 if(index == 0){
+                  if(bets == null){
+                    return Container();
+                  }
                   for(int i = 0; i < bets.length; i++){
                     print("Challenge $i\n");
                     print("Challenge response\n\n");
@@ -87,6 +90,9 @@ class _NotificationsPageState extends State<NotificationsPage> {
                   return Column(children: challengeList);
                 }
                 if(index == 1){
+                  if(modBets == null){
+                    return Container();
+                  }
                   for(int i = 0; i < modBets.length; i++){
                     print("Moderator $i\n");
                     print("Moderate response\n\n");
@@ -96,6 +102,9 @@ class _NotificationsPageState extends State<NotificationsPage> {
                   return Column(children: modReqList);
                 }
                 if(index == 2){
+                  if(modBets == null){
+                    return Container();
+                  }
                   for(int i = 0; i < modBets.length; i++){
                     print("Moderator $i\n");
                     print("Moderate response\n\n");
@@ -105,6 +114,10 @@ class _NotificationsPageState extends State<NotificationsPage> {
                   return Column(children: modVoteList);
                 }
                 if(index == 3){
+                  if(friend_requests == null){
+                    return Container();
+                  }
+
                   for(int i = 0; i < friend_requests.length; i++){
                     
                     friendReqList.add(friendRequestItem(context, widget.user));
