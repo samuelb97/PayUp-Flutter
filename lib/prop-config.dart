@@ -203,7 +203,7 @@ class themeColors {
 }
 
 class Backend {
-  static String url = "http://10.0.0.33:5000/";
+  static String url = "https://payupelite.appspot.com/";
 }
 
 // credit :  Icon made by Freepik from www.flaticon.com 

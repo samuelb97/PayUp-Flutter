@@ -61,10 +61,10 @@ class Controller extends ControllerMVC {
       try {
         print("\nUsername: $username\n");
         FirebaseUser user =
-            await FirebaseAuth.instance.createUserWithEmailAndPassword(
+            (await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: email,
           password: password,
-        );
+        )).user;
         print("Auth Created\n");
         String uid = user.uid;
         String searchKey = name[0].toUpperCase();

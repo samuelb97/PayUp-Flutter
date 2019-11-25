@@ -45,10 +45,10 @@ class Controller extends ControllerMVC {
       formState.save();
       try {
         FirebaseUser user =
-            await FirebaseAuth.instance.signInWithEmailAndPassword(
+            (await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: email,
           password: password,
-        );
+        )).user;
         if (user.isEmailVerified) {
           analControl.sendAnalytics('login_successful');
           userController _user = userController();

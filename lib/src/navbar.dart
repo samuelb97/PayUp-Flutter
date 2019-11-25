@@ -58,14 +58,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   //int _index = 0;
   int _selectedDrawerIndex = 2;
 
-  List<String> pages = [
-    Headers.profile,
-    Headers.friends,
-    Headers.messages,
-    Headers.search,
-    Headers.settings,
-  ];
-
   void initFCM() async {
     String token = await _firebaseMessaging.getToken();
 
