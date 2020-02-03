@@ -51,6 +51,8 @@ class betController extends ControllerMVC{
  
   static List _friends;
 
+  List _challenge_list;
+
 
 //define in details
 
@@ -89,33 +91,39 @@ class betController extends ControllerMVC{
 
   static String _sender_outcome_id;
   static int _number_invited;
-  static int _wager_type;
+  static String _wager_type;
   static int _standard_wager;
   static int _min_wager;
   static int _max_wager;
 
-  static String _outcome_1_description;
-  static String _outcome_2_description;
-  static String _outcome_3_description;
-  static String _outcome_4_description;
-  static String _outcome_5_description;
+  static List outcome_description_list;
+
+  List get outcomeList => outcome_description_list;
+
+  set set_outcomes(List _outcome_description_list){
+    outcome_description_list = _outcome_description_list;
+  }
+  // static String _outcome_2_description;
+  // static String _outcome_3_description;
+  // static String _outcome_4_description;
+  // static String _outcome_5_description;
 
 
-  set set_outcome_1_desc(String outcome1){
-    _outcome_1_description = outcome1;
-  }
-  set set_outcome_2_desc(String outcome2){
-    _outcome_2_description = outcome2;
-  }
-  set set_outcome_3_desc(String outcome3){
-    _outcome_3_description = outcome3;
-  }
-  set set_outcome_4_desc(String outcome4){
-    _outcome_4_description = outcome4;
-  }
-  set set_outcome_5_desc(String outcome5){
-    _outcome_5_description = outcome5;
-  }
+  // set set_outcome_1_desc(String outcome1){
+  //   _outcome_1_description = outcome1;
+  // }
+  // set set_outcome_2_desc(String outcome2){
+  //   _outcome_2_description = outcome2;
+  // }
+  // set set_outcome_3_desc(String outcome3){
+  //   _outcome_3_description = outcome3;
+  // }
+  // set set_outcome_4_desc(String outcome4){
+  //   _outcome_4_description = outcome4;
+  // }
+  // set set_outcome_5_desc(String outcome5){
+  //   _outcome_5_description = outcome5;
+  // }
       
 
   set set_sender_outcome_id(String sender_outcome_id){
@@ -124,7 +132,7 @@ class betController extends ControllerMVC{
   set set_num_invited(number_invited){
     _number_invited = number_invited;
   }
-  set set_wager_type(wager_type){
+  set set_wager_type(String wager_type){
     _wager_type = wager_type;
   }
   set set_standard_wager(standard_wager){
@@ -176,6 +184,10 @@ class betController extends ControllerMVC{
   }
   set set_rec_name(String rec_name){
     _rec_name = rec_name;
+  }
+
+  set set_challenge_list(List _challengelist){
+    _challenge_list = _challengelist;
   }
 
   Future <String> getImage(userController user) async {
@@ -241,15 +253,6 @@ class betController extends ControllerMVC{
   Future<String> createGroupBet(BuildContext context, userController user) async {
     
         var docRef = await Firestore.instance.collection("bets").add({
-          "bettors":[
-            {
-              "outcome_id": "",
-              "uid": _send_uid,
-              "vote_id": "",
-              "vote_weight": "",
-              "wager": _send_wager
-            },
-          ],
           "pool_bet": true,
           "timestamp":_timestamp,
           "imageUrl":_imageUrl,
@@ -258,12 +261,14 @@ class betController extends ControllerMVC{
           "minimum_wager": _min_wager,
           "maximum_wager": _max_wager,
           "number_accepted": 0,
-          "number_invited": _number_invited,
+          "number_invited": _challenge_list.length,
+          "number_declined": 0,
           "wager_type": _wager_type,
           "winners":[],
           "losers":[],
           "description":_description,
-          "winning_outcome_id": ""
+          "winning_outcome_id": "",
+          "challenge_list": _challenge_list
         });
 
 
@@ -277,6 +282,16 @@ class betController extends ControllerMVC{
     var docRef2 = await Firestore.instance.collection("bets").document(betID).collection("outcomes").add({
           "description": description,
           "votes": 0
+        });
+    return docRef2.documentID;
+  }
+  Future<String> createBettor(BuildContext context, String betID, String outcomeID, String uid, int wager_amount) async {
+    var docRef2 = await Firestore.instance.collection("bets").document(betID).collection("bettors").add({
+          "outcome_id": outcomeID,
+          "uid": uid,
+          "vote_id": "",
+          "vote_weight": "",
+          "wager": wager_amount
         });
     return docRef2.documentID;
   }

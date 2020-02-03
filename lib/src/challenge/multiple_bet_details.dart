@@ -11,6 +11,7 @@ import 'package:login/src/challenge/challenge_form.dart';
 import 'package:login/src/challenge/moderator_search.dart';
 import 'dart:async';
 import 'package:grouped_buttons/grouped_buttons.dart';
+import 'package:login/src/challenge/sender_option.dart';
 
 class MultipleBetDetailsPage extends StatefulWidget {
   MultipleBetDetailsPage({Key key, this.analControl, @required this.user, this.bet})
@@ -30,6 +31,7 @@ class MultipleBetDetailsPage extends StatefulWidget {
 class _MultipleBetDetailsPageState extends StateMVC<MultipleBetDetailsPage> {
   String dropdownValue; //= 'Number of potential outcomes';
   String wager_type; // standard or min/max
+  List <String> tempOutcomes = ['test'];
   List <String> _options = ['Two', 'Three', 'Four', 'Five'];
   bool _autoValidate = false;
   var image =
@@ -134,6 +136,7 @@ class _MultipleBetDetailsPageState extends StateMVC<MultipleBetDetailsPage> {
                             onSelected: (String selected) {
                               setState(() {
                                 wager_type = selected;
+                                //widget.bet.set_wager_type = selected;
                               });
                             }
                           ),
@@ -191,25 +194,29 @@ class _MultipleBetDetailsPageState extends StateMVC<MultipleBetDetailsPage> {
                           ),
                           RaisedButton(
                             onPressed: () {
-                              if (widget.bet.registerformkey.currentState
-                                  .validate()) {
-                                widget.bet.registerformkey.currentState.save();
+                              print("BEFORE ERROR \n\n\n\n\n\n");
                               
+                              // if (widget.bet.registerformkey.currentState
+                              //     .validate()) {
+                              widget.bet.registerformkey.currentState.save();
+
+                              //print(widget.bet.outcome_description_list);
+                              // print("in button");
                               
                               Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => ModeratorSearchPage(
+                                      builder: (context) => SenderSelectPage(
                                           user: widget.user, bet: widget.bet)));
-                                  } else {
-                                    setState(() {
-                                      _autoValidate = true;
-                                    });
-                                  }
+                                  // } else {
+                                  //   setState(() {
+                                  //     _autoValidate = true;
+                                  //   });
+                                  // }
                             },
                             color: themeColors.accent2,
                             textColor: Colors.white,
-                            child: Text("Send it out"),
+                            child: Text("Head to final step"),
                           ),
                           Container(height: 500),
                           
@@ -317,18 +324,32 @@ class _MultipleBetDetailsPageState extends StateMVC<MultipleBetDetailsPage> {
         style: TextStyle(
             color: Colors.white, fontSize: 13),
         //validator: _con.validateAge,
-        onSaved: (input) =>
-            print("wager type saved: $type"),
+        onSaved: (input) {
+            print("wager type saved: $type");
+            if(type == "Minimum Wager"){
+              widget.bet.set_min_wager = int.parse(input);
+            }
+            else if(type == "Maximum Wager"){
+              widget.bet.set_max_wager = int.parse(input);
+            }
+            else if(type == "Standard Wager Amount"){
+              widget.bet.set_standard_wager = int.parse(input);
+              widget.bet.set_send_wager = int.parse(input);
+            }
+            else if(type == "Your Wager"){
+              widget.bet.set_send_wager = int.parse(input);
+            }
 
             //handle based on "type"
             //widget.bet.set_rec_wager = int.parse(input),
-      ));
+        }));
   }
 
   Widget _buildItem(BuildContext context, String label){ 
     return Container(
       margin: EdgeInsets.only(left: 15.0, right: 15.0),
       child: TextFormField(
+        
         decoration: InputDecoration(
           fillColor: Colors.white,
           hintStyle: TextStyle(
@@ -350,11 +371,40 @@ class _MultipleBetDetailsPageState extends StateMVC<MultipleBetDetailsPage> {
             color: Colors.white, fontSize: 13),
         maxLength: 140,
         //validator: _con.validateOccupation,
-        onSaved: (input) =>
-            print(input),
+        onSaved: (input) {
+            if(label == "A"){
+              print("Label: $input \n\n\n");
+              print("List: ");
+              print(tempOutcomes);
+              tempOutcomes[0] = input;
+              print(tempOutcomes[0]);
+              
+              widget.bet.set_outcomes = tempOutcomes;
+            }
+            else if(label == "B"){
+              print("Label: $input \n\n\n");
+              tempOutcomes.add(input);
+              widget.bet.set_outcomes = tempOutcomes;
+            }
+            else if(label == "C"){
+              print("Label: $input \n\n\n");
+              tempOutcomes.add(input);
+              widget.bet.set_outcomes = tempOutcomes;
+            }
+            else if(label == "D"){
+              print("Label: $input \n\n\n");
+              tempOutcomes.add(input);
+              widget.bet.set_outcomes = tempOutcomes;
+            }
+            else if(label == "E"){
+              print("Label: $input \n\n\n");
+              tempOutcomes.add(input);
+              widget.bet.set_outcomes = tempOutcomes;
+            }
+
             //handle outcome based on value of "label"
 
-            //widget.bet.set_outcome = input,
+        }    //widget.bet.set_outcome = input,
       ));
   }
 

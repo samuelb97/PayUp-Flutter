@@ -168,6 +168,7 @@ class _ChallengeSearchPageState extends StateMVC<ChallengeSearchPage> {
             } else if(challengeList.isEmpty){
               Fluttertoast.showToast(msg: 'Select at least one friend');
             } else{
+              _bet.set_challenge_list = challengeList;
               Navigator.pushReplacement(context,
                 MaterialPageRoute(
                   builder: (context) => MultipleBetDetailsPage(user: widget.user, bet: _bet)
